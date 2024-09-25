@@ -1,0 +1,26 @@
+//colors.scss
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$background-color: #ecf0f1;
+$text-color: #2c3e50;
+$dark-gray-color:#666;
+$gray-color:#C4C4C4;
+$light-gray-color:#F5F5F5;
+$white-color:#fff;
+$yellow-color: #FF9900;
+
+:root {
+  --primary-color: #{$primary-color};
+  --secondary-color: #{$secondary-color};
+  --background-color: #{$background-color};
+  --text-color: #{$text-color};
+  --dark-gray-color: #{$dark-gray-color};
+  --gray-color: #{$gray-color};
+  --light-gray-color: #{$light-gray-color};
+  --white-color: #{$white-color};
+  --yellow-color: #{$yellow-color};
+  //--success-color: #{$success-color};
+  //--info-color: #{$info-color};
+  //--warning-color: #{$warning-color};
+  //--error-color: #{$error-color};
+}

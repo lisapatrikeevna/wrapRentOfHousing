@@ -1,19 +1,26 @@
-$gray-color:#666;
-$white-color:#fff;
-
 .headerWrap{
   height: 147px;
+  justify-content: space-between;
+
 
   .header{
     display: flex;
     align-items: center;
+    height: -webkit-fill-available;
     justify-content: space-between;
   }
 
   .navbar{
     height: 46px;
-    background: $gray-color;
-    color: $white-color;
+    background: var(--gray-color);
+    //background: $gray-color;
+    color: var(--white-color);
+  }
+  .rightBlock{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 95px;
   }
   .logo{
     width: 180px;

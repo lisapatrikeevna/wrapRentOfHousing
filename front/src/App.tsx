@@ -1,18 +1,19 @@
 import HomePage from "./pages/homePage";
 import Header from "./components/header/Header";
-// import {API_URL} from "../../index";
-// import axios from "axios";
+import Footer from "./components/footer/Footer";
+import { Provider } from "react-redux";
+import { store } from "./bll/store";
 
 function App() {
-  // const getStudents = (data)=>{
-  //   axios.get(API_URL).then(data => setStudents(data.data))
-  // }
+
   return (
+    <Provider store={store}>
     <>
       <Header/>
       <HomePage/>
-
+      <Footer/>
     </>
+    </Provider>
   )
 }
 

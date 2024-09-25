@@ -4,6 +4,7 @@ rentOfHousing/zzz.txt
 .gitignore
 
 front/zzz.txt
+front/src/config.ts
 # Logs
 front/logs
 front/*.log
