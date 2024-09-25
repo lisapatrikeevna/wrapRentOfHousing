@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .rentOfHousing
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8088
+    volumes:
+      - .:/app
+    ports:
+      - 8088:8088
+
+
+  frontend:
+    build:
+      context: .front
+      dockerfile: Dockerfile
+    command: npm start
+    volumes:
+      - ./frontend:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - web
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

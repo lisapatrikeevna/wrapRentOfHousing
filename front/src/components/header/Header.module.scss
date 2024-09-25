@@ -1,0 +1,32 @@
+$gray-color:#666;
+$white-color:#fff;
+
+.headerWrap{
+  height: 147px;
+
+  .header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .navbar{
+    height: 46px;
+    background: $gray-color;
+    color: $white-color;
+  }
+  .logo{
+    width: 180px;
+    height: 62px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
