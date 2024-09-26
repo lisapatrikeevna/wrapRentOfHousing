@@ -11,7 +11,10 @@ const mutex = new Mutex()
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_URL,
-  credentials: 'include',
+  // credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  }
 })
 
 export const baseQueryWithReauth: BaseQueryFn<

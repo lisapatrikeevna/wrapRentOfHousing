@@ -1,3 +1,4 @@
+
 import { baseApi } from "../base-api";
 
 export type RealtyType = {
@@ -23,6 +24,7 @@ export type RealtyCategoryArgs = {
 
 const realtyService = baseApi.injectEndpoints({
   endpoints: builder => {
+    console.log(baseApi);
     debugger
     return {
       createRealty: builder.mutation<void, RealtyCategoryArgs>({
@@ -47,10 +49,14 @@ const realtyService = baseApi.injectEndpoints({
           return {method: 'DELETE', url: `realty/delete/${id}`,}
         }, invalidatesTags: ['Realty']
       }),
-      getRealty: builder.query<any, void>({
+      getRealty: builder.query<Array<RealtyType>, void>({
         query: () => {
-          console.log()
-          return {method: 'GET', url: 'realty/',}
+          const requestConfig = { method: 'GET', url: 'realty/' };
+
+          // Логируем конфигурацию запроса
+          console.log("Запрос к API:", requestConfig);
+          return requestConfig;
+          // return {method: 'GET', url: 'realty/',}
         }, providesTags: ['Realty'],
       }),
     }
@@ -59,3 +65,12 @@ const realtyService = baseApi.injectEndpoints({
 
 export const {useGetRealtyQuery} = realtyService
 // export const {useCreateCategoryMutation, useGetCategoryQuery, useRemoveCategoryMutation, useUpdateCategoryMutation} = categoryService
+
+
+
+
+
+
+
+
+

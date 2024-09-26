@@ -1,12 +1,12 @@
 import { Container } from "@mui/material";
-import RealEstateItem from "../components/RealEstateItem";
+import RealEstateList from "../components/realty/RealEstateList.tsx";
 
 const HomePage = () => {
 
 
   return <Container>
     <p>HomePage</p>
-    <RealEstateItem/>
+    <RealEstateList/>
   </Container>;
 };
 

@@ -1,32 +1,79 @@
-version: '3'
+#version: '3'
+#
+#services:
+#  web:
+#    build:
+#      context: .rentOfHousing
+#      dockerfile: Dockerfile
+#    command: python manage.py runserver 0.0.0.0:8088
+#    volumes:
+#      - .:/app
+#    ports:
+#      - 8088:8088
+#
+#
+#  frontend:
+#    build:
+#      context: .front
+#      dockerfile: Dockerfile
+#    command: npm start
+#    volumes:
+#      - ./frontend:/app
+#    ports:
+#      - 3000:3000
+#    depends_on:
+#      - web
 
+version: '3.8'
+# Поднимаем два сервиса, django И node
 services:
-  web:
-    build:
-      context: .rentOfHousing
-      dockerfile: Dockerfile
-    command: python manage.py runserver 0.0.0.0:8088
-    volumes:
-      - .:/app
+  django:
+    #говорим что build будет из dockerfile который располагается ./rentOfHousing/rentOfHousing/
+    build: ./rentOfHousing
+    # имя контейнера
+    container_name: djangoapp
+    # перезапускать контейнер при завершении выполнения работы или при аварийном завершении
+    restart: always
+    # проброс портов внутрь контейнера, 8000 порт на хост машине будет проброшен внутрь контейнера на такой же 8000 порт
     ports:
       - 8088:8088
-
-
-  frontend:
-    build:
-      context: .front
-      dockerfile: Dockerfile
-    command: npm start
+    # команда при старте контейнера
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8088"
+    # Для статики мы подключаем два volume (чтобы при перезапуске наши данные не пропадали)), создадим их ниже.
     volumes:
-      - ./frontend:/app
+      - ./rentOfHousing:/usr/src/app
+      - django_static_volume:/usr/src/app/static
+      - django_media_volume:/usr/src/app/media
+    # подключаем к сети myNetwork (в целом не обязательно, но до кучи чтоб было)
+    networks:
+      - myNetwork
+
+  node:
+    # Аналогично, build из ./reactapp/dockerfile
+    build: ./reactapp
+    # имя контейнера
+    container_name: reactapp
+    # рестарт
+    restart: always
+    # порты
     ports:
-      - 3000:3000
+      - 5173:5173
+    # команда при запуске
+    command: pnpm run dev
+    # Зависимость. нет смысла ноде, если некому отдать ей данные. поэтому сначала стартуем сервис django, а за ней node
     depends_on:
-      - web
+      - django
+    # Сеть та же, все контейнеры должны крутиться в однйо сети чтобы видеть друг друга.
+    networks:
+      - myNetwork
+# создаём два volume для статики
+volumes:
+  django_static_volume:
+  django_media_volume:
 
-
-
-
+networks:
+  myNetwork:
 
 
 
