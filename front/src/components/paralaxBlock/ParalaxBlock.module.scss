@@ -1,0 +1,20 @@
+.root{
+  min-height: 500px;
+  background:
+          url('./../../assets/paralaxBlock.jpg') center / cover no-repeat fixed;
+  //background: url('./../../assets/paralaxBlock.jpg');
+  //background-attachment: fixed;
+  //background-position: center;
+  //background-repeat: no-repeat;
+  //background-size: cover;
+}
+.content{
+  height: max-content;
+  padding: 20px 10px;
+  background: var(--light-gray-color);
+  font-size: 16px;
+}
+
+
+
+

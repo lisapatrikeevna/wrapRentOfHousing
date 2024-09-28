@@ -1,0 +1,25 @@
+.blend{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 800px;
+}
+.blend img{
+  position: absolute;
+  width: 100%;
+}
+.blend h2{
+  font-size: 4rem;
+  mix-blend-mode: overlay;
+}
+
+
+
+
+
+
+
+
+
+

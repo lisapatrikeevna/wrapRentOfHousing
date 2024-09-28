@@ -24,8 +24,6 @@ export type RealtyCategoryArgs = {
 
 const realtyService = baseApi.injectEndpoints({
   endpoints: builder => {
-    console.log(baseApi);
-    debugger
     return {
       createRealty: builder.mutation<void, RealtyCategoryArgs>({
         query: arg => {
@@ -49,9 +47,11 @@ const realtyService = baseApi.injectEndpoints({
           return {method: 'DELETE', url: `realty/delete/${id}`,}
         }, invalidatesTags: ['Realty']
       }),
-      getRealty: builder.query<Array<RealtyType>, void>({
-        query: () => {
-          const requestConfig = { method: 'GET', url: 'realty/' };
+      getRealty: builder.query<Array<RealtyType>, {params:string}>({
+        query: (arg) => {
+          console.log('arg!!!!!!' , arg.params);
+          const requestConfig = { method: 'GET', url: `realty${arg.params}/` };
+          // const requestConfig = { method: 'GET', url: 'realty/' };
 
           // Логируем конфигурацию запроса
           console.log("Запрос к API:", requestConfig);

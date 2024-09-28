@@ -64,19 +64,21 @@ const OneAd = ({item,}: PropsType) => {
     <CardHeader avatar={<Avatar sx={{bgcolor: red[500]}} aria-label="recipe">R</Avatar>}
 	 action={<IconButton aria-label="settings"> <MoreVertIcon/> </IconButton>}
 	 title={item.title} subheader="September 14, 2016"/>
+    <Box className={cl.clipPolygon} >
+      <Box className={cl.shadow}>
+        <Typography sx={{fontWeight: 'bold'}}>
+          {item.price} $
+        </Typography>
+        <Typography>
+          {item.number_of_rooms}/120m
+        </Typography>
+      </Box>
     <CardMedia component="img" height="194" image="https://pictures.immobilienscout24.de/listings/237653a1-49dd-4faf-ab57-3e43866e479c-1842863996.jpeg/ORIG/resize/1106x830%3E/format/webp/quality/73" alt="Paella dish"/>
+    </Box>
     <CardContent className={cl.flexWrapp} sx={{width:'100%',display:'flex',justifyContent:'space-between'}}>
       <Typography variant="body2" sx={{color: 'text.secondary'}}>
         {item.location}
       </Typography>
-      <Box className={cl.flexWrapp} sx={{width:'100%',display:'flex'}}>
-        <Typography variant="body2" sx={{color: 'text.secondary'}}>
-          {item.price} $
-        </Typography>
-        <Typography variant="body2" sx={{color: 'text.secondary'}}>
-          {item.number_of_rooms}/120m
-        </Typography>
-      </Box>
     </CardContent>
     <CardActions disableSpacing>
       <IconButton aria-label="add to favorites">

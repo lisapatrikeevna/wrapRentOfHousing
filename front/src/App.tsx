@@ -1,4 +1,4 @@
-import HomePage from "./pages/homePage";
+import HomePage from "./pages/home/HomePage.tsx";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import { Provider } from "react-redux";

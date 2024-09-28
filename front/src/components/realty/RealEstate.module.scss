@@ -1,12 +1,41 @@
 .container{
+  margin-top: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  margin-bottom: 60px;
 }
-
-
+.clipPolygon{
+  background: var(--gray-color);
+  //background: var(--light-gray-color);
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+.shadow{
+  position: absolute;
+  left: 0;
+  z-index: 9999;
+  width: 85px;
+  height: 100%;
+  display: block;
+  background: var(--dark-gray-color);
+  //clip-path: polygon(0% 0%, 100% 0%, 100% 10%, 10% 100%, 0% 100%);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 14%, 13% 100%, 0% 100%);
+  opacity: 0.8;
+  color: var(--white-color);
+  padding: 10px 7px;
+  >*{
+    font-size: 12px!important;
+    text-shadow: 1px 1px 3px #000;
+  }
+}
+.clipPolygon img{
+  width: 100%;
+  //clip-path:polygon(0% 59%, 19% 0%, 100% 0%, 100% 100%, 0% 100%)!important
+}
 
 
 

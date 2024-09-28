@@ -35,7 +35,7 @@ const categoryService = baseApi.injectEndpoints({
           return {method: 'DELETE', url: `category/delete/${id}`,}
         }, invalidatesTags: ['Category']
       }),
-      getCategory: builder.query<any, void>({
+      getCategory: builder.query<Array<CategoryType>, void>({
         query: () => {
           return {method: 'GET', url: 'category/',}
         }, providesTags: ['Category'],

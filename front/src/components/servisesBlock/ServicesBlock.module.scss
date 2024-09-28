@@ -1,0 +1,40 @@
+.root{
+  margin-top: 80px;
+  margin-bottom: 60px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+}
+.servicesBlock {
+  margin-top: 60px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center; /* Центрируем содержимое по горизонтали */
+  width: 100%;
+}
+.servicesItem{
+  padding: 20px 10px;
+  min-width: 310px;
+  width: 460px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
