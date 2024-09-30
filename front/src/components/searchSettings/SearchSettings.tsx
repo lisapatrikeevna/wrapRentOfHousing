@@ -1,32 +1,46 @@
-import { Button, CircularProgress, MenuItem, Paper, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
+import { Button, MenuItem, Paper, Select, SelectChangeEvent, TextField } from "@mui/material";
 import cl from './SearchSettings.module.scss'
 import { useState } from "react";
-import { useGetCategoryQuery } from "../../bll/category/category.service";
+import { CategoryType } from "../../bll/category/category.service";
 
-const SearchSettings = () => {
-  const {data: categories, isLoading, isError} = useGetCategoryQuery()
-  const [category, setCategory] = useState('');
+export type SearchParamsType={
+  category?:number,
+  city?:string
+}
+type PropsType = {
+  searchHandler: (searchParams: SearchParamsType) => void
+  categories: Array<CategoryType>
+}
+const SearchSettings = ({categories, ...props}: PropsType) => {
+
+  const [category, setCategory] = useState<number>(categories[1].id );
+  // console.log(category);
   const [city, setCity] = useState('');
-  const searchHandler=()=>{
-
+  const searchHandler = () => {
+    console.log(category);
+    // const idCategory = categories!.find(e => e.name === category);
+    let res={}
+    if(category){
+      res={category:category};
+    }
+    if(city){
+      res={...res,city:city}
+    }
+    props.searchHandler(res);
+    // props.searchHandler(`&category=${category}&city=${city}`);
   }
   const handleChange = (event: SelectChangeEvent) => {
-    setCategory(event.target.value as string);
+    setCategory(+event.target.value);
   };
-  console.log("categories", categories);
+  // console.log("categories", categories);
 
-  if( isLoading ) return <CircularProgress/>
-  if( isError ) return <Typography color="error">Error loading category</Typography>;
 
   return (<Paper className={cl.searchSettings}>
-    <Select labelId="demo-simple-select-label" id="demo-simple-select" value={category} label="category" onChange={handleChange}>
+    <Select labelId="demo-simple-select-label" id="demo-simple-select" value={category.toString()} label="category" onChange={handleChange}>
       {categories?.map(i => <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>)}
-      {/*<MenuItem value={10}>Ten</MenuItem>*/}
-      {/*<MenuItem value={20}>Twenty</MenuItem>*/}
-      {/*<MenuItem value={30}>Thirty</MenuItem>*/}
     </Select>
     <TextField id="outlined-basic" label="city" variant="outlined" value={city} onChange={e => setCity(e.target.value)}/>
-  <Button onClick={searchHandler}>search</Button>
+    <Button onClick={searchHandler}>search</Button>
   </Paper>);
 };
 

@@ -20,7 +20,11 @@ export type RealtyType = {
 export type RealtyCategoryArgs = {
   name: string
 }
-
+export type RealtyRequestType={
+  data:Array<RealtyType>
+  total_pages:number
+  current_page:number
+}
 
 const realtyService = baseApi.injectEndpoints({
   endpoints: builder => {
@@ -47,7 +51,7 @@ const realtyService = baseApi.injectEndpoints({
           return {method: 'DELETE', url: `realty/delete/${id}`,}
         }, invalidatesTags: ['Realty']
       }),
-      getRealty: builder.query<Array<RealtyType>, {params:string}>({
+      getRealty: builder.query<RealtyRequestType, {params:string}>({
         query: (arg) => {
           console.log('arg!!!!!!' , arg.params);
           const requestConfig = { method: 'GET', url: `realty${arg.params}/` };
