@@ -7,18 +7,16 @@ import ParalaxBlock from "../../components/paralaxBlock/ParalaxBlock";
 import ServicesBlock from "../../components/servisesBlock/ServicesBlock";
 import { useGetRealtyQuery } from "../../bll/realty/realty.service";
 import { useGetCategoryQuery } from "../../bll/category/category.service";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const HomePage = () => {
   const [newParams, setParams] = useState('?page=1');
   const { data: realty, isLoading: isRealtyLoading, isError: isRealtyError } = useGetRealtyQuery({ params: newParams });
   const { data: categories, isLoading: isLoadingCategory, isError: isErrorCategory } = useGetCategoryQuery();
 
-  console.log('realty.current_page', realty?.current_page);
 
   const searchHandler = (searchParams: SearchParamsType) => {
     let params = newParams;
-    console.log("searchHandler-params : ", params);
 
     if (searchParams.category) {
       params = params.replace(/category=\d+/, `category=${searchParams.category}`) || `${params}&category=${searchParams.category}`;
@@ -28,7 +26,6 @@ const HomePage = () => {
     }
 
     setParams(params);  // Обновляем параметры и запускаем запрос с обновлённым состоянием
-    console.log('Params end : ', params);
   }
 
   const pageHandler = (current_page: number) => {
@@ -41,7 +38,6 @@ const HomePage = () => {
       params = `${params}&page=${current_page}`;
     }
 
-    console.log('pageHandler-params : ', params);
     setParams(params);  // Обновляем параметры для пагинации
   }
 
