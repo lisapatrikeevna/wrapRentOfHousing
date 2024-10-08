@@ -6,14 +6,15 @@
 #run pnpm build
 
 # так же берём готовый контейнер с node на основе alpine
-FROM node:18-alpine as build
+FROM node:18.16
 # Задаем рабочий каталог
 WORKDIR /usr/src/app
 # Копируем туда наши json файлы
 #ADD *.json ./
-COPY package.json pnpm-lock.yaml ./
+# Копируем json файлы и tsconfig
+COPY package.json pnpm-lock.yaml tsconfig.json tsconfig.node.json ./
 
-RUN npm install pnpm
+RUN npm install -g pnpm && pnpm -v
 ## Устанавливаем все пакеты и зависимости указанные в json
 RUN pnpm install
 #COPY package.json pnpm-lock.yaml vite.config.ts ./

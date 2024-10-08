@@ -27,7 +27,7 @@ useEffect(()=> console.log('page', page),[page])
             <OneAd item={item}/>
           </Grid>))}
       </Grid>
-      <Pagination count={realty.total_pages} page={page} onChange={handleChange}/>
+      <Pagination count={realty.total_pages} page={+page} onChange={handleChange}/>
     </Box>);
 };
 

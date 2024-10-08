@@ -16,6 +16,13 @@
     //background: $gray-color;
     color: var(--white-color);
   }
+  .navbar>ul{
+    list-style: 'none';
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   .rightBlock{
     display: flex;
     align-items: center;

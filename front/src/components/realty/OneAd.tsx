@@ -12,6 +12,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from "react";
 import cl from './RealEstate.module.scss'
+import { useNavigate } from "react-router-dom";
+import { PATH } from "../../router";
 
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -34,11 +36,14 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     },
   },],
 }));
+
 type PropsType = {
   item: RealtyType
 }
-const OneAd = ({item,}: PropsType) => {
 
+
+const OneAd = ({item,}: PropsType) => {
+  const navigate = useNavigate()
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
@@ -63,7 +68,7 @@ const OneAd = ({item,}: PropsType) => {
   return <Card sx={{maxWidth: 345}}>
     <CardHeader avatar={<Avatar sx={{bgcolor: red[500]}} aria-label="recipe">R</Avatar>}
 	 action={<IconButton aria-label="settings"> <MoreVertIcon/> </IconButton>}
-	 title={item.title} subheader="September 14, 2016"/>
+	 title={item.title} subheader="September 14, 2016" onClick={()=>navigate(PATH.itemRealty,{state:{id:item.id} })}/>
     <Box className={cl.clipPolygon} >
       <Box className={cl.shadow}>
         <Typography sx={{fontWeight: 'bold'}}>

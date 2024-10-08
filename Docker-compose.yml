@@ -51,7 +51,7 @@ services:
 
   node:
     # Аналогично, build из ./reactapp/dockerfile
-    build: ./reactapp
+    build: ./front
     # имя контейнера
     container_name: reactapp
     # рестарт
@@ -74,6 +74,8 @@ volumes:
 
 networks:
   myNetwork:
+
+
 
 
 
