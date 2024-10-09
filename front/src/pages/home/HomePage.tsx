@@ -13,7 +13,7 @@ const HomePage = () => {
   const [newParams, setParams] = useState('?page=1');
   const { data: realty, isLoading: isRealtyLoading, isError: isRealtyError } = useGetRealtyQuery({ params: newParams });
   const { data: categories, isLoading: isLoadingCategory, isError: isErrorCategory } = useGetCategoryQuery();
-
+  console.log("!!!!realty", realty);
 
   const searchHandler = (searchParams: SearchParamsType) => {
     let params = newParams;

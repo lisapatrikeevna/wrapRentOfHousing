@@ -23,7 +23,7 @@ useEffect(()=> console.log('page', page),[page])
   return (<Box className={cl.container}>
       <Typography variant="h5" align="center" sx={{mb: 4}}>Real Estate Items</Typography>
       <Grid container rowSpacing={1} gap={2} columnSpacing={{xs: 1, sm: 2, md: 3}} justifyContent="center">
-        {realty.data.map(item => (<Grid item xs={12} sm={6} md={4} key={item.id}>
+        {realty.data.map(item => (<Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
             <OneAd item={item}/>
           </Grid>))}
       </Grid>

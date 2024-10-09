@@ -72,7 +72,7 @@ const realtyService = baseApi.injectEndpoints({
       getRealty: builder.query<RealtyRequestType, {params:string}>({
         query: (arg) => {
           console.log('arg!!!!!!' , arg.params);
-          const requestConfig = { method: 'GET', url: `realty${arg.params}/` };
+          const requestConfig = { method: 'GET', url: `realty${arg.params}` };
           // const requestConfig = { method: 'GET', url: 'realty/' };
 
           // Логируем конфигурацию запроса
