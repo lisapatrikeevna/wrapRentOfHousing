@@ -6,14 +6,22 @@ import BlendBlock from "../../components/blendBlock/BlendBlock";
 import ParalaxBlock from "../../components/paralaxBlock/ParalaxBlock";
 import ServicesBlock from "../../components/servisesBlock/ServicesBlock";
 import { useGetRealtyQuery } from "../../bll/realty/realty.service";
-import { useGetCategoryQuery } from "../../bll/category/category.service";
+// import { useGetCategoryQuery } from "../../bll/category/category.service";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootStateType } from "../../bll/store";
+import { CategoryType } from "../../bll/category/category.service";
 
 const HomePage = () => {
+  let filters = useSelector<RootStateType, string>(state => state.app.filteringOptions )
+
+  let categories = useSelector<RootStateType, Array<CategoryType>>(state => state.app.categories)
+  let isLoadingCategory = useSelector<RootStateType, boolean>(state => state.app.isLoadingCategory)
+  let isErrorCategory = useSelector<RootStateType, string|boolean>(state => state.app.isErrorCategory)
   const [newParams, setParams] = useState('?page=1');
   const { data: realty, isLoading: isRealtyLoading, isError: isRealtyError } = useGetRealtyQuery({ params: newParams });
-  const { data: categories, isLoading: isLoadingCategory, isError: isErrorCategory } = useGetCategoryQuery();
-  console.log("!!!!realty", realty);
+  // const { data: categories, isLoading: isLoadingCategory, isError: isErrorCategory } = useGetCategoryQuery();
+  // console.log("!!!!categories", categories);
 
   const searchHandler = (searchParams: SearchParamsType) => {
     let params = newParams;
@@ -40,6 +48,11 @@ const HomePage = () => {
 
     setParams(params);  // Обновляем параметры для пагинации
   }
+  const sortHandler = (value: string) => {
+    setParams(value)
+  }
+
+
 
   return (
     <>
@@ -47,14 +60,14 @@ const HomePage = () => {
         <h3 className={cl.title}>HomePage title</h3>
         {isErrorCategory && <Typography color="error"> {isErrorCategory}</Typography>}
         {isLoadingCategory && <CircularProgress />}
-        {(!isLoadingCategory && !isErrorCategory && categories) &&
+        {(!isLoadingCategory && !isErrorCategory && categories.length) &&
           <SearchSettings searchHandler={searchHandler} categories={categories} />}
       </Box>
 
       {isRealtyError && <Typography color="error">Error loading realty data</Typography>}
       {isRealtyLoading && <CircularProgress />}
       {(!isRealtyLoading && !isRealtyError && realty) &&
-        <RealEstateList realty={realty} pageHandler={pageHandler} />}
+        <RealEstateList realty={realty} pageHandler={pageHandler} sortHandler={sortHandler} filters={filters}/>}
 
       <ParalaxBlock />
       <ServicesBlock />

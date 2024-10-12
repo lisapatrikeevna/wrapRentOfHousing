@@ -3,7 +3,6 @@ import { baseApi } from "../base-api";
 export type CategoryType = {
   id: number
   name: string
-  // questions:any
 }
 export type CreatCategoryArgs = {
   name: string

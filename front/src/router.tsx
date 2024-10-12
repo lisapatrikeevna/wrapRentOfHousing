@@ -10,7 +10,7 @@ import {
 // import { useMeQuery } from "@/services/auth/auth.servies.ts";
 // import DesksPage from "@/pages/desksPage/desksPage.tsx";
 // import CardsPage from "@/pages/cards/cardsPage.tsx";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import ItemProduct from "./pages/productPage/ItemProduct";
 // import { appAC } from "@/services/app.slice.ts";
 // import LearnCards from "@/pages/cards/learnCards/learnCards.tsx";
@@ -76,7 +76,7 @@ export const Router = () => {
   return <RouterProvider router={router} />
 }
 function PrivateRoutes() {
-  const dispatch=useDispatch()
+  // const dispatch=useDispatch()
   // const {data,isError,isLoading} = useMeQuery()
 
   const isAuthenticated = true

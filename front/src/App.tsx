@@ -1,18 +1,31 @@
 import HomePage from "./pages/home/HomePage";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
-import { Provider } from "react-redux";
-import { store } from "./bll/store";
+import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import About from "./pages/about/About";
 import ItemProduct from "./pages/productPage/ItemProduct";
 import PrivacyPolicy from "./pages/privacyPolicy/PrivacyPolicy";
 import { PATH } from "./router";
+import { useEffect } from "react";
+import { appAC } from "./bll/app.slice";
+import { useGetCategoryQuery } from "./bll/category/category.service";
+
+
 
 function App() {
+  const dispatch = useDispatch()
+  const { data: categories, isLoading: isLoadingCategory, isError: isErrorCategory } = useGetCategoryQuery();
+  // console.log("!!!!categories", categories, isLoadingCategory, isErrorCategory);
+  useEffect(()=>{
+    // @ts-ignore
+    isErrorCategory && dispatch(appAC.setIsErrorCategory(isErrorCategory));
+    dispatch(appAC.setIsLoadingCategory(isLoadingCategory));
+    categories && dispatch(appAC.setCategories(categories));
+  },[categories,isLoadingCategory,isErrorCategory])
+
 
   return (
-    <Provider store={store}>
       <Router>
         <Header/>
         <Routes>
@@ -23,7 +36,6 @@ function App() {
         </Routes>
         <Footer/>
       </Router>
-    </Provider>
   )
 }
 

@@ -36,7 +36,14 @@
   width: 100%;
   //clip-path:polygon(0% 59%, 19% 0%, 100% 0%, 100% 100%, 0% 100%)!important
 }
-
+.wrapp{
+  display: flex;
+  justify-content: end;
+  width: 100%;
+}
+.filtersBox{
+  width: 230px;
+}
 
 
 
