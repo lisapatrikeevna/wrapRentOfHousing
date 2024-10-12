@@ -29,7 +29,7 @@ const RealEstateList = ({realty, filters, ...props}: PropsType) => {
       <Stack spacing={2} className={cl.filtersBox}>
         <Typography variant="h6">sort by</Typography>
 
-        <Stack direction="row" spacing={1}>rsc
+        <Stack direction="row" spacing={1}>
           <SortByData filters={filters} sortHandler={props.sortHandler} />
           <SortByTitle filters={filters} sortHandler={props.sortHandler} />
         </Stack>
