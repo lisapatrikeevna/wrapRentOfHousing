@@ -28,12 +28,10 @@ const RealEstateList = ({realty, filters, ...props}: PropsType) => {
     <Box className={cl.wrapp}>
       <Stack spacing={2} className={cl.filtersBox}>
         <Typography variant="h6">sort by</Typography>
-
         <Stack direction="row" spacing={1}>
           <SortByData filters={filters} sortHandler={props.sortHandler} />
           <SortByTitle filters={filters} sortHandler={props.sortHandler} />
         </Stack>
-
       </Stack>
     </Box>
     <Grid container rowSpacing={1} gap={2} columnSpacing={{xs: 1, sm: 2, md: 3}} justifyContent="center">

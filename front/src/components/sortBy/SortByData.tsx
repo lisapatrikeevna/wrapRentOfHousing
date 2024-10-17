@@ -21,7 +21,6 @@ const SortByData = ({filters,sortHandler}:PropsType) => {
   }
 
 
-
   return (<Box>
     <Typography variant="h6">by date</Typography>
     <Stack direction="row" spacing={1} className={cl.itemFilter}>

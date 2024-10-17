@@ -42,6 +42,19 @@ export type RealtyRequestType={
   total_pages:number
   current_page:number
 }
+type itemFilterType={
+  id:number
+  value:string|number|boolean
+}
+export type FilterType={
+  available_dates:itemFilterType[]
+  categories:itemFilterType[]
+  class_realty:itemFilterType[]
+  locations:itemFilterType[]
+  number_of_rooms:itemFilterType[]
+  square_footage:itemFilterType[]
+  available:itemFilterType[]
+}
 
 const realtyService = baseApi.injectEndpoints({
   endpoints: builder => {
@@ -92,11 +105,19 @@ const realtyService = baseApi.injectEndpoints({
           // return {method: 'GET', url: 'realty/',}
         }, providesTags: ['Realty'],
       }),
+      getFilterList: builder.query<FilterType, void>({
+        query: () => {
+          const requestConfig = { method: 'GET', url: `realty/filterList/` };
+
+          console.log("Запрос к API:", requestConfig);
+          return requestConfig;
+        }, providesTags: ['Realty'],
+      }),
     }
   },
 })
 
-export const {useGetRealtyQuery,useGetItemRealtyQuery} = realtyService
+export const {useGetRealtyQuery,useGetItemRealtyQuery,useLazyGetFilterListQuery} = realtyService
 // export const {useCreateCategoryMutation, useGetCategoryQuery, useRemoveCategoryMutation, useUpdateCategoryMutation} = categoryService
 
 
@@ -104,6 +125,32 @@ export const {useGetRealtyQuery,useGetItemRealtyQuery} = realtyService
 
 
 
+// export const realtyApi = createApi({
+//   reducerPath: 'realtyApi',
+//   baseQuery: fetchBaseQuery({
+//     baseUrl: 'http://127.0.0.1:8000/api/',
+//     prepareHeaders: (headers, { getState }) => {
+//       // Получаем токен из Redux state или localStorage
+//       const token = localStorage.getItem('token'); // Или getState().auth.token;
+//
+//       // Если токен существует, добавляем его в заголовки
+//       if (token) {
+//         headers.set('Authorization', `Bearer ${token}`);
+//       }
+//       return headers;
+//     },
+//   }),
+//   endpoints: (builder) => ({
+//     // Эндпоинт для создания объекта Realty
+//     createRealty: builder.mutation({
+//       query: (newRealty) => ({
+//         url: 'realty/',
+//         method: 'POST',
+//         body: newRealty,
+//       }),
+//     }),
+//   }),
+// });
 
 
 

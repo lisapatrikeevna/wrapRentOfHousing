@@ -1,36 +1,30 @@
-import { createAsyncThunk, createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
-import { CategoryType, useGetCategoryQuery } from "./category/category.service";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { CategoryType } from "./category/category.service";
+import { UserType } from "./auth/auth.type";
 // import { User } from "@/services/auth/auth.type.ts";
-import { baseApi } from "./base-api";
-import { AppDispatchType, RootStateType } from "./store.ts";
 
 type initialStateType = {
+  user:UserType|null
   categories: Array<CategoryType>
   filteringOptions: string
   isLoadingCategory: boolean
-  isErrorCategory: string|boolean
+  isErrorCategory: string | boolean
   // user:User
 }
 const initialState: initialStateType = {
-  categories: [],
-  filteringOptions:'?page=1',
-  isLoadingCategory:false,
-  isErrorCategory:false,
-  // user:{}as User,
+  user: null,
+  categories: [], filteringOptions: '?page=1', isLoadingCategory: false, isErrorCategory: false, // user:{}as User,
 }
 
 const slice = createSlice({
   name: 'App', initialState, reducers: {
     setCategories: (state, action: PayloadAction<Array<CategoryType>>) => {
       state.categories = action.payload
-    },
-    setIsLoadingCategory: (state, action: PayloadAction<boolean>) => {
+    }, setIsLoadingCategory: (state, action: PayloadAction<boolean>) => {
       state.isLoadingCategory = action.payload
-    },
-    setIsErrorCategory: (state, action: PayloadAction<string>) => {
+    }, setIsErrorCategory: (state, action: PayloadAction<string>) => {
       state.isErrorCategory = action.payload
-    },
-    // setDecksImg: (state, action: PayloadAction<string>) => {
+    }, // setDecksImg: (state, action: PayloadAction<string>) => {
     //   state.decksImg = action.payload
     // },
     // setUser: (state, action: PayloadAction<User>) => {
@@ -38,8 +32,8 @@ const slice = createSlice({
     // },
   }
 })
-export const appAC=slice.actions
-export const appReducer=slice.reducer
+export const appAC = slice.actions
+export const appReducer = slice.reducer
 
 // TC
 // export const getCategoriesTC = createAsyncThunk(
