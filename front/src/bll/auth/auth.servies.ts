@@ -1,32 +1,37 @@
-// import { baseApi } from "@/services/base-api";
-// import { LoginArgs, SignUpArgs } from "@/services/auth/auth.type"
-
-
 import { baseApi } from "../base-api";
-import { LoginArgs, SignUpArgs } from "./auth.type";
+import { LoginArgs, responseRegisterType, SignUpArgs } from "./auth.type";
+
+
+const token = localStorage.getItem('access_token');
+const headers= {
+  'Authorization': `Bearer ${token}`,
+  'Content-Type': 'application/json',
+}
+
 
 const authService=baseApi.injectEndpoints({
  endpoints: builder => ({
 
-   // me: builder.query<any, void>({
-   //   query: () => {
-   //     return {url: `/auth/me`, method: 'GET',
-   //     }
-   //   },
-   //   extraOptions: {maxRetries: 0,},
-   //   providesTags: ['Me'],
-   // }),
+   me: builder.query<any, void>({
+     query: () => {
+       return {url: `/auth/me/`, method: 'GET',headers
+       }
+     },
+     extraOptions: {maxRetries: 0,},
+     providesTags: ['Me'],
+   }),
 
-   login: builder.mutation<void, LoginArgs>({
+   login: builder.mutation<responseRegisterType, LoginArgs>({
      query: args => {
-       return {url: `/auth/register`, method: 'POST', params: args,}
+       return {url: `/auth/login/`, method: 'POST', body: args,}
      },
      invalidatesTags: ['Me'],
    }),
 
-   signUp: builder.mutation<void, SignUpArgs>({
+   // signUp: builder.mutation<void, SignUpArgs>({
+   signUp: builder.mutation<responseRegisterType, SignUpArgs>({
      query: args => {
-       return { url: `/auth/sign-up`, method: 'POST',body: args}
+       return { url: `/auth/register/`, method: 'POST',body: args}
      },
 
      // async onQueryStarted(_, { dispatch, queryFulfilled }) {

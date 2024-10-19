@@ -1,7 +1,20 @@
 .footerWrap{
-  background: #000;
+  background: var(--dark-gray-color);
   color: #fff;
-  .footer{
+  padding: 25px 0 20px;
 
+  .footer{
+    width: 95%;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+    align-items: self-start;
+  }
+  .footer>ul{
+    list-style: none;
+    padding: 0;
+  }
+  ul>li>a{
+    text-decoration: none;
   }
 }

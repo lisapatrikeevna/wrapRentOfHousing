@@ -1,5 +1,5 @@
 import { z, ZodError } from 'zod'
-import s from './RegisterForm.module.scss'
+import cl from './RegisterForm.module.scss'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
@@ -9,6 +9,8 @@ import { PATH } from "../../../router";
 import { useSignUpMutation } from "../../../bll/auth/auth.servies";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { useDispatch } from "react-redux";
+import { appAC } from "../../../bll/app.slice";
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -24,32 +26,45 @@ const schema = z.object({
       message: 'Passwords do not match', code: z.ZodIssueCode.custom, path: ['passwordConfirmation'],
     })
   }
-
   return data
 })
 
 type FormType = z.infer<typeof schema>
 
 
+
+
 export const RegisterForm = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate()
+  const [signUp, {isError}] = useSignUpMutation();
   const {control, register, handleSubmit, setError, formState: {errors},} = useForm<FormType>({
     mode: 'onSubmit', resolver: zodResolver(schema), defaultValues: {
-      email: 'lisa1@gmail.com', password: '12345', firstName: 'Vasja', lastName: 'Pjato4kin', username: 'air', phone: '', passwordConfirmation: '',
+      email: 'lisa1@gmail.com', password: '12345', firstName: 'Vasja', lastName: 'Pjato4kin', username: 'air', phone: '', passwordConfirmation: '12345',
     },
   })
 
-  const [signUp, {isError}] = useSignUpMutation();
-
   const onSubmit: SubmitHandler<FormType> = async(data) => {
     const body = {
-      email: data.email, name: data.username ? data.username : data.email, password: data.password, // sendConfirmationEmail?: boolean,
-      // subject?: string,
+      firstName: data.firstName, lastName: data.lastName, username: data.username,
+      email: data.email, password: data.password, avatar: data.avatar, phone: data.phone? data.phone : null,
     }
     try {
+      debugger
       const response = await signUp(body)
+      console.log("response",response.data);
+      if(response.data) {
+        dispatch(appAC.setUser({
+          username: response.data.username, email: response.data.email, first_name: response.data.first_name, last_name: response.data.last_name, phone: response.data.phone, id: response.data.id
+        }))
+        dispatch(appAC.setAccessToken(response.data.accessToken));
+        dispatch(appAC.setRefreshToken(response.data.refreshToken));
+        localStorage.setItem('access_token', response.data.access_token);
+        localStorage.setItem('refresh_token', response.data.refresh_token);
+      }
+
       navigate('/')
-      console.log(response);
+      console.log('onSubmit response',response);
     } catch( error ) {
       if( error instanceof ZodError ) {
         // Обработка ошибок валидации от Zod
@@ -72,9 +87,9 @@ export const RegisterForm = () => {
 
   return (<>
     <DevTool control={control}/>
-    <Box className={s.wrapperCard}>
-      <Card className={s.intoAuthCard}>
-        <h1 className={s.h1}>Sign In</h1>
+    <Box className={cl.wrapperCard}>
+      <Card className={cl.intoAuthCard}>
+        <h1 className={cl.h1}>Sign In</h1>
         <p>{isError}</p>
         <form onSubmit={handleFormSubmitted}>
           <TextField placeholder={'firstName'} label={'firstName'} {...register('firstName')} error={!!errors.firstName}/>
@@ -84,25 +99,27 @@ export const RegisterForm = () => {
           <TextField placeholder={'Email'} label={'Email'} {...register('email')} error={!!errors.email}/>
           <Button component="label" role={undefined} variant="contained" tabIndex={-1} startIcon={<CloudUploadIcon/>}>
             Upload Avatar
-            <VisuallyHiddenInput type="file" onChange={(event) => console.log(event.target.files)} multiple/>
+            <VisuallyHiddenInput type="file" {...register('avatar')} multiple/>
+            {/*<VisuallyHiddenInput type="file" onChange={(event) => console.log(event.target.files)} multiple/>*/}
           </Button>
           <TextField placeholder={'Password'} label={'Password'} type={'password'} {...register('password')} error={!!errors.password}/>
           {errors.password && <p>{errors.password.message}</p>}
 
           <TextField {...register('passwordConfirmation')} label={'Confirm Password'} type={'password'}/>
 
-          <Button className={s.button} variant={'outlined'} type="submit" fullWidth={true}>
-            Sign Up
+          <Button className={cl.button} variant={'outlined'} type="submit" fullWidth={true}>
+            Sign Up(reg)
           </Button>
           <div style={{display: 'flex', justifyContent: 'center'}}>
-            <Button as={Link} className={`${s.link} ${s.alreadyHaveAccount}`} to={navigate(PATH.login)} rel={'noopener nopener'} >
+            <Button component={Link} className={`${cl.link} ${cl.alreadyHaveAccount}`} to={navigate(PATH.login)} >
+            {/*<Button component={Link} className={`${cl.link} ${cl.alreadyHaveAccount}`} to={navigate(PATH.login)} rel={'noopener nopener'} >*/}
               Already have an account?
             </Button>
           </div>
-          <div className={s.underlineLinkWrapper}>
-            <Button as={NavLink} className={s.underlineLink} to={navigate(PATH.login)} rel={'noopener nopener'} target={'_blank'} >
-              Sign In
-            </Button>
+          <div className={cl.underlineLinkWrapper}>
+            <NavLink as={NavLink} className={cl.underlineLink} to={navigate(PATH.login)} rel={'noopener nopener'} target={'_blank'} >
+              Sign In(log)
+            </NavLink>
           </div>
         </form>
       </Card>

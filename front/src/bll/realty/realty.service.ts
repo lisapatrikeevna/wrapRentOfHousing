@@ -1,59 +1,10 @@
-
 import { baseApi } from "../base-api";
-export type RealtyDetailsType={
-  id: number
-  internet:string
-  garage_or_parking:string
-  balcony:string
-  heating_type:string
-  air_conditioning:string
-  floor_number:number
-  total_floors:number
-  pet_friendly:boolean
-  furnished:boolean
-  description:string
-  created_at:string
-  updated_at:string
-}
-export type RealtyType = {
-  id: number
-  title: string
-  description: string
-  location: string
-  price: string
-  number_of_rooms: number
-  available: boolean
-  rating: number
-  register_date: string
-  available_date: string
-  real_estate_image:string
-  category:number
-  author:number
-  class_realty:string
-  details:RealtyDetailsType
-  square_footage:number
-}
+import { FilterType, RealtyCategoryArgs, RealtyRequestType, RealtyType } from "./realty.type";
 
-export type RealtyCategoryArgs = {
-  name: string
-}
-export type RealtyRequestType={
-  data:Array<RealtyType>
-  total_pages:number
-  current_page:number
-}
-type itemFilterType={
-  id:number
-  value:string|number|boolean
-}
-export type FilterType={
-  available_dates:itemFilterType[]
-  categories:itemFilterType[]
-  class_realty:itemFilterType[]
-  locations:itemFilterType[]
-  number_of_rooms:itemFilterType[]
-  square_footage:itemFilterType[]
-  available:itemFilterType[]
+const token = localStorage.getItem('access_token');
+const headers= {
+  'Authorization': `Bearer ${token}`,
+  'Content-Type': 'application/json',
 }
 
 const realtyService = baseApi.injectEndpoints({
@@ -62,11 +13,7 @@ const realtyService = baseApi.injectEndpoints({
       createRealty: builder.mutation<void, RealtyCategoryArgs>({
         query: arg => {
           return {
-            body: JSON.stringify(arg),
-            method: 'POST',
-            url: 'realty',
-            // url: 'realty/add',
-            headers: { 'Content-Type': 'application/json' }
+            body: JSON.stringify(arg), method: 'POST', url: 'realty', headers
           };
         }, invalidatesTags: ['Realty'],
       }),
@@ -79,7 +26,7 @@ const realtyService = baseApi.injectEndpoints({
       // }),
       removeRealty: builder.mutation<void, {id: number}>({
         query(id) {
-          return {method: 'DELETE', url: `realty/${id}/`,}
+          return {method: 'DELETE', url: `realty/${id}/`,headers}
         }, invalidatesTags: ['Realty']
       }),
       getRealty: builder.query<RealtyRequestType, {params:string}>({
@@ -97,7 +44,7 @@ const realtyService = baseApi.injectEndpoints({
       getItemRealty: builder.query<RealtyType, {id:number}>({
         query: (args) => {
           console.log('args.id', args.id);
-          const requestConfig = { method: 'GET', url: `realty/${args.id}` };
+          const requestConfig = { method: 'GET', url: `realty/${args.id}`,headers };
 
           // Логируем конфигурацию запроса
           console.log("Запрос к API:", requestConfig);

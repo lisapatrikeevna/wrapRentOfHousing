@@ -3,7 +3,7 @@ import logoImg from './../../assets/logo.png'
 import { AppBar, Avatar, Box, Container, Modal, Toolbar, Typography } from '@mui/material'
 // import MenuIcon from '@mui/icons-material/Menu'
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { PATH } from "../../router";
 import FiltersModal from "../filtersModal/FiltersModal";
 import { useSelector } from "react-redux";
@@ -49,22 +49,30 @@ const Header = () => {
           {/*  <MenuIcon/>*/}
           {/*</IconButton>*/}
           <Avatar sx={{width: 26, height: 26}} onClick={avatarHandler}>
-            <PermIdentityIcon color='inherit'/>
+            <PermIdentityIcon color={user? 'inherit': 'error'}/>
           </Avatar>
 
         </Toolbar>
       </Box>
 
     <nav className={cl.navbar}>
-      <Container component="ul">
+      {/*<Container component="ul" className={cl.role}>*/}
+      <Container component="ul" sx={{width:'212px'}} className={cl.role}>
+        <li><NavLink className={({ isActive }) => (isActive ? cl.active : '')} to={PATH.toLandlords}>to landlords</NavLink></li>
+        <li><NavLink className={({ isActive }) => (isActive ? cl.active : '')} to={PATH.home}>rent</NavLink></li>
+      </Container>
+      <Container component="ul" sx={{width:'300px'}}>
         <li><Link to={PATH.home}>Home</Link></li>
         <li><Link to={PATH.about}>About</Link></li>
         <li><Link to={PATH.privacyPolicy}>PrivacyPolicy</Link></li>
         {/*<li><Link to={PATH.itemRealty}>itemRealty</Link></li>*/}
-        {/*<li><Link to="/real-estate">Real Estate List</Link></li>*/}
       </Container>
+
     </nav>
   </AppBar>
+
+
+
   <Modal
     open={open}
     onClose={modalHandler}

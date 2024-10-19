@@ -1,18 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CategoryType } from "./category/category.service";
 import { UserType } from "./auth/auth.type";
-// import { User } from "@/services/auth/auth.type.ts";
 
 type initialStateType = {
+  access_token:string|null
+  refresh_token:string|null
   user:UserType|null
   categories: Array<CategoryType>
   filteringOptions: string
   isLoadingCategory: boolean
   isErrorCategory: string | boolean
-  // user:User
 }
 const initialState: initialStateType = {
   user: null,
+  access_token:null,
+  refresh_token:null,
   categories: [], filteringOptions: '?page=1', isLoadingCategory: false, isErrorCategory: false, // user:{}as User,
 }
 
@@ -24,56 +26,32 @@ const slice = createSlice({
       state.isLoadingCategory = action.payload
     }, setIsErrorCategory: (state, action: PayloadAction<string>) => {
       state.isErrorCategory = action.payload
-    }, // setDecksImg: (state, action: PayloadAction<string>) => {
-    //   state.decksImg = action.payload
-    // },
-    // setUser: (state, action: PayloadAction<User>) => {
-    //   state.user = action.payload
-    // },
+    },
+    setUser: (state, action: PayloadAction<UserType>) => {
+      debugger
+      state.user = action.payload
+    },
+    setAccessToken: (state, action: PayloadAction<string>) => {
+      state.access_token = action.payload
+    },
+    setRefreshToken: (state, action: PayloadAction<string>) => {
+      state.refresh_token = action.payload
+    },
+    setLogout(state) {
+      // Очистка стейта пользователя при выходе
+      state.access_token = null;
+      state.refresh_token = null;
+      state.user = null
+      // Очистка токенов из localStorage
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+    }
   }
 })
 export const appAC = slice.actions
 export const appReducer = slice.reducer
 
 // TC
-// export const getCategoriesTC = createAsyncThunk(
-//   'app/getCategories',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const { data, isLoading, isError } = await useGetCategoryQuery();
-//       if (isError) {
-//         return rejectWithValue(isError);
-//       }
-//       return data;
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
-// export const getCategoriesTC = createAsyncThunk('app/getCategories', async (_, { dispatch }) => {
-//     dispatch(appAC.setIsLoadingCategory(true));
-//     try {
-//       const { data: categories } = await baseApi.endpoints.getCategory.initiate();
-//       dispatch(appAC.setCategories(categories));
-//     } catch (error) {
-//       dispatch(appAC.setIsErrorCategory(error));
-//     } finally {
-//       dispatch(appAC.setIsLoadingCategory(false));
-//     }
-//   }
-// );
-
-// export const getCategoriesTC = () => async (dispatch: Dispatch) => {
-//   dispatch(appAC.setIsLoadingCategory(true));
-//   try {
-//     const { data: categories } = await useGetCategoryQuery();
-//     dispatch(appAC.setCategories(categories));
-//     dispatch(appAC.setIsLoadingCategory(false));
-//   } catch (isError) {
-//     dispatch(appAC.setIsErrorCategory(isError));
-//     dispatch(appAC.setIsLoadingCategory(false));
-//   }
-// };
 
 // export const getCategoriesTC = () => async (dispatch: AppDispatchType, getState: () => RootStateType) => {
 //   dispatch(appAC.setIsLoadingCategory(true));

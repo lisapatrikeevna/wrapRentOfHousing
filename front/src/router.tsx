@@ -9,11 +9,12 @@ import ErrorPage from "./pages/errorPage/ErrorPage";
 import HomePage from "./pages/home/HomePage";
 import About from "./pages/about/About";
 import PageLogin from "./pages/auth/login/pageLogin";
+import { appAC } from "./bll/app.slice";
 
 
 export const PATH = {
-  login: '/login', loginOut: '/logOut', register: '/register', home: '/', renter: '/renter', landlord: '/landlord', // cardTest:'/cardTest',
-  about: '/about', privacyPolicy: '/privacyPolicy', itemRealty: '/realEstate',
+  login: '/login', loginOut: '/logOut', register: '/register', home: '/', renter: '/renter',
+  about: '/about', privacyPolicy: '/privacyPolicy', itemRealty: '/realEstate',toLandlords:'/toLandlords',
 }
 
 const publicRoutes: RouteObject[] = [
@@ -27,7 +28,7 @@ const publicRoutes: RouteObject[] = [
 
 const privateRoutes: RouteObject[] = [
   {
-  element: <LandlordPage/>, path: PATH.landlord,
+  element: <LandlordPage/>, path: PATH.toLandlords,
 }, {
   element: <div>log out</div>, path: PATH.loginOut,
 },
@@ -58,28 +59,20 @@ export const Router = () => {
 
 
 
-// function PrivateRoutes() {
-//   const dispatch = useDispatch()
-//   const {data, isError, isLoading} = useMeQuery()
-//
-//   // const isAuthenticated = true
-//   const isAuthenticated = !isError
-//
-//   if( isLoading ) {
-//     return null
-//   }
-//   if( data ) {
-//     // dispatch(appAC.setUser(data))
-//   }
-//   return isAuthenticated ? <Outlet/> : <Navigate to={'/login'}/>
-// }
 function PrivateRoutes() {
-  const { data, isError, isLoading } = useMeQuery();
+  const dispatch = useDispatch()
+  const {data, isError, isLoading} = useMeQuery()
 
-  const isAuthenticated = !isError;
+  // const isAuthenticated = true
+  const isAuthenticated = !isError
 
-  if (isLoading) {
-    return null;
+  if( isLoading ) {
+    return null
+  }
+  if( data ) {
+    debugger
+    console.log(data);
+    // dispatch(appAC.setUser(data))
   }
 
   return isAuthenticated ? <Outlet /> : <Navigate to={PATH.login} />;
