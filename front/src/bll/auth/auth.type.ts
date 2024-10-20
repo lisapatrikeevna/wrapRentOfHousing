@@ -6,16 +6,18 @@ export type authType = {
 
 }
 export type responseRegisterType = {
-  data: {
-    access_token:string
-    refresh_token:string
-    username: string
-    email: string
-    first_name: string
-    id: number
-    last_name: string
-    phone: string | null
-  }
+  access_token: string
+  refresh_token: string
+  user: UserType
+  // user:{
+  //   email: string
+  //   username: string
+  //   phone?: string | null
+  //   avatar?: string | null
+  //   first_name?: string
+  //   id?: number
+  //   last_name?: string
+  // }
 }
 export type LoginArgs = {
   // email: string
@@ -32,16 +34,17 @@ export type SignUpArgs = {
   phone?: string | null
 }
 export type UserType = {
-  avatar?: string | null
-  created?: string
+  id?: number
   email: string
-  phone?: string | null
-  id: string
   username: string
-  last_name?: string | null
-  first_name?: string | null
+  phone?: string | null
+  avatar?: string | null
+  first_name?: string
+  last_name?: string
+  created?: string
   updated?: string
 }
+
 export interface RefreshResponse {
   access_token: string
   refresh_token?: string

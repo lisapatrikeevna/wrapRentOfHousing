@@ -10,11 +10,20 @@ import HomePage from "./pages/home/HomePage";
 import About from "./pages/about/About";
 import PageLogin from "./pages/auth/login/pageLogin";
 import { appAC } from "./bll/app.slice";
+import PrivacyPolicy from "./pages/privacyPolicy/PrivacyPolicy";
+import LogoutPage from "./pages/auth/logoutPage/LogoutPage";
 
 
 export const PATH = {
-  login: '/login', loginOut: '/logOut', register: '/register', home: '/', renter: '/renter',
-  about: '/about', privacyPolicy: '/privacyPolicy', itemRealty: '/realEstate',toLandlords:'/toLandlords',
+  login: '/login',
+  loginOut: '/logOut',
+  register: '/register',
+  home: '/',
+  renter: '/renter',
+  about: '/about',
+  privacyPolicy: '/privacyPolicy',
+  itemRealty: '/realEstate',
+  toLandlords:'/toLandlords',
 }
 
 const publicRoutes: RouteObject[] = [
@@ -22,16 +31,15 @@ const publicRoutes: RouteObject[] = [
   {element: <PageLogin/>, path: PATH.login,},
   {element: <HomePage/>, path: PATH.home,},
   {element: <About/>, path: PATH.about,},
-  {element: <ItemProduct/>, path: PATH.privacyPolicy,},
-  {element: <ItemProduct/>, path: PATH.itemRealty,},
+  {element: <PrivacyPolicy/>, path: PATH.privacyPolicy,},
+  // {element: <ItemProduct/>, path: PATH.itemRealty,},
 ]
 
 const privateRoutes: RouteObject[] = [
-  {
-  element: <LandlordPage/>, path: PATH.toLandlords,
-}, {
-  element: <div>log out</div>, path: PATH.loginOut,
-},
+  {element: <LandlordPage/>, path: PATH.toLandlords},
+  {element: <ItemProduct/>, path: PATH.itemRealty},
+  {element: <LogoutPage/>, path: PATH.loginOut,},
+  // {element: <div>log out</div>, path: PATH.loginOut,},
 ]
 
 

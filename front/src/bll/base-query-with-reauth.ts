@@ -14,8 +14,7 @@ const baseQuery = fetchBaseQuery({
   }
 })
 
-export const baseQueryWithReauth: BaseQueryFn<FetchArgs | string, unknown, FetchBaseQueryError> =
-  async(args, api, extraOptions) => {
+export const baseQueryWithReauth: BaseQueryFn<FetchArgs | string, unknown, FetchBaseQueryError> = async(args, api, extraOptions) => {
   await mutex.waitForUnlock()
   let result = await baseQuery(args, api, extraOptions)
 
@@ -23,7 +22,13 @@ export const baseQueryWithReauth: BaseQueryFn<FetchArgs | string, unknown, Fetch
     if( !mutex.isLocked() ) {
       const release = await mutex.acquire()
       // Попытка получить новый токен
-      const refreshResult = await baseQuery({method: 'POST', url: '/auth/refreshToken/'}, api, extraOptions) as {data?: RefreshResponse}
+      const refreshResult = await baseQuery({
+        method: 'POST',
+        url: '/auth/refreshToken/',
+        body: {
+          refresh: localStorage.getItem('refresh_token') // Получаем refresh_token из localStorage
+        }
+      }, api, extraOptions) as {data?: RefreshResponse}
 
       if( refreshResult.data?.access_token ) {
         // Сохраняем новый access token
