@@ -28,13 +28,14 @@ const style = {
 const Header = () => {
   const navigate = useNavigate()
   const user=useSelector<RootStateType,UserType|null>(state=>state.app.user)
+  // const user=true
   const[open, setOpen] = useState<boolean>(false)
   const modalHandler = ()=>{
     setOpen(!open)
   }
   const avatarHandler=()=>{
     console.log('user', user);
-    !!user? modalHandler : navigate(PATH.login)
+    !!user? modalHandler() : navigate(PATH.login)
   }
 
 
@@ -73,12 +74,7 @@ const Header = () => {
 
 
 
-  <Modal
-    open={open}
-    onClose={modalHandler}
-    aria-labelledby="modal-modal-title"
-    aria-describedby="modal-modal-description"
-  >
+  <Modal open={open} onClose={modalHandler} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
     <Box sx={style}>
       <Typography id="modal-modal-title" variant="h6" component="h2">
         Text in a modal

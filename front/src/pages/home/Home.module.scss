@@ -13,10 +13,17 @@
   flex-direction: column;
   padding-bottom: 100px;
 }
-.title{
-  mix-blend-mode: overlay;
+.title {
+  //mix-blend-mode: overlay;
+  mix-blend-mode: soft-light;
   font-size: 133px;
   text-align: center;
+  max-width: 95%;
+  width: 100%; /* Занимает всю ширину родительского элемента */
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: normal;
 }
 
 

@@ -72,9 +72,10 @@ function PrivateRoutes() {
   if( data ) {
     debugger
     console.log(data);
-    // dispatch(appAC.setUser(data))
+    dispatch(appAC.setUser(data))
   }
 
+  // return isAuthenticated ? <Outlet /> : null;
   return isAuthenticated ? <Outlet /> : <Navigate to={PATH.login} />;
 }
 //<Route path="*" element={<NoMatch />} />

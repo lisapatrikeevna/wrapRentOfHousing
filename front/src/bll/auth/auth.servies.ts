@@ -21,16 +21,45 @@ const authService=baseApi.injectEndpoints({
      providesTags: ['Me'],
    }),
 
+   // login: builder.mutation<responseRegisterType, LoginArgs>({
+   //   query: args => {
+   //     console.log("args", args);
+   //     return {url: `/auth/login/`, method: 'POST', body: JSON.stringify(args), headers: {'Content-Type': 'application/json',},}
+   //   },
+   //   invalidatesTags: ['Me'],
+   // }),
    login: builder.mutation<responseRegisterType, LoginArgs>({
      query: args => {
-       return {url: `/auth/login/`, method: 'POST', body: args,}
+       console.log("args", args);
+       const res= {
+         url: `/auth/login/`,
+         method: 'POST',
+         headers: {'Content-Type': 'application/json',},
+         // body: JSON.stringify(
+         //   {
+         //   username: "air",
+         //   password: "12345"}),
+         body: JSON.stringify(args),
+       };
+       console.log(res);
+       return res;
      },
      invalidatesTags: ['Me'],
+     async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+       try {
+         const { data } = await queryFulfilled;
+         console.log('Login successful:', data);
+       } catch (error) {
+         console.error('Login error:', error);
+       }
+     },
    }),
+
 
    // signUp: builder.mutation<void, SignUpArgs>({
    signUp: builder.mutation<responseRegisterType, SignUpArgs>({
      query: args => {
+       console.log('args for register', args);
        return { url: `/auth/register/`, method: 'POST',body: args}
      },
 

@@ -18,7 +18,7 @@ export type responseRegisterType = {
   }
 }
 export type LoginArgs = {
-  email: string
+  // email: string
   password: string
   username: string
 }
