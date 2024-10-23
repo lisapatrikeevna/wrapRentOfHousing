@@ -28,7 +28,7 @@ export type RealtyType = {
   category:number
   author:number
   class_realty:string
-  details:RealtyDetailsType
+  details?:RealtyDetailsType
   square_footage:number
 }
 

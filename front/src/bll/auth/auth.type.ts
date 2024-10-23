@@ -9,15 +9,6 @@ export type responseRegisterType = {
   access_token: string
   refresh_token: string
   user: UserType
-  // user:{
-  //   email: string
-  //   username: string
-  //   phone?: string | null
-  //   avatar?: string | null
-  //   first_name?: string
-  //   id?: number
-  //   last_name?: string
-  // }
 }
 export type LoginArgs = {
   // email: string

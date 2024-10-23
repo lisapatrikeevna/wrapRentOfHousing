@@ -24,6 +24,12 @@ background: var(--light-gray-color);
   font-size: 14px;
   font-weight: 400;
   text-align: right;
+  &:focus-visible{
+    color: var(--primary-color);
+  }
+  &:hover{
+    color: var(--header-link-color);
+  }
 }
 
 .underlineLinkWrapper {

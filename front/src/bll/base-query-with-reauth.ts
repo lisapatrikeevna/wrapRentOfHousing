@@ -6,12 +6,14 @@ import { RefreshResponse } from "./auth/auth.type"; // Импорт экшено
 
 const mutex = new Mutex()
 
-const token = localStorage.getItem('access_token');
+// const token = localStorage.getItem('access_token');
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: API_URL, headers: {
-    'Content-Type': 'application/json', 'Authorization': token ? `Bearer ${token}` : '',
-  }
+  baseUrl: API_URL,
+  credentials: "include",
+  // headers: {
+  //   'Content-Type': 'application/json', 'Authorization': token ? `Bearer ${token}` : '',
+  // }
 })
 
 export const baseQueryWithReauth: BaseQueryFn<FetchArgs | string, unknown, FetchBaseQueryError> = async(args, api, extraOptions) => {
@@ -23,8 +25,7 @@ export const baseQueryWithReauth: BaseQueryFn<FetchArgs | string, unknown, Fetch
       const release = await mutex.acquire()
       // Попытка получить новый токен
       const refreshResult = await baseQuery({
-        method: 'POST',
-        url: '/auth/refreshToken/',
+        method: 'POST', url: '/auth/refreshToken/',
         body: {
           refresh: localStorage.getItem('refresh_token') // Получаем refresh_token из localStorage
         }
@@ -55,3 +56,9 @@ export const baseQueryWithReauth: BaseQueryFn<FetchArgs | string, unknown, Fetch
 
   return result
 }
+
+
+
+
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI5NTQ4ODIwLCJpYXQiOjE3Mjk1NDg1MjAsImp0aSI6IjE5Yzg0MjhmM2U0MzRkYmRiMTMxMjdmMzExODQ4MTE3IiwidXNlcl9pZCI6MX0.Cv1wl-fdG0dJ1TTvGaOTZ7t3CwPmDWVhRJXYdvMDdp8
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI5NTQ5ODM1LCJpYXQiOjE3Mjk1NDk1MzUsImp0aSI6IjI3YWVmZWQxNWVkMjQ4ODBhZmY2YjFhODZmOWEzNjZiIiwidXNlcl9pZCI6MX0.Kc8UDA3wkCyM7KV84Ceu3Ztde5uJEeIDVCY0pfISC4U

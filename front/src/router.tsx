@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate, Outlet, RouteObject, RouterProvider, } from 'react-router-dom'
 import ItemProduct from "./pages/productPage/ItemProduct";
 import LandlordPage from "./pages/landlord/LandlordPage";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useMeQuery } from "./bll/auth/auth.servies";
 import RegisterForm from "./pages/auth/registerForm/RegisterForm";
 import App from "./App";
@@ -12,6 +12,8 @@ import PageLogin from "./pages/auth/login/pageLogin";
 import { appAC } from "./bll/app.slice";
 import PrivacyPolicy from "./pages/privacyPolicy/PrivacyPolicy";
 import LogoutPage from "./pages/auth/logoutPage/LogoutPage";
+import { RootStateType } from "./bll/store.ts";
+import { UserType } from "./bll/auth/auth.type.ts";
 
 
 export const PATH = {
@@ -69,22 +71,27 @@ export const Router = () => {
 
 function PrivateRoutes() {
   const dispatch = useDispatch()
-  const {data, isError, isLoading} = useMeQuery()
+  const user=useSelector<RootStateType,UserType|null>(state => state.app.user)
 
-  // const isAuthenticated = true
-  const isAuthenticated = !isError
+  if(!user){
+    const {data, isError, isLoading} = useMeQuery()
 
-  if( isLoading ) {
-    return null
-  }
-  if( data ) {
-    debugger
-    console.log(data);
-    dispatch(appAC.setUser(data))
+    // const isAuthenticated = true
+    const isAuthenticated = !isError
+
+    if( isLoading ) {
+      return null
+    }
+    if( data ) {
+      debugger
+      console.log(data);
+      dispatch(appAC.setUser(data))
+    }
+    return isAuthenticated ? <Outlet /> : <Navigate to={PATH.login} />;
   }
 
   // return isAuthenticated ? <Outlet /> : null;
-  return isAuthenticated ? <Outlet /> : <Navigate to={PATH.login} />;
+  // return isAuthenticated ? <Outlet /> : <Navigate to={PATH.login} />;
 }
 //<Route path="*" element={<NoMatch />} />
 

@@ -58,7 +58,8 @@ const authService=baseApi.injectEndpoints({
    signUp: builder.mutation<responseRegisterType, SignUpArgs>({
      query: args => {
        console.log('args for register', args);
-       return { url: `/auth/register/`, method: 'POST',body: args}
+       return { url: `/auth/register/`, method: 'POST',body: args, headers: {} }
+       // return { url: `/auth/register/`, method: 'POST',body: args, headers: {'Accept': 'application/json',} }
      },
 
      // async onQueryStarted(_, { dispatch, queryFulfilled }) {

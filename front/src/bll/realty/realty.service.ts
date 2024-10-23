@@ -1,5 +1,5 @@
 import { baseApi } from "../base-api";
-import { FilterType, RealtyCategoryArgs, RealtyRequestType, RealtyType } from "./realty.type";
+import { FilterType, RealtyRequestType, RealtyType } from "./realty.type";
 
 const token = localStorage.getItem('access_token');
 const headers= {
@@ -10,10 +10,18 @@ const headers= {
 const realtyService = baseApi.injectEndpoints({
   endpoints: builder => {
     return {
-      createRealty: builder.mutation<void, RealtyCategoryArgs>({
-        query: arg => {
+      createRealty: builder.mutation<void, RealtyType>({
+        query: (arg) => {
+          const token = localStorage.getItem('access_token');
           return {
-            body: JSON.stringify(arg), method: 'POST', url: 'realty', headers
+            url: 'realty/',
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              // 'Content-Type': 'application/json',
+            },
+            body: arg,
+            // body: JSON.stringify(arg),
           };
         }, invalidatesTags: ['Realty'],
       }),
@@ -54,7 +62,7 @@ const realtyService = baseApi.injectEndpoints({
       }),
       getFilterList: builder.query<FilterType, void>({
         query: () => {
-          const requestConfig = { method: 'GET', url: `realty/filterList/` };
+          const requestConfig = { method: 'GET', url: `realty/filterList/`,headers:{} };
 
           console.log("Запрос к API:", requestConfig);
           return requestConfig;
@@ -64,7 +72,7 @@ const realtyService = baseApi.injectEndpoints({
   },
 })
 
-export const {useGetRealtyQuery,useGetItemRealtyQuery,useLazyGetFilterListQuery} = realtyService
+export const {useGetRealtyQuery,useGetItemRealtyQuery,useLazyGetFilterListQuery, useCreateRealtyMutation} = realtyService
 // export const {useCreateCategoryMutation, useGetCategoryQuery, useRemoveCategoryMutation, useUpdateCategoryMutation} = categoryService
 
 

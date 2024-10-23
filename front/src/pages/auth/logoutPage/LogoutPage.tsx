@@ -22,13 +22,11 @@ export const LogoutPage = () => {
       <Paper className={cl.registerCard}>
         <Typography variant={'h5'} className={cl.h1}>Are you sure you want to log out of your account?</Typography>
 
-
-      </Paper>
-      <Box style={{display: 'flex', justifyContent: 'center'}}>
-        <Button className={`${cl.link} `} onClick={handleLogout}>
-          Already have an account?
+        <Button variant={'contained'} onClick={handleLogout}>
+          log out of account
         </Button>
-      </Box>
+      </Paper>
+
       <Box className={cl.underlineLinkWrapper}>
         <NavLink className={cl.underlineLink} to={PATH.home} >
           return to home
