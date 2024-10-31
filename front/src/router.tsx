@@ -12,8 +12,8 @@ import PageLogin from "./pages/auth/login/pageLogin";
 import { appAC } from "./bll/app.slice";
 import PrivacyPolicy from "./pages/privacyPolicy/PrivacyPolicy";
 import LogoutPage from "./pages/auth/logoutPage/LogoutPage";
-import { RootStateType } from "./bll/store.ts";
-import { UserType } from "./bll/auth/auth.type.ts";
+import { RootStateType } from "./bll/store";
+import { UserType } from "./bll/auth/auth.type";
 
 
 export const PATH = {
@@ -67,31 +67,57 @@ export const Router = () => {
   return <RouterProvider router={router} />;
 };
 
-
-
 function PrivateRoutes() {
-  const dispatch = useDispatch()
-  const user=useSelector<RootStateType,UserType|null>(state => state.app.user)
+  const dispatch = useDispatch();
+  const user = useSelector<RootStateType, UserType | null>((state) => state.app.user);
 
-  if(!user){
-    const {data, isError, isLoading} = useMeQuery()
-
-    // const isAuthenticated = true
-    const isAuthenticated = !isError
-
-    if( isLoading ) {
-      return null
-    }
-    if( data ) {
-      debugger
-      console.log(data);
-      dispatch(appAC.setUser(data))
-    }
-    return isAuthenticated ? <Outlet /> : <Navigate to={PATH.login} />;
+  // Если пользователь уже есть в стейте, пропускаем его дальше
+  if (user) {
+    return <Outlet />;
   }
 
-  // return isAuthenticated ? <Outlet /> : null;
-  // return isAuthenticated ? <Outlet /> : <Navigate to={PATH.login} />;
+  // Если пользователя нет, пытаемся получить его данные через useMeQuery
+  const { data, isError, isLoading } = useMeQuery();
+
+  // Пока идет запрос - показываем индикатор загрузки
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // Если запрос не удался (ошибка или нет данных), перенаправляем на страницу логина
+  if (isError || !data) {
+    return <Navigate to={PATH.login} />;
+  }
+
+  // Если запрос удался, сохраняем пользователя в стейте
+  dispatch(appAC.setUser(data));
+
+  // После сохранения пользователя в стейте, пропускаем к приватным маршрутам
+  return <Outlet />;
 }
+// function PrivateRoutes() {
+//   const dispatch = useDispatch()
+//   const user=useSelector<RootStateType,UserType|null>(state => state.app.user)
+//
+//   if(!user){
+//     const {data, isError, isLoading} = useMeQuery()
+//
+//     // const isAuthenticated = true
+//     // const isAuthenticated = !isError
+//
+//     if( isLoading ) {
+//       return <CircularProgress />
+//     }
+//     if( data ) {
+//       console.log(data);
+//       dispatch(appAC.setUser(data))
+//     }
+//     const isAuthenticated = !isError;
+//     return isAuthenticated ? <Outlet /> : <Navigate to={PATH.login} />;
+//   }
+//   return <Outlet />;
+//   // return isAuthenticated ? <Outlet /> : <Navigate to={PATH.login} />;
+// }
+
 //<Route path="*" element={<NoMatch />} />
 

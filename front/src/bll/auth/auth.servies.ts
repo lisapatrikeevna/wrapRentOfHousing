@@ -14,9 +14,10 @@ const authService=baseApi.injectEndpoints({
 
    me: builder.query<any, void>({
      query: () => {
-       const token = localStorage.getItem('access_token');
+       // const token = localStorage.getItem('access_token');
        // console.log("Authorization headers: ", headers);
-       return {url: `/auth/me/`, method: 'GET',headers:{'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json',}
+       return {url: `/auth/me/`, method: 'GET',
+         // headers:{'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json',}
        }
      },
      extraOptions: {maxRetries: 0,},
@@ -26,32 +27,12 @@ const authService=baseApi.injectEndpoints({
    login: builder.mutation<responseRegisterType, LoginArgs>({
      query: args => {
        console.log("args", args);
-       return {url: `/auth/login/`, method: 'POST', body: JSON.stringify(args), headers: {'Content-Type': 'application/json',},}
+       return {url: `/auth/login/`, method: 'POST', body: JSON.stringify(args),
+         headers: {'Content-Type': 'application/json',},
+       }
      },
      invalidatesTags: ['Me'],
    }),
-   // login: builder.mutation<responseRegisterType, LoginArgs>({
-   //   query: args => {
-   //     console.log("args", args);
-   //     const res= {
-   //       url: `/auth/login/`,
-   //       method: 'POST',
-   //       headers: {'Content-Type': 'application/json',},
-   //       body: JSON.stringify(args),
-   //     };
-   //     console.log(res);
-   //     return res;
-   //   },
-   //   invalidatesTags: ['Me'],
-   //   async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-   //     try {
-   //       const { data } = await queryFulfilled;
-   //       console.log('Login successful:', data);
-   //     } catch (error) {
-   //       console.error('Login error:', error);
-   //     }
-   //   },
-   // }),
 
 
    // signUp: builder.mutation<void, SignUpArgs>({

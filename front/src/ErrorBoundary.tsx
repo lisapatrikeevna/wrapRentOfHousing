@@ -3,6 +3,7 @@ import React, { Component, ErrorInfo } from 'react';
 class ErrorBoundary extends Component<{ children: React.ReactNode }, { hasError: boolean }> {
   state = { hasError: false };
 
+  //@ts-ignore
   static getDerivedStateFromError(error: Error) {
     return { hasError: true };
   }

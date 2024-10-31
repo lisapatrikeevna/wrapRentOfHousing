@@ -11,12 +11,10 @@ import { appAC } from "../../../bll/app.slice";
 import { useLoginMutation } from "../../../bll/auth/auth.servies";
 import { RootStateType } from "../../../bll/store";
 import { UserType } from "../../../bll/auth/auth.type";
-import { useState } from "react";
 
 
 const schema = z.object({
-  password: z.string().min(3, 'too short password').nonempty('Enter password'),
-  username: z.string().min(3, 'too short username').nonempty('Enter username'),
+  password: z.string().min(3, 'too short password').nonempty('Enter password'), username: z.string().min(3, 'too short username').nonempty('Enter username'),
 })
 
 type FormType = z.infer<typeof schema>
@@ -27,7 +25,6 @@ export const PageLogin = () => {
   const navigate = useNavigate()
   const user = useSelector<RootStateType, UserType | null>(state => state.app.user)
   const [signIn, {isLoading: isSigningIn}] = useLoginMutation()
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {control, register, handleSubmit, formState: {errors},} = useForm<FormType>({
     mode: 'onSubmit', resolver: zodResolver(schema), defaultValues: {
@@ -35,24 +32,14 @@ export const PageLogin = () => {
     },
   })
 
-  // const { control, handleSubmit, formState: { errors } } = useForm<FormType>({
-  // const {field} = useController({name: 'username', control, defaultValue: string})
-  // const {field: {value, onChange},} = useController({name: 'username', control, defaultValue: string})
-  // console.log(value, onChange);
 
   const handleSignIn = (data: FormType) => {
     console.log('handleSignIn data:', data);
     signIn(data).unwrap().then((response) => {
       console.log('Login successful:', response);
-      if( response.access_token && response.refresh_token ) {
-        localStorage.setItem('access_token', response.access_token);
-        localStorage.setItem('refresh_token', response.refresh_token);
-
-        // Сохраняем токены в стейт
-        // dispatch(appAC.setAccessToken(response.access_token));
-        // dispatch(appAC.setRefreshToken(response.refresh_token));
-        dispatch(appAC.setUser(response.user));
-      }
+      debugger
+      dispatch(appAC.setUser(response.user));
+      // window.close()
     }).catch((error) => {
       console.error('SignIn Error:', error);
     });

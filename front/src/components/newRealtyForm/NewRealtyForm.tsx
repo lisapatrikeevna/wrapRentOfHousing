@@ -242,7 +242,7 @@ const NewRealtyForm = () => {
           <InputLabel>Category</InputLabel>
           <Controller name="category" control={control} render={({ field }) => (
             <Select {...field} label="Category">
-              {categories?.map(i=><MenuItem value={i.id}>{i.name}</MenuItem>)}
+              {categories?.map(i=><MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>)}
               {/*<MenuItem value="apartment">Apartment</MenuItem>*/}
               {/*<MenuItem value="villa">Villa</MenuItem>*/}
               {/*<MenuItem value="studio">Studio</MenuItem>*/}

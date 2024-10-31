@@ -1,25 +1,25 @@
 import { baseApi } from "../base-api";
 import { FilterType, RealtyRequestType, RealtyType } from "./realty.type";
 
-const token = localStorage.getItem('access_token');
-const headers= {
-  'Authorization': `Bearer ${token}`,
-  'Content-Type': 'application/json',
-}
+// const token = localStorage.getItem('access_token');
+// const headers= {
+//   'Authorization': `Bearer ${token}`,
+//   'Content-Type': 'application/json',
+// }
 
 const realtyService = baseApi.injectEndpoints({
   endpoints: builder => {
     return {
       createRealty: builder.mutation<void, RealtyType>({
         query: (arg) => {
-          const token = localStorage.getItem('access_token');
+          // const token = localStorage.getItem('access_token');
           return {
             url: 'realty/',
             method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              // 'Content-Type': 'application/json',
-            },
+            // headers: {
+            //   'Authorization': `Bearer ${token}`,
+            //   // 'Content-Type': 'application/json',
+            // },
             body: arg,
             // body: JSON.stringify(arg),
           };
@@ -34,25 +34,23 @@ const realtyService = baseApi.injectEndpoints({
       // }),
       removeRealty: builder.mutation<void, {id: number}>({
         query(id) {
-          return {method: 'DELETE', url: `realty/${id}/`,headers}
+          return {method: 'DELETE', url: `realty/${id}/`,headers:{}}
         }, invalidatesTags: ['Realty']
       }),
       getRealty: builder.query<RealtyRequestType, {params:string}>({
         query: (arg) => {
           console.log('arg!!!!!!' , arg.params);
-          const requestConfig = { method: 'GET', url: `realty${arg.params}` };
-          // const requestConfig = { method: 'GET', url: 'realty/' };
+          const requestConfig = { method: 'GET', url: `realty/${arg.params}` };
 
           // Логируем конфигурацию запроса
           console.log("Запрос к API:", requestConfig);
           return requestConfig;
-          // return {method: 'GET', url: 'realty/',}
         }, providesTags: ['Realty'],
       }),
       getItemRealty: builder.query<RealtyType, {id:number}>({
         query: (args) => {
           console.log('args.id', args.id);
-          const requestConfig = { method: 'GET', url: `realty/${args.id}`,headers };
+          const requestConfig = { method: 'GET', url: `realty/${args.id}`,headers:{} };
 
           // Логируем конфигурацию запроса
           console.log("Запрос к API:", requestConfig);
