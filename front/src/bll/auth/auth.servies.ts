@@ -17,7 +17,6 @@ const authService=baseApi.injectEndpoints({
        // const token = localStorage.getItem('access_token');
        // console.log("Authorization headers: ", headers);
        return {url: `/auth/me/`, method: 'GET',
-         // headers:{'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json',}
        }
      },
      extraOptions: {maxRetries: 0,},

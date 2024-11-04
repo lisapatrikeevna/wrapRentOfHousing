@@ -175,13 +175,11 @@ const NewRealtyForm = () => {
     mode: 'onSubmit',
     resolver: zodResolver(schema),
     defaultValues: {
-      title:'Sanierte 3-Zimmer Wohnung in der Innenstadt - 1. OG',
+      title:'Barrierefreie Wohnung mit Balkon',
       available: true,
-      location: 'Crailsheim, Schwäbisch Hall (Kreis)',
-      description: 'Zu der Wohnung gehört ein Balkon und ein Kellerraum. Ein separates Gäste-WC ist ' +
-        'in der Wohnung vorhanden. Die Wohnung wird ohne Einbauküche vermietet. ' +
-        'Der Waschmaschinen-Anschluss befindet sich in der gemeinsamen Waschküche im UG. ' +
-        'Im Gebäude befindet sich kein Aufzug.'
+      location: 'Crailsheim, Kreis',
+      description: 'Diese gemütliche 2-Zimmer Wohnung mit einer Wohnfläche von ca. 49 m² befindet sich in\n' +
+        'einer gepflegten betreuten Wohnanlage und bietet Ihnen alle Annehmlichkeiten, die Sie für ein komfortables und sorgenfreies Leben benötigen.',
     },
   });
 
