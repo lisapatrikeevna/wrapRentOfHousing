@@ -13,11 +13,11 @@ import { RootStateType } from "../../bll/store";
 import { CategoryType } from "../../bll/category/category.service";
 
 const HomePage = () => {
-  let filters = useSelector<RootStateType, string>(state => state.app.filteringOptions )
+  const filters = useSelector<RootStateType, string>(state => state.app.filteringOptions )
 
-  let categories = useSelector<RootStateType, Array<CategoryType>>(state => state.app.categories)
-  let isLoadingCategory = useSelector<RootStateType, boolean>(state => state.app.isLoadingCategory)
-  let isErrorCategory = useSelector<RootStateType, string|boolean>(state => state.app.isErrorCategory)
+  const categories = useSelector<RootStateType, Array<CategoryType>>(state => state.app.categories)
+  const isLoadingCategory = useSelector<RootStateType, boolean>(state => state.app.isLoadingCategory)
+  const isErrorCategory = useSelector<RootStateType, string|boolean>(state => state.app.isErrorCategory)
   const [newParams, setParams] = useState('?page=1');
   const { data: realty, isLoading: isRealtyLoading, isError: isRealtyError } = useGetRealtyQuery({ params: newParams });
   // const { data: categories, isLoading: isLoadingCategory, isError: isErrorCategory } = useGetCategoryQuery();

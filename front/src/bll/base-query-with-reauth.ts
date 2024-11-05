@@ -75,6 +75,7 @@ export const baseQueryWithReauth: BaseQueryFn<
         );
 
         if (refreshResult.meta?.response?.status === 204) {
+          console.log('if refreshResult 204/args, api, extraOptions: ',args, api, extraOptions);
           result = await baseQuery(args, api, extraOptions);
         } else {
           console.error('Token refresh failed:', refreshResult.error);
