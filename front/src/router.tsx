@@ -17,84 +17,61 @@ import { UserType } from "./bll/auth/auth.type";
 
 
 export const PATH = {
-  login: '/login',
-  loginOut: '/logOut',
-  register: '/register',
-  home: '/',
-  renter: '/renter',
-  about: '/about',
-  privacyPolicy: '/privacyPolicy',
-  itemRealty: '/realEstate',
-  toLandlords:'/toLandlords',
+  login: '/login', loginOut: '/logOut', register: '/register', home: '/', renter: '/renter', about: '/about', privacyPolicy: '/privacyPolicy', itemRealty: '/realEstate', toLandlords: '/toLandlords',
 }
 
-const publicRoutes: RouteObject[] = [
-  {element: <RegisterForm/>, path: PATH.register,},
-  {element: <PageLogin/>, path: PATH.login,},
-  {element: <HomePage/>, path: PATH.home,},
-  {element: <About/>, path: PATH.about,},
-  {element: <PrivacyPolicy/>, path: PATH.privacyPolicy,},
-  // {element: <ItemProduct/>, path: PATH.itemRealty,},
+const publicRoutes: RouteObject[] = [{element: <RegisterForm/>, path: PATH.register,}, {element: <PageLogin/>, path: PATH.login,}, {element: <HomePage/>, path: PATH.home,}, {element: <About/>, path: PATH.about,}, {element: <PrivacyPolicy/>, path: PATH.privacyPolicy,}, // {element: <ItemProduct/>, path: PATH.itemRealty,},
 ]
 
-const privateRoutes: RouteObject[] = [
-  {element: <LandlordPage/>, path: PATH.toLandlords},
-  {element: <ItemProduct/>, path: PATH.itemRealty},
-  {element: <LogoutPage/>, path: PATH.loginOut,},
-  // {element: <div>log out</div>, path: PATH.loginOut,},
+const privateRoutes: RouteObject[] = [{element: <LandlordPage/>, path: PATH.toLandlords}, {element: <ItemProduct/>, path: PATH.itemRealty}, {element: <LogoutPage/>, path: PATH.loginOut,}, // {element: <div>log out</div>, path: PATH.loginOut,},
 ]
 
 
-const router = createBrowserRouter([
-  {
-    element: <App />, // Корневой компонент
-    errorElement: <ErrorPage />, // Страница ошибки
-    children: [
-      ...publicRoutes, // Открытые маршруты
-      {
-        element: <PrivateRoutes />, // Приватные маршруты
-        children: privateRoutes, // Дочерние маршруты
-      },
-      {
-        path: "*", // Обработка всех несуществующих маршрутов
-        element: <ErrorPage />, // Страница 404
-      },
-    ],
-  },
-]);
+const router = createBrowserRouter([{
+  element: <App/>, // Корневой компонент
+  errorElement: <ErrorPage/>, // Страница ошибки
+  children: [...publicRoutes, // Открытые маршруты
+    {
+      element: <PrivateRoutes/>, // Приватные маршруты
+      children: privateRoutes, // Дочерние маршруты
+    }, {
+      path: "*", // Обработка всех несуществующих маршрутов
+      element: <ErrorPage/>, // Страница 404
+    },],
+},]);
 
 export const Router = () => {
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router}/>;
 };
 
 function PrivateRoutes() {
   const dispatch = useDispatch();
   const user = useSelector<RootStateType, UserType | null>((state) => state.app.user);
 
+  // Используем skip для условного вызова useMeQuery
+  const {data, isError, isLoading} = useMeQuery(undefined, {skip: !!user});
+  console.log("useMeQuery/user", data);
+
   // Если пользователь уже есть в стейте, пропускаем его дальше
-  if (user) {
-    return <Outlet />;
+  if( user ) {
+    return <Outlet/>;
   }
 
-  // Если пользователя нет, пытаемся получить его данные через useMeQuery
-  const { data, isError, isLoading } = useMeQuery();
-
-  // Пока идет запрос - показываем индикатор загрузки
-  if (isLoading) {
+  if( isLoading ) {
     return <div>Loading...</div>;
   }
-
-  // Если запрос не удался (ошибка или нет данных), перенаправляем на страницу логина
-  if (isError || !data) {
-    return <Navigate to={PATH.login} />;
+  if( isError || !data ) {
+    return <Navigate to={PATH.login}/>;
   }
 
-  // Если запрос удался, сохраняем пользователя в стейте
-  dispatch(appAC.setUser(data));
+  if( data.user ) {
+    dispatch(appAC.setUser(data.user));
+  }
 
   // После сохранения пользователя в стейте, пропускаем к приватным маршрутам
-  return <Outlet />;
+  return <Outlet/>;
 }
+
 // function PrivateRoutes() {
 //   const dispatch = useDispatch()
 //   const user=useSelector<RootStateType,UserType|null>(state => state.app.user)

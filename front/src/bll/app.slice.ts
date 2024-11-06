@@ -1,21 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CategoryType } from "./category/category.service";
 import { UserType } from "./auth/auth.type";
+import { SearchParamsType } from "../components/searchSettings/SearchSettings";
+
 
 type initialStateType = {
-  access_token:string|null
-  refresh_token:string|null
-  user:UserType|null
+  additionalFilters: SearchParamsType | null
+  refresh_token: string | null
+  user: UserType | null
   categories: Array<CategoryType>
   filteringOptions: string
   isLoadingCategory: boolean
   isErrorCategory: string | boolean
 }
 const initialState: initialStateType = {
-  user: null,
-  access_token:null,
-  refresh_token:null,
-  categories: [], filteringOptions: '?page=1', isLoadingCategory: false, isErrorCategory: false, // user:{}as User,
+  user: null, additionalFilters: null, refresh_token: null, categories: [], filteringOptions: '?page=1', isLoadingCategory: false, isErrorCategory: false, // user:{}as User,
 }
 
 const slice = createSlice({
@@ -26,26 +25,21 @@ const slice = createSlice({
       state.isLoadingCategory = action.payload
     }, setIsErrorCategory: (state, action: PayloadAction<string>) => {
       state.isErrorCategory = action.payload
-    },
-    setUser: (state, action: PayloadAction<UserType>) => {
+    }, setUser: (state, action: PayloadAction<UserType>) => {
       debugger
       state.user = action.payload
     },
-    setAccessToken: (state, action: PayloadAction<string>) => {
-      state.access_token = action.payload
-    },
-    setRefreshToken: (state, action: PayloadAction<string>) => {
+      setRefreshToken: (state, action: PayloadAction<string>) => {
       state.refresh_token = action.payload
-    },
-    setLogout(state) {
+    }, setLogout(state) {
       // Очистка стейта пользователя при выходе
-      state.access_token = null;
-      state.refresh_token = null;
       state.user = null
       // Очистка токенов из localStorage
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-    }
+      // localStorage.removeItem('access_token');
+      // localStorage.removeItem('refresh_token');
+    }, setAdditionalFilters: (state, action: PayloadAction<SearchParamsType>) => {
+      state.additionalFilters = action.payload
+    },
   }
 })
 export const appAC = slice.actions

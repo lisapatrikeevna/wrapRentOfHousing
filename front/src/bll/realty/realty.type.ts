@@ -41,8 +41,8 @@ export type RealtyRequestType={
   current_page:number
 }
 type itemFilterType={
-  id:number
-  value:string|number|boolean
+  name:string
+  value:Array<string|number|boolean>
 }
 export type FilterType={
   available_dates:itemFilterType[]

@@ -16,8 +16,9 @@ const authService=baseApi.injectEndpoints({
      query: () => {
        // const token = localStorage.getItem('access_token');
        // console.log("Authorization headers: ", headers);
-       return {url: `/auth/me/`, method: 'GET',
-       }
+     const res= {url: `/auth/me/`, method: 'GET',}
+       console.log('me/res', res);
+       return res
      },
      extraOptions: {maxRetries: 0,},
      providesTags: ['Me'],
@@ -26,13 +27,22 @@ const authService=baseApi.injectEndpoints({
    login: builder.mutation<responseRegisterType, LoginArgs>({
      query: args => {
        console.log("args", args);
-       return {url: `/auth/login/`, method: 'POST', body: JSON.stringify(args),
+       const res= {url: `/auth/login/`, method: 'POST', body: JSON.stringify(args),
          headers: {'Content-Type': 'application/json',},
        }
+       console.log('me/res', res);
+       return res
      },
      invalidatesTags: ['Me'],
    }),
-
+   logout:builder.mutation<void, void>({
+     query: () => {
+       const res= {url: `/auth/logout/`, method: 'POST',}
+       console.log('logout/res', res);
+       return res
+     },
+     invalidatesTags: ['Me'],
+   }),
 
    // signUp: builder.mutation<void, SignUpArgs>({
    signUp: builder.mutation<responseRegisterType, SignUpArgs>({
