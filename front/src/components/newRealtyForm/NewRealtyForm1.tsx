@@ -1,4 +1,4 @@
-import { Box, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { DevTool } from "@hookform/devtools";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +7,6 @@ import { useCreateRealtyMutation } from "../../bll/realty/realty.service";
 import { useSelector } from "react-redux";
 import { RootStateType } from "../../bll/store";
 import { CategoryType } from "../../bll/category/category.service";
-import { CreateRealtyType } from "@/bll/realty/realty.type";
 
 
 const schema = z.object({
@@ -17,6 +16,7 @@ const schema = z.object({
   price: z.number().positive('Price must be greater than 0').max(99999999.99, 'Price must be at most 99999999.99'),
   number_of_rooms: z.number().int('Number of rooms must be an integer').min(1, 'Number of rooms must be at least 1'),
   category: z.number(),
+  // category: z.enum(['apartment', 'villa', 'studio', 'townhouse', 'duplex']).default('apartment'),  // Заменили z.number() на z.enum()
   available: z.boolean().optional(),
   available_date: z.string().optional(),
   real_estate_image: z.any().optional(),
@@ -27,11 +27,9 @@ const schema = z.object({
 });
 
 type FormType = z.infer<typeof schema>;
-type propsType={
-  onFormDataChange:(data:CreateRealtyType)=>void
-}
 
-const NewRealtyForm = (props:propsType) => {
+
+const NewRealtyForm = () => {
   let categories = useSelector<RootStateType, Array<CategoryType>>(state => state.app.categories)
   const [createNew, { isLoading, isError }] = useCreateRealtyMutation();
   const { control, register, handleSubmit, formState: { errors }, } = useForm<FormType>({
@@ -47,7 +45,6 @@ const NewRealtyForm = (props:propsType) => {
   });
 
   const onSubmit = (data: FormType) => {
-
     const formData = new FormData();
     Object.keys(data).forEach(key => {
       const value = (data as any)[key];
@@ -59,32 +56,17 @@ const NewRealtyForm = (props:propsType) => {
         formData.append(key, value);
       }
     });
-    console.log(errors, [...formData]); // Выводит массив пар [ключ, значение]
 
-    const formDataObject = Object.fromEntries(formData.entries());
-    props.onFormDataChange(formDataObject);
-    // props.onFormDataChange({...formDataObject, author:props.userId});
+    createNew(formData).unwrap()
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
   };
 
   return (
     <>
       <DevTool control={control} />
-
-      {errors && <Typography color="error">{JSON.stringify(errors)}</Typography>}
-      <Box component="form"
-           // onSubmit={handleSubmit(onSubmit)}
-           // onBlur={handleSubmit(onSubmit)} // вызываем submit при потере фокуса формы
-           onBlur={() => {
-             handleSubmit(
-               (data) => {
-                 if (!Object.keys(errors).length) { onSubmit(data) }
-               },
-               (errors) => {
-                 console.log("Errors:", errors); // Логируем ошибки для отладки
-               }
-             )();
-           }}
-           sx={{ maxWidth: 600, margin: '0 auto' }} encType="multipart/form-data">
+      {isError && <Typography color="error">Ошибка при создании объекта недвижимости</Typography>}
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: 600, margin: '0 auto' }} encType="multipart/form-data">
         <Typography gutterBottom>Realty Form</Typography>
 
         {/* Поле Title */}
@@ -162,7 +144,7 @@ const NewRealtyForm = (props:propsType) => {
         )} />
 
 
-        {/*<Button type="submit" variant="contained" color="primary" sx={{ mt: 3 }} disabled={isLoading}>Submit</Button>*/}
+        <Button type="submit" variant="contained" color="primary" sx={{ mt: 3 }} disabled={isLoading}>Submit</Button>
       </Box>
     </>
   );
@@ -172,4 +154,32 @@ export default NewRealtyForm;
 
 
 
+//
+// <Controller name="real_estate_image" control={control} render={({field}) => (
+//   <TextField {...field} type="file" variant="outlined" fullWidth error={!!errors.real_estate_image}
+//              helperText={errors.real_estate_image?.message}
+//              margin="normal" InputLabelProps={{ shrink: true, }} />)}
+// />
+// "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI5NTQ5MzYxLCJpYXQiOjE3Mjk1NDg1MjAsImp0aSI6ImJmYTQ4NTJmYjFlMTQ4NDA5OTUxYTA2NzY0ZWNmNWQ5IiwidXNlcl9pZCI6MX0.5zkcE-YqX9ikD7xhqc_pdFvaHvbDgRDlJWCzjCuA3V0"
+// "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI5NTQ5NTA3LCJpYXQiOjE3Mjk1NDg1MjAsImp0aSI6IjY3NTM0YTMyMGQzNDQ5MWFiZjQ1ZDFmNmNjMWQzNDgwIiwidXNlcl9pZCI6MX0.AwhI0vHo6WZg50lC0XJHtr2dSHE2y687sqGLySx0lyU"
+//            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI5NTQ4ODIwLCJpYXQiOjE3Mjk1NDg1MjAsImp0aSI6IjE5Yzg0MjhmM2U0MzRkYmRiMTMxMjdmMzExODQ4MTE3IiwidXNlcl9pZCI6MX0.Cv1wl-fdG0dJ1TTvGaOTZ7t3CwPmDWVhRJXYdvMDdp8
+{/*  <Controller name="real_estate_image" control={control} render={({ field }) => (*/}
+{/*    <TextField {...field} type="file" variant="outlined" fullWidth error={!!errors.real_estate_image}*/}
+{/*               helperText={errors.real_estate_image?.message} margin="normal" InputLabelProps={{ shrink: true }}*/}
+{/*               onChange={(e) => field.onChange(e.target.files)}  // Изменено: теперь получаем FileList*/}
+{/*    />*/}
+{/*  )} />*/}
+{/*  <Controller name="real_estate_image" control={control} render={({ field }) => (*/}
+{/*    <TextField*/}
+{/*      {...field}*/}
+{/*      type="file"*/}
+{/*      variant="outlined"*/}
+{/*      fullWidth*/}
+{/*      error={!!errors.real_estate_image}*/}
+{/*      helperText={errors.real_estate_image?.message}*/}
+{/*      margin="normal"*/}
+{/*      InputLabelProps={{ shrink: true }}*/}
+{/*      onChange={(e) => field.onChange(e.target.files)}  // получаем FileList*/}
+{/*    />*/}
+{/*  )} />*/}
 

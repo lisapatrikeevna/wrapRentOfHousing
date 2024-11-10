@@ -26,7 +26,6 @@ const slice = createSlice({
     }, setIsErrorCategory: (state, action: PayloadAction<string>) => {
       state.isErrorCategory = action.payload
     }, setUser: (state, action: PayloadAction<UserType>) => {
-      debugger
       state.user = action.payload
     },
       setRefreshToken: (state, action: PayloadAction<string>) => {
@@ -38,6 +37,7 @@ const slice = createSlice({
       // localStorage.removeItem('access_token');
       // localStorage.removeItem('refresh_token');
     }, setAdditionalFilters: (state, action: PayloadAction<SearchParamsType>) => {
+      console.log('appSlise/setAdditionalFilters/payload: ', action.payload);
       state.additionalFilters = action.payload
     },
   }

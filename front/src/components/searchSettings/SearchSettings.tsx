@@ -1,6 +1,6 @@
 import { Button, MenuItem, Paper, Select, SelectChangeEvent, TextField } from "@mui/material";
 import cl from './SearchSettings.module.scss'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CategoryType } from "../../bll/category/category.service";
 
 export type SearchParamsType={
@@ -15,18 +15,24 @@ export type SearchParamsType={
 type PropsType = {
   searchHandler: (searchParams: SearchParamsType) => void
   categories: Array<CategoryType>
+  city:string|null
+  selectedCat:string|null
 }
 const SearchSettings = ({categories, ...props}: PropsType) => {
 
-  const [category, setCategory] = useState<number>(categories[1].id );
-  // console.log(category);
+  const [category, setCategory] = useState<number|string>( );
   const [city, setCity] = useState('');
+  useEffect(()=> {
+    props.city && setCity(props.city)
+      props.selectedCat? setCategory(props.selectedCat):categories[1].id
+    },[props.city])
   const searchHandler = () => {
-    console.log(category)
+    console.log("category, location: ", category, city)
+
     // const idCategory = categories!.find(e => e.name === category);
     let res={}
     if(category){
-      res={category:category};
+      res={...res,category:category};
     }
     if(city){
       res={...res,location:city}
@@ -41,7 +47,7 @@ const SearchSettings = ({categories, ...props}: PropsType) => {
 
 
   return (<Paper className={cl.searchSettings}>
-    <Select labelId="demo-simple-select-label" id="demo-simple-select" value={category.toString()} label="category" onChange={handleChange} sx={{width: 150, mr:2}}>
+    <Select labelId="demo-simple-select-label" id="demo-simple-select" value={category} label="category" onChange={handleChange} sx={{width: 150, mr:2}}>
       {/*<MenuItem value={'all'}>All</MenuItem>*/}
       {categories?.map(i => <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>)}
     </Select>

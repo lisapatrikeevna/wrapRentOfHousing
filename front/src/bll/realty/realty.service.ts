@@ -1,5 +1,5 @@
 import { baseApi } from "../base-api";
-import { FilterType, RealtyRequestType, RealtyType } from "./realty.type";
+import { CreateRealtyType, FilterType, RealtyRequestType, RealtyType } from "./realty.type";
 
 // const token = localStorage.getItem('access_token');
 // const headers= {
@@ -10,10 +10,10 @@ import { FilterType, RealtyRequestType, RealtyType } from "./realty.type";
 const realtyService = baseApi.injectEndpoints({
   endpoints: builder => {
     return {
-      createRealty: builder.mutation<void, RealtyType>({
+      createRealty: builder.mutation<void, CreateRealtyType>({
         query: (arg) => {
           // const token = localStorage.getItem('access_token');
-          return {
+          const res= {
             url: 'realty/',
             method: 'POST',
             // headers: {
@@ -23,6 +23,7 @@ const realtyService = baseApi.injectEndpoints({
             body: arg,
             // body: JSON.stringify(arg),
           };
+          return res
         }, invalidatesTags: ['Realty'],
       }),
       // updateRealty: builder.mutation<void, {body: CategoryType}>({

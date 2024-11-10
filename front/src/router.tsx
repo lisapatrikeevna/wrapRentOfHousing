@@ -29,7 +29,7 @@ const privateRoutes: RouteObject[] = [{element: <LandlordPage/>, path: PATH.toLa
 
 const router = createBrowserRouter([{
   element: <App/>, // Корневой компонент
-  errorElement: <ErrorPage/>, // Страница ошибки
+  // errorElement: <ErrorPage/>, // Страница ошибки
   children: [...publicRoutes, // Открытые маршруты
     {
       element: <PrivateRoutes/>, // Приватные маршруты
@@ -64,7 +64,7 @@ function PrivateRoutes() {
     return <Navigate to={PATH.login}/>;
   }
 
-  if( data.user ) {
+  if(data && data.user ) {
     dispatch(appAC.setUser(data.user));
   }
 
