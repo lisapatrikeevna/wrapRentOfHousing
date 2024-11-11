@@ -38,11 +38,11 @@ const NewRealtyForm = (props:propsType) => {
     mode: 'onSubmit',
     resolver: zodResolver(schema),
     defaultValues: {
-      title:'Barrierefreie Wohnung mit Balkon',
+      title:' Balkon',
       available: true,
-      location: 'Crailsheim, Kreis',
-      description: 'Diese gemütliche 2-Zimmer Wohnung mit einer Wohnfläche von ca. 49 m² befindet sich in\n' +
-        'einer gepflegten betreuten Wohnanlage und bietet Ihnen alle Annehmlichkeiten, die Sie für ein komfortables und sorgenfreies Leben benötigen.',
+      location: 'Kiev',
+      description: 'en, die Sie für ein komfortables und sorgenfreies Leben benötigen.',
+      price: 1000
     },
   });
 
@@ -62,8 +62,8 @@ const NewRealtyForm = (props:propsType) => {
     console.log(errors, [...formData]); // Выводит массив пар [ключ, значение]
 
     const formDataObject = Object.fromEntries(formData.entries());
+    debugger
     props.onFormDataChange(formDataObject);
-    // props.onFormDataChange({...formDataObject, author:props.userId});
   };
 
   return (

@@ -14,7 +14,7 @@ import { CreateRealtyDetailType, CreateRealtyType } from "../../bll/realty/realt
 const LandlordPage = () => {
   const id = useSelector<RootStateType, number|undefined>(state => state.app.user?.id);
   const { data: realty, isLoading: isRealtyLoading, isError: isRealtyError } = useGetRealtyQuery({ params: `?author=${id}`});
-  console.log('data',id, realty);
+  console.log('id, realty',id, realty);
   const [createNew, { isLoading, isError }] = useCreateRealtyMutation();
   const [newRealtyData, setNewRealtyData] = useState<CreateRealtyType|null>(null);
   const [realtyDetailData, setRealtyDetailData] = useState<CreateRealtyDetailType|null>(null);
@@ -52,10 +52,27 @@ const LandlordPage = () => {
     console.log("newRealtyData: ", newRealtyData);
     console.log("realtyDetailData", realtyDetailData);
 
-    let data={...newRealtyData, author:id}
-    if(realtyDetailData){
-      data={...data, details:realtyDetailData}
+    // let data={...newRealtyData, author:id}
+    // if(realtyDetailData){
+    //   data={...data, details:realtyDetailData}
+    // }
+    const data = new FormData();
+
+    // Добавляем данные из newRealtyData
+    Object.keys(newRealtyData).forEach(key => {
+      data.append(key, newRealtyData[key]);
+    });
+
+    // Добавляем данные из realtyDetailData, если они есть
+    if (realtyDetailData) {
+      Object.keys(realtyDetailData).forEach(key => {
+        data.append(key, realtyDetailData[key]);
+      });
     }
+
+    // Добавляем автора
+    data.append('author', id);
+
     console.log("data: ", data);
     debugger
     createNew(data)

@@ -6,11 +6,13 @@ from corsheaders.defaults import default_headers
 from environ import Env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = Env()
 # Env.read_env(BASE_DIR/'.env')
-env.read_env(str(BASE_DIR / '.env'))
+env.read_env(str(os.path.join(BASE_DIR, '.env')))
+# env.read_env(str(BASE_DIR / '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -54,7 +56,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # end base
-    # 'rentOfHousing.middleware.authentication_middleware.CookieTokenAuthenticationMiddleware',
 
 ]
 
@@ -62,7 +63,8 @@ ROOT_URLCONF = 'rentOfHousing.urls'
 
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    'DIRS': [BASE_DIR / 'templates'], 'APP_DIRS': True,
+    'DIRS': [os.path.join(BASE_DIR, 'templates')], 'APP_DIRS': True,
+    # 'DIRS': [BASE_DIR / 'templates'], 'APP_DIRS': True,
     'OPTIONS': {'context_processors':
                     ['django.template.context_processors.debug',
                      'django.template.context_processors.request',
@@ -84,7 +86,7 @@ if env.bool('MYSQL', default=False):
         'HOST': env('DB_HOST'),
         'PORT': env('DB_PORT'), }, }
 else:
-    DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3', }, }
+    DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), }, }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

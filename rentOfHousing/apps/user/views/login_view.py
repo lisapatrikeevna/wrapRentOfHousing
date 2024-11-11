@@ -23,7 +23,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         try:
             response = super().post(request, *args, **kwargs)
             user = self.serializer_class().validate(request.data)
-
             user_data = CustomUserSerializer(user).data
             response = get_users_token(user, response)
 
@@ -31,7 +30,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 response.data = {}
 
             response.data['user'] = user_data
-
             return response
 
         except AuthenticationFailed as e:

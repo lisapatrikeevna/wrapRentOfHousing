@@ -28,7 +28,7 @@ class Realty(models.Model):
     available_date = models.DateField('availability date')
     real_estate_image = models.ImageField('main real estate picture', upload_to='real_estate_images/', null=True, blank=True)
     # author = models.ForeignKey('Autor', on_delete=models.CASCADE, related_name='properties', null=True, blank=True)
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1, related_name='properties')
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=2, related_name='properties')
     class_realty = models.CharField(max_length=50, choices=RealtyLevel.choices, null=False, blank=False, default='standard')
     details = models.OneToOneField(RealtyDetail, on_delete=models.CASCADE, null=True, blank=True)
     square_footage = models.FloatField(blank=False, null=False, default=0)  # Площадь в квадратных метрах
@@ -53,13 +53,3 @@ class Realty(models.Model):
                    models.Index(fields=['category']),  # Индекс на категорию
                    ]
 
-# class RealtyForm(forms.ModelForm):
-#     class Meta:
-#         model = Realty
-#         fields = ['title', 'description', 'location', 'price', 'number_of_rooms', 'category', 'available', 'rating', 'available_date', 'real_estate_image', 'square_footage',  # Добавлено поле площади
-#             'class_realty',  # Добавлено поле уровня жилья
-#         ]
-# class RealtyDetailForm(forms.ModelForm):
-#     class Meta:
-#         model = RealtyDetail
-#         fields = ['internet', 'garage_or_parking', 'balcony', 'heating_type', 'air_conditioning', 'floor_number', 'total_floors', 'pet_friendly', 'furnished', 'description']

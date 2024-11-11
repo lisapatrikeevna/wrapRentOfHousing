@@ -111,7 +111,7 @@ debugger
   const sortHandler = (value: string) => {
     setParams(value)
   }
-  console.log("realty.data", realty?.data.length);
+  console.log("realty.data", realty?.data);
 
   return (<>
       <Box className={cl.homeBg}>

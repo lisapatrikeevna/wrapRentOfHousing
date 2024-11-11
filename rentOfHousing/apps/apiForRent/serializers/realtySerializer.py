@@ -2,34 +2,47 @@ from decimal import Decimal
 
 from rest_framework import serializers
 
-from ..models import Realty
+from apps.apiForRent.models import *
+
+
+class RealtyFilesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RealtyFiles
+        fields = ['file_name', 'path']
 
 
 class RealtyDetailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Realty
+        model = RealtyDetail
         fields = '__all__'
 
 
 class RealtySerializer(serializers.ModelSerializer):
-    price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'))  # Пример добавления min_value
-
-    # detail = RealtyDetailSerializer(required=False)
-    # detail = RealtyDetailSerializer(read_only=True, many=False)
-    # autor = AutorSerializer(read_only=True)
-    # category = CategorySerializer(required=True)
-    # category = CategorySerializer(read_only=True)
+    price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'))
+    details = RealtyDetailSerializer(required=False)
+    realtyFiles = RealtyFilesSerializer(many=True, required=False)  # Добавляем поле для файлов
 
     class Meta:
         model = Realty
         fields = '__all__'
         read_only_fields = ['register_date', 'rating']
 
-    # def create(self, validated_data):  #     detail_data = validated_data.pop('detail', None)  # autor_data = validated_data.pop('autor')  # category_data = validated_data.pop('category')
+    def create(self, validated_data):
+        details_data = validated_data.pop('details', None)
+        files_data = validated_data.pop('realtyFiles', [])  # Извлекаем данные о файлах
 
-    # Создание объектов  # autor = Autor.objects.create(**autor_data)  # category = Category.objects.create(**category_data)
+        # Создаем запись недвижимости
+        realty_instance = Realty.objects.create(**validated_data)
 
-    # Создание объекта Realty  # realty = Realty.objects.create(autor=autor, category=category, **validated_data)  #  # if detail_data:  #     RealtyDetail.objects.create(realty=realty, **detail_data)  #  # return realty
+        # Если данные о деталях были предоставлены, создаем их
+        if details_data:
+            RealtyDetail.objects.create(realty=realty_instance, **details_data)
+
+        # Если данные о файлах были предоставлены, создаем их
+        for file_data in files_data:
+            RealtyFiles.objects.create(realty=realty_instance, **file_data)
+
+        return realty_instance
 
 
 class RealtyCreateUpdateSerializer(serializers.ModelSerializer):

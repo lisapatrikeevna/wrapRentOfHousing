@@ -1,10 +1,7 @@
 import { Avatar, Box, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, IconButtonProps, Typography } from "@mui/material";
 import { RealtyType } from "../../bll/realty/realty.service";
-// import { ExpandMore } from "@mui/icons-material";
 import { styled } from '@mui/material/styles';
 import CardMedia from '@mui/material/CardMedia';
-// import CardActions from '@mui/material/CardActions';
-// import Collapse from '@mui/material/Collapse';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
@@ -14,6 +11,8 @@ import { useState } from "react";
 import cl from './RealEstate.module.scss'
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../router";
+import { API_STATIC_MEDIA } from "../../config";
+import defaultImg from '@/assets/baseImgR.webp'
 
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -64,6 +63,9 @@ const OneAd = ({item,}: PropsType) => {
   //   "category": 1,
   //   "author": 1
   // },
+  // console.log('img pass',item.real_estate_image );
+
+
 
   return <Card sx={{maxWidth: 345}}>
     <CardHeader avatar={<Avatar sx={{bgcolor: red[500]}} aria-label="recipe">R</Avatar>}
@@ -78,7 +80,9 @@ const OneAd = ({item,}: PropsType) => {
           {item.number_of_rooms}/120m
         </Typography>
       </Box>
-    <CardMedia component="img" height="194" image="https://pictures.immobilienscout24.de/listings/237653a1-49dd-4faf-ab57-3e43866e479c-1842863996.jpeg/ORIG/resize/1106x830%3E/format/webp/quality/73" alt="Paella dish"/>
+      <CardMedia component="img" height="194" alt="Paella dish"
+        image={item.real_estate_image ? item.real_estate_image : defaultImg}
+      />
     </Box>
     <CardContent className={cl.flexWrapp} sx={{width:'100%',display:'flex',justifyContent:'space-between'}}>
       <Typography variant="body2" sx={{color: 'text.secondary'}}>
