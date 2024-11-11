@@ -27,7 +27,7 @@ const HomePage = () => {
   const [newParams, setParams] = useState('?page=1');
   const {data: realty, isLoading: isRealtyLoading, isError: isRealtyError} = useGetRealtyQuery({params: newParams});
   // Сохраняем предыдущее значение additionalFilters для отслеживания изменений
-  const prevFiltersRef = useRef<SearchParamsType | null>(additionalFilters);
+  // const prevFiltersRef = useRef<SearchParamsType | null>(additionalFilters);
   // const { data: categories, isLoading: isLoadingCategory, isError: isErrorCategory } = useGetCategoryQuery();
   // console.log("!!!!categories", categories);
   console.log("homePage/filters: ", filters);
@@ -35,33 +35,28 @@ const HomePage = () => {
 
 
   useEffect(() => {
-    // Функция проверки изменения значений additionalFilters
-    const hasFiltersChanged = (prevFilters: SearchParamsType | null, currentFilters: SearchParamsType | null) => {
-      if (!prevFilters || !currentFilters) return prevFilters !== currentFilters;
-
-      return Object.keys(currentFilters).some(
-        key => prevFilters[key] !== currentFilters[key]
-      );
-    };
-
-    // Проверяем, изменилось ли значение additionalFilters
-    if (hasFiltersChanged(prevFiltersRef.current, additionalFilters)) {
-      searchHandler(additionalFilters || {});  // Вызов searchHandler при изменении фильтров
-    }
-
-    // Обновляем предыдущее значение после проверки
-    prevFiltersRef.current = additionalFilters;
+    // // Функция проверки изменения значений additionalFilters
+    // const hasFiltersChanged = (prevFilters: SearchParamsType | null, currentFilters: SearchParamsType | null) => {
+    //   if (!prevFilters || !currentFilters) return prevFilters !== currentFilters;
+    //
+    //   return Object.keys(currentFilters).some(
+    //     key => prevFilters[key] !== currentFilters[key]
+    //   );
+    // };
+    //
+    // // Проверяем, изменилось ли значение additionalFilters
+    // if (hasFiltersChanged(prevFiltersRef.current, additionalFilters)) {
+    //   searchHandler(additionalFilters || {});  // Вызов searchHandler при изменении фильтров
+    // }
+    //
+    // // Обновляем предыдущее значение после проверки
+    // prevFiltersRef.current = additionalFilters;
+    additionalFilters && searchHandler(additionalFilters)
   }, [additionalFilters]);
 
   const searchHandler = (searchParams: SearchParamsType) => {
     console.log("homePage/searchHandler/searchParams: ", searchParams);
     let params = newParams;
-    // if( searchParams.category ) {
-    //   params = params.includes('category') ? params.replace(/category=\d+/, `category=${searchParams.category}`) : `${params}&category=${searchParams.category}`;
-    // }
-    // if( searchParams.city ) {
-    //   params = params.includes('city') ? params.replace(/city=\w+/, `city=${searchParams.city}`) : `${params}&city=${searchParams.city}`;
-    // }
     const paramsToInclude: Array<keyof SearchParamsType> = [
       'category',
       'location',
@@ -72,15 +67,32 @@ const HomePage = () => {
       'square_footage'
     ];
 
+    // paramsToInclude.forEach((param) => {
+    //   if (searchParams[param] !== undefined) {
+    //     const paramValue = searchParams[param];
+    //     params = params.includes(param)
+    //       ? params.replace(new RegExp(`${param}=[^&]*`), `${param}=${paramValue}`)
+    //       : `${params}&${param}=${paramValue}`;
+    //   }
+    // });
     paramsToInclude.forEach((param) => {
-      if (searchParams[param] !== undefined) {
-        const paramValue = searchParams[param];
-        params = params.includes(param)
-          ? params.replace(new RegExp(`${param}=[^&]*`), `${param}=${paramValue}`)
-          : `${params}&${param}=${paramValue}`;
+      const paramValue = searchParams[param];
+
+      if (paramValue !== undefined) {
+        if (paramValue === 0) {
+          // Удаляем параметр из строки, если его значение равно 0
+          params = params.replace(new RegExp(`([&?])${param}=[^&]*(&|$)`), (match, p1, p2) => {
+            // Если это первый параметр, просто удаляем его
+            return p2 === '&' ? p1 : ''; // Удаляем параметр, убирая лишний символ
+          });
+        } else {
+          params = params.includes(param)
+            ? params.replace(new RegExp(`${param}=[^&]*`), `${param}=${paramValue}`)
+            : `${params}&${param}=${paramValue}`;
+        }
       }
     });
-
+debugger
     setParams(params);  // Обновляем параметры и запускаем запрос с обновлённым состоянием
   }
 
@@ -106,7 +118,7 @@ const HomePage = () => {
         <h3 className={cl.title}>HomePage title</h3>
         {isErrorCategory && <Typography color="error"> {isErrorCategory}</Typography>}
         {isLoadingCategory && <CircularProgress/>}
-        {(!isLoadingCategory && !isErrorCategory && categories.length) && <SearchSettings searchHandler={searchHandler} categories={categories} city={additionalFilters?.location? additionalFilters.location:null}/>}
+        {(!isLoadingCategory && !isErrorCategory && categories.length) && <SearchSettings searchHandler={searchHandler} categories={categories} city={additionalFilters?.location? additionalFilters.location:null} selectedCat={additionalFilters?.category? categories[additionalFilters.category]:null}/>}
       </Box>
 
       {isRealtyError && <Typography color="error">Error loading realty data</Typography>}

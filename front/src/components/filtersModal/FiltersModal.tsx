@@ -13,7 +13,7 @@ const style = {
   position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80%', bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4,
 };
 
-
+const all={id:0,name:'All'}
 const FiltersModal = () => {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
@@ -32,18 +32,18 @@ const FiltersModal = () => {
   const [selectedAvailableDate, setSelectedAvailableDate] = useState('');
   const [available, setAvailable] = useState(true);
 
-  useEffect(() => {
-    if (data) {
-      console.log('data', data);
-      // Установите состояния как пустые строки по умолчанию
-      // setSelectedCategory('');
-      setSelectedAvailableDate('');
-      setSelectedClassRealty('');
-      setSelectedLocation('');
-      setSelectedNumberOfRooms('');
-      setSelectedSquareFootage('');
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log('data', data);
+  //     // Установите состояния как пустые строки по умолчанию
+  //     // setSelectedCategory('');
+  //     setSelectedAvailableDate('');
+  //     setSelectedClassRealty('');
+  //     setSelectedLocation('');
+  //     setSelectedNumberOfRooms('');
+  //     setSelectedSquareFootage('');
+  //   }
+  // }, [data]);
 
   const resetHandlers=()=>{
     // setSelectedCategory('');
@@ -52,12 +52,12 @@ const FiltersModal = () => {
     setSelectedLocation('');
     setSelectedNumberOfRooms('');
     setSelectedSquareFootage('');
-    setAvailable(false)
+    // setAvailable(false)
     // handleSend();
-    let filters:SearchParamsType = {}
+    // let filters:SearchParamsType = {}
 
     debugger
-    dispatch(appAC.setAdditionalFilters(filters));
+    dispatch(appAC.setAdditionalFilters(null));
   }
 
   const handleSend = () => {
@@ -66,30 +66,23 @@ const FiltersModal = () => {
     // if (selectedCategory) {
     //   filters.category = selectedCategory;
     // }
-    // if (selectedLocation) {
-    //   filters.location = selectedLocation;
-    // }
-    // if (selectedNumberOfRooms) {
-    //   filters.number_of_rooms = selectedNumberOfRooms;
-    // }
-    // filters.available = available;
-    // if (selectedAvailableDate) {
-    //   filters.available_date = selectedAvailableDate;
-    // }
-    // if (selectedClassRealty) {
-    //   filters.class_realty = selectedClassRealty;
-    // }
-    // if (selectedSquareFootage) {
-    //   filters.square_footage = selectedSquareFootage;
-    // }
-    if (selectedAvailableDate && selectedAvailableDate !== 'all') filters.available_date = selectedAvailableDate;
-    if (selectedClassRealty && selectedClassRealty !== 'all') filters.class_realty = selectedClassRealty;
-    if (selectedNumberOfRooms && selectedNumberOfRooms !== 'all') filters.number_of_rooms = selectedNumberOfRooms;
-    if (selectedLocation && selectedLocation !== 'all') filters.location = selectedLocation;
-    if (selectedSquareFootage && selectedSquareFootage !== 'all') filters.square_footage = selectedSquareFootage;
-    // if (selectedCategory && selectedCategory !== 'all') filters.category = selectedCategory;
+    if (selectedLocation) {
+      filters.location = selectedLocation;
+    }
+    if (selectedNumberOfRooms) {
+      filters.number_of_rooms = selectedNumberOfRooms;
+    }
+    filters.available = available;
+    if (selectedAvailableDate) {
+      filters.available_date = selectedAvailableDate;
+    }
+    if (selectedClassRealty) {
+      filters.class_realty = selectedClassRealty;
+    }
+    if (selectedSquareFootage) {
+      filters.square_footage = selectedSquareFootage;
+    }
 
-debugger
     dispatch(appAC.setAdditionalFilters(filters));
     handleOpen();
   };
@@ -129,7 +122,7 @@ debugger
                         onChange={(e) => setSelectedAvailableDate(e.target.value)} sx={{mt: 1, width: '100%'}}
                 >
                   <MenuItem value="" disabled> Выберите дату доступности </MenuItem>
-                  <MenuItem value={'all'}> all </MenuItem>
+                  <MenuItem value={all.id}>{all.name}</MenuItem>
                   {data.available_dates.map((item, index) => (<MenuItem key={index} value={item}>{item}</MenuItem>))}
                 </Select>
                 <label>Class Realty</label>
@@ -137,7 +130,7 @@ debugger
                         onChange={(e) => setSelectedClassRealty(e.target.value)} sx={{mt: 1, width: '100%'}}
                 >
                   <MenuItem value="" disabled> Выберите дату доступности </MenuItem>
-                  <MenuItem value={'all'}> all </MenuItem>
+                  <MenuItem value={all.id}>{all.name}</MenuItem>
                   {data.class_realty.map((classR, index) => (<MenuItem key={index} value={classR}>{classR}</MenuItem>))}
                 </Select>
                 <label>Number of Rooms</label>
@@ -145,7 +138,7 @@ debugger
                         onChange={(e) => setSelectedNumberOfRooms(e.target.value)} sx={{mt: 1, width: '100%'}}
                 >
                   <MenuItem value="" disabled> Выберите дату доступности </MenuItem>
-                  <MenuItem value={'all'}> all </MenuItem>
+                  <MenuItem value={all.id}>{all.name}</MenuItem>
                   {data.number_of_rooms.map((i, index) => (<MenuItem key={index} value={i}>{i}</MenuItem>))}
                 </Select>
                 <label>Locations</label>
@@ -153,7 +146,7 @@ debugger
                         onChange={(e) => setSelectedLocation(e.target.value)} sx={{mt: 1, width: '100%'}}
                 >
                   <MenuItem value="" disabled> Выберите дату доступности </MenuItem>
-                  <MenuItem value={'all'}> all </MenuItem>
+                  <MenuItem value={all.id}>{all.name}</MenuItem>
                   {data.locations.map((l, index) => (<MenuItem key={index} value={l}>{l}</MenuItem>))}
                 </Select>
                 <label>Square Footage</label>
@@ -161,7 +154,7 @@ debugger
                         onChange={(e) => setSelectedSquareFootage(e.target.value)} sx={{mt: 1, width: '100%'}}
                 >
                   <MenuItem value="" disabled> Выберите дату доступности </MenuItem>
-                  <MenuItem value={'all'}> all </MenuItem>
+                  <MenuItem value={all.id}>{all.name}</MenuItem>
                   {data.square_footage.map((i, index) => (<MenuItem key={index} value={i}>{i}</MenuItem>))}
                 </Select>
               </Grid>

@@ -36,7 +36,7 @@ const slice = createSlice({
       // Очистка токенов из localStorage
       // localStorage.removeItem('access_token');
       // localStorage.removeItem('refresh_token');
-    }, setAdditionalFilters: (state, action: PayloadAction<SearchParamsType>) => {
+    }, setAdditionalFilters: (state, action: PayloadAction<SearchParamsType|null>) => {
       console.log('appSlise/setAdditionalFilters/payload: ', action.payload);
       state.additionalFilters = action.payload
     },
