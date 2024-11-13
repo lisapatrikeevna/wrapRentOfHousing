@@ -43,7 +43,7 @@ type propsType={
 
 
 const RealtyDetailForm = (props:propsType) => {
-  console.log('detail', props.detail);
+  // console.log('detail', props.detail);
   // let categories = useSelector<RootStateType, Array<CategoryType>>(state => state.app.categories);
   // const [createNew, { isLoading, isError }] = useCreateRealtyMutation();
   const { control, handleSubmit,reset, formState: { errors } } = useForm<FormType>({
@@ -60,8 +60,9 @@ const RealtyDetailForm = (props:propsType) => {
   useEffect(()=>{
     props.detail && reset(props.detail)
   },[props.detail])
+
   const onSubmit = (data: FormType) => {
-    debugger
+    // debugger
     const formData = new FormData();
     const { realtyFiles, ...rest } = data; // Извлекаем файлы
 
@@ -103,7 +104,9 @@ const RealtyDetailForm = (props:propsType) => {
     console.log(errors, [...formData]);
 
     const formDataObject = Object.fromEntries(formData.entries());
-    props.onFormDataChange(formDataObject);
+    // props.onFormDataChange(formDataObject);
+    // props.onFormDataChange({"details":{...formDataObject}});
+    props.onFormDataChange({"details":formDataObject})
   };
 
 

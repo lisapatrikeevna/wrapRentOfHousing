@@ -49,7 +49,7 @@ class RealtyListCreate(ListCreateAPIView):
 
     # Устанавливаем разные права для GET и POST запросов
     def get_permissions(self):
-        print(f'RealtyListCreate/Method: {self.request.method}')
+        # print(f'RealtyListCreate/Method: {self.request.method}')
         # print(f'Headers: {self.request.headers}')
         # POST-запросы требуют аутентификации
         if self.request.method == 'POST':
@@ -59,9 +59,9 @@ class RealtyListCreate(ListCreateAPIView):
         return [AllowAny()]  # Для GET-запросов токен не требуется
 
     def create(self, request, *args, **kwargs):
-        print(f'RealtyListGetCreate/POST request headers: {request.headers}')
-        print(f'POST request body: {request.data}')  # для проверки, что все данные приходят
-        print(f'POST request body: {request.FILES}')  # для проверки файлов
+        # print(f'RealtyListGetCreate/POST request headers: {request.headers}')
+        print(f'------POST request.data: {request.data}')  # для проверки, что все данные приходят
+        print(f'------POST request.FILES: {request.FILES}')  # для проверки файлов
         serializer = RealtySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

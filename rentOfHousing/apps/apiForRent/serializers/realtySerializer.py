@@ -1,3 +1,4 @@
+import json
 from decimal import Decimal
 
 from rest_framework import serializers
@@ -25,21 +26,35 @@ class RealtySerializer(serializers.ModelSerializer):
     class Meta:
         model = Realty
         fields = '__all__'
-        read_only_fields = ['register_date', 'rating']
+        read_only_fields = ['register_date', 'rating','favorite','views']
 
     def create(self, validated_data):
-        details_data = validated_data.pop('details')
-        # details_data = validated_data.pop('details', None)
-        files_data = validated_data.pop('realtyFiles', [])  # Извлекаем данные о файлах
+        print('!!!!!!!!!!!!!!!!!!!/def create(self, validated_data):', validated_data)
+        # Получаем данные для details
+        details_data = validated_data.pop('details', None)
 
-        # Создаем запись недвижимости
+        if details_data:
+            # Предполагаем, что 'details' передается как строка JSON
+            try:
+                details_data = json.loads(details_data)
+            except json.JSONDecodeError:
+                print("Error decoding JSON for details")
+                details_data = {}
+
+        # Извлекаем файлы
+        files_data = validated_data.pop('realtyFiles', [])
+
+        # Создаем объект недвижимости
         realty_instance = Realty.objects.create(**validated_data)
 
-        # Если данные о деталях были предоставлены, создаем их
+        # Если данные о деталях были переданы, создаем их
         if details_data:
-            RealtyDetail.objects.create(realty=realty_instance, **details_data)
+            realty_detail = RealtyDetail.objects.create(
+                realty=realty_instance,
+                **details_data
+            )
 
-        # Если данные о файлах были предоставлены, создаем их
+        # Если были переданы файлы, создаем их
         for file_data in files_data:
             RealtyFiles.objects.create(realty=realty_instance, **file_data)
 

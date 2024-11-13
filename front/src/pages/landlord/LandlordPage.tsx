@@ -14,7 +14,7 @@ import { CreateRealtyDetailType, CreateRealtyType } from "../../bll/realty/realt
 const LandlordPage = () => {
   const id = useSelector<RootStateType, number|undefined>(state => state.app.user?.id);
   const { data: realty, isLoading: isRealtyLoading, isError: isRealtyError } = useGetRealtyQuery({ params: `?author=${id}`});
-  console.log('id, realty',id, realty);
+  // console.log('id, realty',id, realty);
   const [createNew, { isLoading, isError }] = useCreateRealtyMutation();
   const [newRealtyData, setNewRealtyData] = useState<CreateRealtyType|null>(null);
   const [realtyDetailData, setRealtyDetailData] = useState<CreateRealtyDetailType|null>(null);
@@ -24,64 +24,100 @@ const LandlordPage = () => {
 
   const handleRealtyDetailData = (data) => {
     setRealtyDetailData(data);
+    // console.log('parse', Object.keys(data).forEach(key => {data.append(key, data[key]) }) )
+    // console.log('------',[...data]);
+    // console.log('------',Object.fromEntries(data.entries()));
+    // console.log('------3---',"details", JSON.stringify(realtyDetailData));
   };
 
-  const createNewRealty=()=>{
-    // {
-    //   "price": "12345.67",  // Цена в десятичном формате с двумя знаками после запятой
-    //   "details": {
-    //   // Поля, необходимые для RealtyDetailSerializer, например:
-    //   "description": "Описание недвижимости",
-    //     "floor_area": 120.5
-    // },
-    //   "realtyFiles": [
-    //   {
-    //     "file_url": "http://example.com/file1.jpg",
-    //     "file_type": "image"
-    //   },
-    //   {
-    //     "file_url": "http://example.com/file2.jpg",
-    //     "file_type": "image"
-    //   }
-    // ],
-    //   // Остальные поля, требуемые моделью Realty, например:
-    //   "address": "123 Main St",
-    //   "number_of_rooms": 3,
-    //   "available_date": "2024-12-01"
-    // }
-    console.log("newRealtyData: ", newRealtyData);
-    console.log("realtyDetailData", realtyDetailData);
+  // const createNewRealty=()=>{
+  //   console.log("newRealtyData: ", newRealtyData);
+  //   console.log("realtyDetailData", realtyDetailData);
+  //
+  //   // let data={...newRealtyData, author:id}
+  //   // if(realtyDetailData){
+  //   //   data={...data, details:realtyDetailData}
+  //   // }
+  //   const data = new FormData();
+  //
+  //   // Добавляем данные из newRealtyData
+  //   Object.keys(newRealtyData).forEach(key => {
+  //     data.append(key, newRealtyData[key]);
+  //   });
+  //
+  //   // Добавляем данные из realtyDetailData, если они есть
+  //   // if (realtyDetailData) {
+  //   //   // Object.keys(realtyDetailData).forEach(key => {
+  //   //   //   data.append(key, realtyDetailData[key]);
+  //   //   // });
+  //   //   data.append("details", JSON.stringify(realtyDetailData))
+  //   //   console.log('!!!!!!!!!!!!!!!parse',JSON.stringify(realtyDetailData))
+  //   // }
+  //   // if (realtyDetailData) {
+  //   //   Object.keys(realtyDetailData).forEach(key => {
+  //   //     data.append(`details[${key}]`, realtyDetailData[key]); // Важно: используем квадратные скобки здесь
+  //   //   });
+  //   // }
+  //
+  //   // Добавляем автора
+  //   data.append('author', id);
+  //
+  //   console.log("data: ", data);
+  //   // debugger
+  //   createNew(data)
+  //   .unwrap()
+  //   .then((res) => console.log("res !!!!!!!!!!!!", res))
+  //   .catch((err) => console.log(err.errors));
+  // }
+  const createNewRealty = () => {
+    console.log("createNewRealty/newRealtyData", newRealtyData);
+    console.log("createNewRealty/realtyDetailData", realtyDetailData);
 
-    // let data={...newRealtyData, author:id}
-    // if(realtyDetailData){
-    //   data={...data, details:realtyDetailData}
-    // }
     const data = new FormData();
+
+    // Проверяем, что все обязательные поля присутствуют
+    if (!newRealtyData.title || !newRealtyData.price || !newRealtyData.description || !newRealtyData.location || !newRealtyData.number_of_rooms || !newRealtyData.available_date || !newRealtyData.category) {
+      console.error("Missing required fields in newRealtyData");
+      return; // Выход без отправки данных
+    }
 
     // Добавляем данные из newRealtyData
     Object.keys(newRealtyData).forEach(key => {
       data.append(key, newRealtyData[key]);
     });
 
-    // Добавляем данные из realtyDetailData, если они есть
-    if (realtyDetailData) {
-      // Object.keys(realtyDetailData).forEach(key => {
-      //   data.append(key, realtyDetailData[key]);
-      // });
-      data.append("details", JSON.stringify(realtyDetailData))
+    // Добавляем данные о деталях, если они есть
+    // if (realtyDetailData) {
+    //   // Object.keys(realtyDetailData).forEach(key => {
+    //   //   data.append(`details[${key}]`, realtyDetailData[key]); // Важно: используем квадратные скобки здесь
+    //   // });
+    //   // data.append(realtyDetailData)
+    //   // Перебираем ключи в объекте details
+    //   //@ts-ignore
+    //   Object.keys(realtyDetailData.details).forEach(key => {
+    //     data.append(`details[${key}]`, realtyDetailData.details[key]); // Используем квадратные скобки
+    //   });
+    // }
+    // Добавьте детали, если они есть
+    //@ts-ignore
+    // if (realtyDetailData && realtyDetailData.details) {
+    //   Object.keys(realtyDetailData.details).forEach(key => {
+    //     data.append(`details[${key}]`, realtyDetailData.details[key]); // Используйте квадратные скобки
+    //   });
+    // }
+    if (realtyDetailData && realtyDetailData.details) {
+      const detailsJson = JSON.stringify(realtyDetailData.details);
+      data.append('details', detailsJson); // Добавляем details как строку JSON
     }
+    data.append('author', id); // Добавляем автора
 
-    // Добавляем автора
-    data.append('author', id);
+    console.log("Final data to send:", [...data]); // Логируем данные для проверки
 
-    console.log("data: ", data);
-    debugger
     createNew(data)
     .unwrap()
-    .then((res) => console.log("res !!!!!!!!!!!!", res))
-    .catch((err) => console.log(err.errors));
-  }
-
+    .then((res) => console.log("Response: ", res))
+    .catch((err) => console.error("Error: ", err.errors));
+  };
 
   return (<>
     {/*update current objects*/}

@@ -63,7 +63,7 @@ const OneAd = ({item,}: PropsType) => {
   //   "category": 1,
   //   "author": 1
   // },
-  console.log('item: ',item);
+  // console.log('item: ',item);
 
 
 

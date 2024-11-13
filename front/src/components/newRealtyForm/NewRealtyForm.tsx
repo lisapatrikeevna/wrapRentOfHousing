@@ -54,21 +54,6 @@ const NewRealtyForm = (props:propsType) => {
   const onSubmit = (data: FormType) => {
     const formData = new FormData();
 
-    // Object.keys(data).forEach(key => {
-    //   const value = (data as any)[key];
-    //   if (key === 'price' || key === 'number_of_rooms' || key === 'square_footage') {
-    //     formData.append(key, String(Number(value))); // Преобразуем в строку
-    //   } else if (key === 'real_estate_image' && value instanceof File) {
-    //     formData.append(key, value); // Добавляем файл
-    //   } else {
-    //     formData.append(key, value);
-    //   }
-    // });
-    // console.log(errors, [...formData]); // Выводит массив пар [ключ, значение]
-    //
-    // const formDataObject = Object.fromEntries(formData.entries());
-    // debugger
-    // props.onFormDataChange(formDataObject);
     Object.keys(data).forEach(key => {
       const value = (data as any)[key];
 
@@ -106,7 +91,7 @@ const NewRealtyForm = (props:propsType) => {
                  if (!Object.keys(errors).length) { onSubmit(data) }
                },
                (errors) => {
-                 console.log("Errors:", errors); // Логируем ошибки для отладки
+                 // console.log("Errors:", errors); // Логируем ошибки для отладки
                }
              )();
            }}

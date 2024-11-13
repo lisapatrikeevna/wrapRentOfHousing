@@ -33,7 +33,7 @@ class CookieTokenAuthenticationMiddleware(MiddlewareMixin):
     def process_request(self, request: Request, **kwargs):
         access_token = request.COOKIES.get('access_token')
         refresh_token = request.COOKIES.get('refresh_token')
-        print(f"Access Token: {access_token}, Refresh Token: {refresh_token}")
+        # print(f"Access Token: {access_token}, Refresh Token: {refresh_token}")
 
 
         if access_token:
@@ -43,10 +43,10 @@ class CookieTokenAuthenticationMiddleware(MiddlewareMixin):
                     print("Access token is expired")
                     raise TokenError('Token is expired')
                 request.META['HTTP_AUTHORIZATION'] = f"Bearer {access_token}"
-                print(f"Access Token is valid: {access_token}")
+                # print(f"Access Token is valid: {access_token}")
 
             except TokenError:
-                print("Access token is invalid, attempting to refresh...")
+                # print("Access token is invalid, attempting to refresh...")
                 new_access_token = self.refresh_access_token(refresh_token)
 
                 if new_access_token:
@@ -59,7 +59,7 @@ class CookieTokenAuthenticationMiddleware(MiddlewareMixin):
                     self.clear_jwt_cookies(request)
 
         elif refresh_token:
-            print("Refresh Token found, attempting to get a new access token...")
+            # print("Refresh Token found, attempting to get a new access token...")
             new_access_token = self.refresh_access_token(refresh_token)
 
             if new_access_token:
