@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useCreateRealtyMutation } from "../../bll/realty/realty.service";
 import { CreateRealtyDetailType, RealtyDetailsType } from "../../bll/realty/realty.type.ts";
+import { useEffect } from "react";
 
 
 
@@ -37,14 +38,15 @@ type FormType = z.infer<typeof schema>;
 
 type propsType={
   onFormDataChange:(data:CreateRealtyDetailType)=>void
+  detail?:RealtyDetailsType
 }
 
 
 const RealtyDetailForm = (props:propsType) => {
-
+  console.log('detail', props.detail);
   // let categories = useSelector<RootStateType, Array<CategoryType>>(state => state.app.categories);
-  const [createNew, { isLoading, isError }] = useCreateRealtyMutation();
-  const { control, handleSubmit, formState: { errors } } = useForm<FormType>({
+  // const [createNew, { isLoading, isError }] = useCreateRealtyMutation();
+  const { control, handleSubmit,reset, formState: { errors } } = useForm<FormType>({
     mode: 'onSubmit',
     resolver: zodResolver(schema),
     defaultValues: {
@@ -55,7 +57,9 @@ const RealtyDetailForm = (props:propsType) => {
       // realtyFiles: [],
     },
   });
-
+  useEffect(()=>{
+    props.detail && reset(props.detail)
+  },[props.detail])
   const onSubmit = (data: FormType) => {
     debugger
     const formData = new FormData();

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AnonymousUser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, NotFound
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
 from rest_framework.pagination import PageNumberPagination
@@ -25,6 +25,15 @@ class RealtyPagination(PageNumberPagination):
 class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
     queryset = Realty.objects.all()
     serializer_class = RealtyCreateUpdateSerializer
+
+    # def get_object(self):
+    #     pk=self.kwargs.get('pk')
+    #
+    #     try:
+    #         realty=self.request.get(pk=pk, is_deleted=False)
+    #     except Realty.DoesNotExist:
+    #         raise NotFound(detail=f"this Realty with id = '{pk}' dont exist")
+    #     return realty
 
 
 class RealtyListCreate(ListCreateAPIView):

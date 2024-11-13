@@ -12,7 +12,6 @@ const realtyService = baseApi.injectEndpoints({
     return {
       createRealty: builder.mutation<void, CreateRealtyType>({
         query: (arg) => {
-          // const token = localStorage.getItem('access_token');
           const res= {
             url: 'realty/',
             method: 'POST',
@@ -21,21 +20,20 @@ const realtyService = baseApi.injectEndpoints({
             //   // 'Content-Type': 'application/json',
             // },
             body: arg,
-            // body: JSON.stringify(arg),
           };
           return res
         }, invalidatesTags: ['Realty'],
       }),
-      // updateRealty: builder.mutation<void, {body: CategoryType}>({
-      //   query: body => {
-      //     return {
-      //       body:JSON.stringify(body), method: 'PUT', url: `/category/update/${body.id}`, headers: { 'Content-Type': 'application/json'}
-      //     }
-      //   }, invalidatesTags: ['Category']
-      // }),
+      updateRealty: builder.mutation<void, {body: any}>({
+        query: body => {
+          return {
+            body:JSON.stringify(body), method: 'PUT', url: `realty/${body.id}`, headers: { 'Content-Type': 'application/json'}
+          }
+        }, invalidatesTags: ['Realty']
+      }),
       removeRealty: builder.mutation<void, {id: number}>({
         query(id) {
-          return {method: 'DELETE', url: `realty/${id}/`,headers:{}}
+          return {method: 'DELETE', url: `realty/${id}/`}
         }, invalidatesTags: ['Realty']
       }),
       getRealty: builder.query<RealtyRequestType, {params:string}>({
@@ -71,7 +69,7 @@ const realtyService = baseApi.injectEndpoints({
   },
 })
 
-export const {useGetRealtyQuery,useGetItemRealtyQuery,useLazyGetFilterListQuery, useCreateRealtyMutation} = realtyService
+export const {useGetRealtyQuery,useGetItemRealtyQuery,useLazyGetFilterListQuery, useCreateRealtyMutation, useUpdateRealtyMutation,useRemoveRealtyMutation} = realtyService
 // export const {useCreateCategoryMutation, useGetCategoryQuery, useRemoveCategoryMutation, useUpdateCategoryMutation} = categoryService
 
 

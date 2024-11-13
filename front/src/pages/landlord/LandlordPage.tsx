@@ -65,9 +65,10 @@ const LandlordPage = () => {
 
     // Добавляем данные из realtyDetailData, если они есть
     if (realtyDetailData) {
-      Object.keys(realtyDetailData).forEach(key => {
-        data.append(key, realtyDetailData[key]);
-      });
+      // Object.keys(realtyDetailData).forEach(key => {
+      //   data.append(key, realtyDetailData[key]);
+      // });
+      data.append("details", JSON.stringify(realtyDetailData))
     }
 
     // Добавляем автора
@@ -78,7 +79,7 @@ const LandlordPage = () => {
     createNew(data)
     .unwrap()
     .then((res) => console.log("res !!!!!!!!!!!!", res))
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err.errors));
   }
 
 
@@ -86,7 +87,7 @@ const LandlordPage = () => {
     {/*update current objects*/}
     <Paper sx={{width: '90%', margin: '60px auto 20px', p: 2}}>
       {isError && <Typography color="error">Ошибка при создании объекта недвижимости</Typography>}
-    <Accordion defaultExpanded>
+    <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon/>} aria-controls="panel1-content" id="panel1-header">
         <Typography variant="h4" gutterBottom>create new add</Typography>
       </AccordionSummary>
@@ -94,7 +95,7 @@ const LandlordPage = () => {
         <NewRealtyForm onFormDataChange={handleNewRealtyData} />
       </AccordionDetails>
     </Accordion>
-    <Accordion defaultExpanded>
+    <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon/>} aria-controls="panel1-content" id="panel1-header">
         <Typography variant="h4" gutterBottom>more details for add</Typography>
       </AccordionSummary>
@@ -102,11 +103,12 @@ const LandlordPage = () => {
         <RealtyDetailForm onFormDataChange={handleRealtyDetailData}/>
       </AccordionDetails>
     </Accordion>
-      <Button onClick={createNewRealty}> send </Button>
+      <Button onClick={createNewRealty} disabled={!newRealtyData}> send </Button>
     </Paper>
+
     {isRealtyLoading && <Typography>Loading...</Typography>}
     {(!isRealtyLoading && !isRealtyError && realty?.data )&&
-    <Accordion>
+    <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMoreIcon/>} aria-controls="panel2-content" id="panel2-header">
         <Typography>my realty</Typography>
       </AccordionSummary>

@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate, Outlet, RouteObject, RouterProvider, } from 'react-router-dom'
-import ItemProduct from "./pages/productPage/ItemProduct";
+import ItemProduct from "./pages/itemRealtysPage/ItemProduct";
 import LandlordPage from "./pages/landlord/LandlordPage";
 import { useDispatch, useSelector } from "react-redux";
 import { useMeQuery } from "./bll/auth/auth.servies";

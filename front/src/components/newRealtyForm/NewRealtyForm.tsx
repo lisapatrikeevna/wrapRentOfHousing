@@ -7,7 +7,8 @@ import { useCreateRealtyMutation } from "../../bll/realty/realty.service";
 import { useSelector } from "react-redux";
 import { RootStateType } from "../../bll/store";
 import { CategoryType } from "../../bll/category/category.service";
-import { CreateRealtyType } from "@/bll/realty/realty.type";
+import { CreateRealtyType, RealtyType } from "@/bll/realty/realty.type";
+import { useEffect } from "react";
 
 
 const schema = z.object({
@@ -18,7 +19,8 @@ const schema = z.object({
   number_of_rooms: z.number().int('Number of rooms must be an integer').min(1, 'Number of rooms must be at least 1'),
   category: z.number(),
   available: z.boolean().optional(),
-  available_date: z.string().optional(),
+  available_date: z.string(),
+  // available_date: z.string().optional(),
   real_estate_image: z.any().optional(),
   // real_estate_image: z.instanceof(File).optional(),  // Убедитесь, что файл обрабатывается правильно
   class_realty: z.enum(['standard', 'economy', 'comfort', 'premium', 'luxury', 'super_luxury']).default('standard'),
@@ -29,40 +31,64 @@ const schema = z.object({
 type FormType = z.infer<typeof schema>;
 type propsType={
   onFormDataChange:(data:CreateRealtyType)=>void
+  realty?: RealtyType
+  isSuccessful?:boolean
 }
 
 const NewRealtyForm = (props:propsType) => {
   let categories = useSelector<RootStateType, Array<CategoryType>>(state => state.app.categories)
-  const [createNew, { isLoading, isError }] = useCreateRealtyMutation();
-  const { control, register, handleSubmit, formState: { errors }, } = useForm<FormType>({
+  const { control, register, handleSubmit, formState: { errors },reset } = useForm<FormType>({
     mode: 'onSubmit',
     resolver: zodResolver(schema),
     defaultValues: {
-      title:' Balkon',
+      title:' Neuwertige 2-Zimmer-Wohnung',
       available: true,
-      location: 'Kiev',
+      location: ' Schießhausweg 7, 74564 Crailsheim, Schwäbisch Hall ',
       description: 'en, die Sie für ein komfortables und sorgenfreies Leben benötigen.',
       price: 1000
     },
   });
+  useEffect(()=> { if( props.isSuccessful ) reset()},[props.isSuccessful])
+  useEffect(()=> { if( props.realty ) reset(props.realty)},[props.realty])
 
   const onSubmit = (data: FormType) => {
-
     const formData = new FormData();
+
+    // Object.keys(data).forEach(key => {
+    //   const value = (data as any)[key];
+    //   if (key === 'price' || key === 'number_of_rooms' || key === 'square_footage') {
+    //     formData.append(key, String(Number(value))); // Преобразуем в строку
+    //   } else if (key === 'real_estate_image' && value instanceof File) {
+    //     formData.append(key, value); // Добавляем файл
+    //   } else {
+    //     formData.append(key, value);
+    //   }
+    // });
+    // console.log(errors, [...formData]); // Выводит массив пар [ключ, значение]
+    //
+    // const formDataObject = Object.fromEntries(formData.entries());
+    // debugger
+    // props.onFormDataChange(formDataObject);
     Object.keys(data).forEach(key => {
       const value = (data as any)[key];
+
+      // Проверка перед добавлением значений
+      if (value === undefined || value === null || value === '') return;
+
       if (key === 'price' || key === 'number_of_rooms' || key === 'square_footage') {
-        formData.append(key, String(Number(value))); // Преобразуем в строку
+        formData.append(key, String(Number(value))); // Преобразуем числа в строки
+      } else if (key === 'available_date') {
+        const formattedDate = new Date(value).toISOString().split('T')[0]; // Преобразуем дату в формат YYYY-MM-DD
+        formData.append(key, formattedDate);
       } else if (key === 'real_estate_image' && value instanceof File) {
-        formData.append(key, value); // Добавляем файл
+        formData.append(key, value); // Добавляем только, если это файл
       } else {
         formData.append(key, value);
       }
     });
-    console.log(errors, [...formData]); // Выводит массив пар [ключ, значение]
 
+    console.log(errors, [...formData]); // Вывод массива пар [ключ, значение]
     const formDataObject = Object.fromEntries(formData.entries());
-    debugger
     props.onFormDataChange(formDataObject);
   };
 
@@ -88,8 +114,8 @@ const NewRealtyForm = (props:propsType) => {
         <Typography gutterBottom>Realty Form</Typography>
 
         {/* Поле Title */}
-        <Controller name="title" control={control} render={({ field }) => (
-          <TextField {...field} label="Title" variant="outlined" fullWidth error={!!errors.title} helperText={errors.title?.message} margin="normal" />
+        <Controller  name="title" control={control} render={({ field }) => (
+          <TextField required {...field} label="Title" variant="outlined" fullWidth error={!!errors.title} helperText={errors.title?.message} margin="normal" />
         )} />
 
         {/* Поле Description */}
@@ -115,7 +141,7 @@ const NewRealtyForm = (props:propsType) => {
         )} />
 
         {/* Поле Category */}
-        <FormControl fullWidth margin="normal" error={!!errors.category}>
+        <FormControl required fullWidth margin="normal" error={!!errors.category}>
           <InputLabel>Category</InputLabel>
           <Controller name="category" control={control} render={({ field }) => (
             <Select {...field} label="Category">
@@ -127,7 +153,7 @@ const NewRealtyForm = (props:propsType) => {
 
         {/* Поле Available Date */}
         <Controller name="available_date" control={control} render={({ field }) => (
-          <TextField {...field} label="Available Date" type="date" variant="outlined"
+          <TextField required {...field} label="Available Date" type="date" variant="outlined"
                      fullWidth InputLabelProps={{ shrink: true, }} error={!!errors.available_date} helperText={errors.available_date?.message} margin="normal" />
         )} />
 

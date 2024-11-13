@@ -34,7 +34,8 @@ class Realty(models.Model):
     square_footage = models.FloatField(blank=False, null=False, default=0)  # Площадь в квадратных метрах
     is_deleted = models.BooleanField(default=False)  # for soft deleted  # Для мягкого удаления
     # slug = models.SlugField('url',max_length=255, unique=True,db_index=True , null=False, blank=False, default='')
-
+    favorit_users = models.ManyToManyField(CustomUser, null=True,blank=True, related_name='properties')
+    views_users = models.ManyToManyField(CustomUser, null=True,blank=True, related_name='properties')
     objects = SoftDeleteRentManager()  # Для мягкого удаления
 
     def delete(self, *args, **kwargs):

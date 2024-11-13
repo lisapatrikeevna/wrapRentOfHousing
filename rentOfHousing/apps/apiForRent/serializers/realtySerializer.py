@@ -28,7 +28,8 @@ class RealtySerializer(serializers.ModelSerializer):
         read_only_fields = ['register_date', 'rating']
 
     def create(self, validated_data):
-        details_data = validated_data.pop('details', None)
+        details_data = validated_data.pop('details')
+        # details_data = validated_data.pop('details', None)
         files_data = validated_data.pop('realtyFiles', [])  # Извлекаем данные о файлах
 
         # Создаем запись недвижимости

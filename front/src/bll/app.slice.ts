@@ -6,7 +6,7 @@ import { SearchParamsType } from "../components/searchSettings/SearchSettings";
 
 type initialStateType = {
   additionalFilters: SearchParamsType | null
-  refresh_token: string | null
+  // refresh_token: string | null
   user: UserType | null
   categories: Array<CategoryType>
   filteringOptions: string
@@ -14,7 +14,9 @@ type initialStateType = {
   isErrorCategory: string | boolean
 }
 const initialState: initialStateType = {
-  user: null, additionalFilters: null, refresh_token: null, categories: [], filteringOptions: '?page=1', isLoadingCategory: false, isErrorCategory: false, // user:{}as User,
+  user: null, additionalFilters: null,
+  // refresh_token: null,
+  categories: [], filteringOptions: '?page=1', isLoadingCategory: false, isErrorCategory: false, // user:{}as User,
 }
 
 const slice = createSlice({
@@ -28,11 +30,13 @@ const slice = createSlice({
     }, setUser: (state, action: PayloadAction<UserType>) => {
       state.user = action.payload
     },
-      setRefreshToken: (state, action: PayloadAction<string>) => {
-      state.refresh_token = action.payload
-    }, setLogout(state) {
+      // setRefreshToken: (state, action: PayloadAction<string>) => {
+      // state.refresh_token = action.payload },
+  setLogout(state) {
       // Очистка стейта пользователя при выходе
       state.user = null
+      state.additionalFilters=null
+      state.filteringOptions=''
       // Очистка токенов из localStorage
       // localStorage.removeItem('access_token');
       // localStorage.removeItem('refresh_token');

@@ -6,7 +6,9 @@ from apps.user.models import CustomUser
 
 class FavoriteProperty(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='favorites')
-    property = models.ForeignKey(Realty, on_delete=models.CASCADE)
+    # property = models.ForeignKey(Realty, on_delete=models.CASCADE)
+    # property = models.ForeignKey(Realty, on_delete=models.CASCADE)
+
 
 
 class ViewedProperty(models.Model):

@@ -63,7 +63,7 @@ const OneAd = ({item,}: PropsType) => {
   //   "category": 1,
   //   "author": 1
   // },
-  // console.log('img pass',item.real_estate_image );
+  console.log('item: ',item);
 
 
 
@@ -90,7 +90,7 @@ const OneAd = ({item,}: PropsType) => {
       </Typography>
     </CardContent>
     <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites">
+      <IconButton aria-label="add to favorites" >
         <FavoriteIcon/>
       </IconButton>
       <IconButton aria-label="share">
@@ -100,6 +100,7 @@ const OneAd = ({item,}: PropsType) => {
         <ExpandMoreIcon/>
       </ExpandMore>
     </CardActions>
+
     <Collapse in={expanded} timeout="auto" unmountOnExit>
       <CardContent>
         <Typography sx={{marginBottom: 2}}>Method:</Typography>
@@ -117,11 +118,6 @@ const OneAd = ({item,}: PropsType) => {
     </Collapse>
   </Card>
 
-  // return <Paper className={cl.advert} grap={1}>
-  //   <Typography variant="h5">{item.title}</Typography>
-  //   <p>{item.description}</p>
-  //   <p>{item.price}</p>
-  // </Paper>
 };
 
 export default OneAd;
