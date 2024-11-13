@@ -24,16 +24,63 @@ class RealtyPagination(PageNumberPagination):
 
 class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
     queryset = Realty.objects.all()
-    serializer_class = RealtyCreateUpdateSerializer
+    serializer_class = RealtySerializer
+    # serializer_class = RealtyCreateUpdateSerializer
 
-    # def get_object(self):
-    #     pk=self.kwargs.get('pk')
-    #
-    #     try:
-    #         realty=self.request.get(pk=pk, is_deleted=False)
-    #     except Realty.DoesNotExist:
-    #         raise NotFound(detail=f"this Realty with id = '{pk}' dont exist")
-    #     return realty
+
+
+    def get_permissions(self):
+        if self.request.method == 'DELETE':
+            if isinstance(self.request.user, AnonymousUser):
+                raise PermissionDenied("Authentication credentials were not provided.")
+            return [IsAuthenticated()]  # Права уже учтены через middleware
+        if self.request.method == 'PUT':
+            if isinstance(self.request.user, AnonymousUser):
+                raise PermissionDenied("Authentication credentials were not provided.")
+            return [IsAuthenticated()]  # Права уже учтены через middleware
+        return [AllowAny()]  # Для GET-запросов токен не требуется
+
+
+    def get_object(self):
+        pk=self.kwargs.get('pk')
+        try:
+            realty = Realty.objects.get(pk=pk, is_deleted=False)
+        except Realty.DoesNotExist:
+            raise NotFound(detail=f"this Realty with id = '{pk}' dont exist")
+        return realty
+
+    def delete(self, request, *args, **kwargs):
+        realty_instance = self.get_object()
+
+        # Проверяем, является ли текущий пользователь автором
+        if realty_instance.author != request.user:
+            raise PermissionDenied("You do not have permission to delete this object.")
+
+        # Мягкое удаление
+        realty_instance.is_deleted = True
+        realty_instance.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+        def patch(self, request, *args, **kwargs):
+            realty_instance = self.get_object()
+        user = request.user
+
+        # Получаем действие из PATCH-запроса
+        action = request.data.get('action')  # Ожидаем, что в запросе будет указано действие: 'add' или 'remove'
+
+        if action == 'add':
+            # Добавляем пользователя в избранное
+            realty_instance.favorite.add(user)
+            return Response(status=status.HTTP_200_OK)
+        elif action == 'remove':
+            # Удаляем пользователя из избранного
+            realty_instance.favorite.remove(user)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response({"detail": "Invalid action. Use 'add' or 'remove'."}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 class RealtyListCreate(ListCreateAPIView):

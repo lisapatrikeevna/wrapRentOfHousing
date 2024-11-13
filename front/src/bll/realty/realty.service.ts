@@ -31,9 +31,20 @@ const realtyService = baseApi.injectEndpoints({
           }
         }, invalidatesTags: ['Realty']
       }),
+      patchRealty: builder.mutation<void, { id: number; body: any }>({
+        query: ({ id, body }) => {
+          return {
+            url: `realty/${id}/`, // Убедитесь, что здесь есть завершающий слэш
+            method: 'PATCH',
+            body: JSON.stringify(body),
+            headers: { 'Content-Type': 'application/json' },
+          };
+        },
+        invalidatesTags: ['Realty'],
+      }),
       removeRealty: builder.mutation<void, {id: number}>({
         query(id) {
-          return {method: 'DELETE', url: `realty/${id}/`}
+          return {method: 'DELETE', url: `realty/${id}`}
         }, invalidatesTags: ['Realty']
       }),
       getRealty: builder.query<RealtyRequestType, {params:string}>({

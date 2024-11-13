@@ -13,6 +13,9 @@ import { useNavigate } from "react-router-dom";
 import { PATH } from "../../router";
 import { API_STATIC_MEDIA } from "../../config";
 import defaultImg from '@/assets/baseImgR.webp'
+import { useSelector } from "react-redux";
+import { UserType } from "../../bll/auth/auth.type.ts";
+import { RootStateType } from "../../bll/store.ts";
 
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -42,12 +45,17 @@ type PropsType = {
 
 
 const OneAd = ({item,}: PropsType) => {
+  const user = useSelector<RootStateType,UserType|null>(state => state.app.user)
   const navigate = useNavigate()
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  const addToFavoritHandler=()=>{
+    // user?.id
+
+  }
   // {
   //   "id": 1,
   //   "title": "title",
@@ -90,9 +98,11 @@ const OneAd = ({item,}: PropsType) => {
       </Typography>
     </CardContent>
     <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites" >
+      {(user?.id !== item.autor) &&
+      <IconButton aria-label="add to favorites" onClick={addToFavoritHandler}>
         <FavoriteIcon/>
       </IconButton>
+      }
       <IconButton aria-label="share">
         <ShareIcon/>
       </IconButton>

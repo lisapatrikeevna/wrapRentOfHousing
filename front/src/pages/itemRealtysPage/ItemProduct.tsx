@@ -27,7 +27,10 @@ const ItemProduct = () => {
   const [updateRealty,{isError:updateIsError, isLoading:updateIsLoading}]=useUpdateRealtyMutation()
   const removeHandler=()=>{
     removeRealty(id).unwrap()
-    .then((res) => {console.log('Realty removed:', res)})
+    .then((res) => {
+      console.log('Realty removed:', res)
+      navigate(-1)
+    })
     .catch((err) => {console.error('Error removing realty:', err);});
   }
 
@@ -123,8 +126,9 @@ const ItemProduct = () => {
   return (<Box className={cl.root}>
     <Button onClick={() => navigate(-1)}>&#10229;  go back </Button>
     {userId == realty?.author && <Button onClick={()=>setIsEdit(!isEdit)}>edit</Button>}
+    {userId == realty?.author && <Button onClick={removeHandler}>delete add</Button>}
     {isRealtyError && <Typography>{isRealtyError.toString()}</Typography>}
-    {isRealtyLoading && <CircularProgress color="success"/>}
+    {(isRealtyLoading || updateIsLoading) && <CircularProgress color="success"/>}
     {(realty && !isEdit) && <Container>
       <Box className={cl.imgWrap}>
         {realty.real_estate_image ? <img src={realty.real_estate_image} alt="img"/> : <img src={defaultImg} alt="defaultImg"/>}
@@ -165,8 +169,8 @@ const ItemProduct = () => {
       {updateIsLoading && <CircularProgress color="success"/>}
       <NewRealtyForm realty={realty} onFormDataChange={handleRealtyData}/>
       <RealtyDetailForm detail={realty.details} onFormDataChange={handleRealtyDetailData} />
-      <Button onClick={updateCurentRealty} disabled={!newRealtyData}>update object</Button>
-      <Button onClick={removeHandler}>delete add</Button>
+      {/*<Button onClick={updateCurentRealty} disabled={!newRealtyData}>update object</Button>*/}
+      <Button onClick={updateCurentRealty} >update object</Button>
       <Button onClick={()=>setIsEdit(!isEdit)}>go back</Button>
     </Container>}
   </Box>);

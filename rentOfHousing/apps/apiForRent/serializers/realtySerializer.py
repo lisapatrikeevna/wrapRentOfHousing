@@ -61,6 +61,8 @@ class RealtySerializer(serializers.ModelSerializer):
         return realty_instance
 
 
+
+
 class RealtyCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Realty
