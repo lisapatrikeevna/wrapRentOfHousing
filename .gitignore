@@ -26,7 +26,8 @@ front/*.local
 *.njsproj
 *.sln
 *.sw?
-
+*.pyc
+__pycache__/
 
 
 

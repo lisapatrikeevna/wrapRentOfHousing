@@ -1,22 +1,31 @@
 import cl from './LogoutPage.module.scss'
-import {NavLink } from "react-router-dom";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Box, Button, CircularProgress, Paper, Typography } from "@mui/material";
 import { PATH } from "../../../router";
 import { useDispatch } from "react-redux";
-import { appAC } from "../../../bll/app.slice";
+import { appAC } from "@/bll/app.slice";
+import { useLogoutMutation } from "@/bll/auth/auth.servies";
 
 
 
 
 export const LogoutPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const[logOut,{isLoading}]=useLogoutMutation()
 
   const handleLogout=()=>{
-    dispatch(appAC.setLogout())
+    logOut().unwrap()
+    .then(res=> {
+      dispatch(appAC.setLogout())
+      navigate(PATH.home)
+    })
+    .catch((err) => console.log(err));
   }
 
 
   return (<>
+    {isLoading && <CircularProgress color="success"/>}
     <Box className={cl.root}>
       <Typography variant={'h3'} className={cl.h1}>logout page</Typography>
       <Paper className={cl.registerCard}>

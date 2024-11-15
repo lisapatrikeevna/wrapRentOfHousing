@@ -5,9 +5,13 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from apps.user.models import CustomUser
+# from apps.user.serializers.property import FavoritePropertySerializers, ViewedPropertySerializers
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    # favorites = FavoritePropertySerializers
+    # viewed_properties = ViewedPropertySerializers
+
     class Meta:
         model = CustomUser
         fields = ('id', 'email', 'username', 'first_name', 'last_name', 'password', 'phone')

@@ -13,8 +13,7 @@ function App() {
   const { data: categories, isLoading: isLoadingCategory, isError: isErrorCategory } = useGetCategoryQuery();
   // console.log("!!!!categories", categories, isLoadingCategory, isErrorCategory);
   useEffect(()=>{
-    // @ts-ignore
-    isErrorCategory && dispatch(appAC.setIsErrorCategory(isErrorCategory));
+    isErrorCategory && dispatch(appAC.setIsErrorCategory(isErrorCategory.toString()));
     dispatch(appAC.setIsLoadingCategory(isLoadingCategory));
     categories && dispatch(appAC.setCategories(categories));
   },[categories,isLoadingCategory,isErrorCategory,dispatch])

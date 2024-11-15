@@ -28,7 +28,7 @@ export const PageLogin = () => {
 
   const {control, register, handleSubmit, formState: {errors},} = useForm<FormType>({
     mode: 'onSubmit', resolver: zodResolver(schema), defaultValues: {
-      password: '12345', username: 'air',
+      password: '12345', username: 'casper',
     },
   })
 

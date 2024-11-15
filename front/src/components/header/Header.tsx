@@ -77,13 +77,15 @@ const Header = () => {
   <Modal open={open} onClose={modalHandler} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
     <Box sx={style}>
       <Typography id="modal-modal-title" variant="h6" component="h2">
-        Text in a modal
-        {/*{user.toString }*/}
+        hi, {user?.username }!
       </Typography>
-      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-      </Typography>
+      {/*<Typography id="modal-modal-description" sx={{ mt: 2 }}>*/}
+      {/*  Duis mollis, est non commodo luctus, nisi erat porttitor ligula.*/}
+      {/*</Typography>*/}
       <NavLink to={PATH.loginOut} >logout</NavLink>
+      <p>history</p>
+      <p>favorit</p>
+      <p>reservation</p>
     </Box>
   </Modal>
   </>
