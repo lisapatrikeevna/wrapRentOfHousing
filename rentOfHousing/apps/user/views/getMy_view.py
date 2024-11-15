@@ -19,7 +19,6 @@ class GetMy(views.APIView):
         user_data = CustomUserSerializer(user).data
 
         # Получаем все избранные объекты недвижимости для пользователя
-
         favorite_properties = Realty.objects.filter(favorite=user)
         favorite_properties_data = RealtySerializer(favorite_properties, many=True).data
 

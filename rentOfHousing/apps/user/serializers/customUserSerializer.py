@@ -4,18 +4,28 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from apps.apiForRent.serializers.realtySerializer import RealtyForUserSerializer
 from apps.user.models import CustomUser
+
+
+
 # from apps.user.serializers.property import FavoritePropertySerializers, ViewedPropertySerializers
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    # additional = RealtyForUserSerializer(many=True, read_only=True)
+    additional = serializers.SerializerMethodField()#когда вам нужно вернуть данные, которые не являются прямым атрибутом модели.
     # favorites = FavoritePropertySerializers
     # viewed_properties = ViewedPropertySerializers
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'email', 'username', 'first_name', 'last_name', 'password', 'phone')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'phone', 'avatar', 'is_active', 'date_joined', 'rating', 'additional')
         extra_kwargs = {'password': {'write_only': True}}
+
+    def get_additional(self, obj):
+        # Возвращаем все объекты недвижимости, которые в избранном у данного пользователя
+        return RealtyForUserSerializer(obj.favorite_properties.all(), many=True).data
 
     def validate_phone(self, value):
         if not value:

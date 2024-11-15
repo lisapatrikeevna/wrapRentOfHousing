@@ -12,10 +12,8 @@ const realtyService = baseApi.injectEndpoints({
     return {
       createRealty: builder.mutation<void, CreateRealtyType>({
         query: (arg) => {
-          const res= {
-            url: 'realty/',
-            method: 'POST',
-            // headers: {
+          const res = {
+            url: 'realty/', method: 'POST', // headers: {
             //   'Authorization': `Bearer ${token}`,
             //   // 'Content-Type': 'application/json',
             // },
@@ -27,50 +25,43 @@ const realtyService = baseApi.injectEndpoints({
       updateRealty: builder.mutation<void, {body: any}>({
         query: body => {
           return {
-            body:JSON.stringify(body), method: 'PUT', url: `realty/${body.id}`, headers: { 'Content-Type': 'application/json'}
+            body: JSON.stringify(body), method: 'PUT', url: `realty/${body.id}`, headers: {'Content-Type': 'application/json'}
           }
         }, invalidatesTags: ['Realty']
       }),
-      patchRealty: builder.mutation<void, { id: number; body: any }>({
-        query: ({ id, body }) => {
+      patchRealty: builder.mutation<void, {id: number; body: any}>({
+        query: ({id, body}) => {
           return {
-            url: `realty/${id}`, // Убедитесь, что здесь есть завершающий слэш
-            method: 'PATCH',
-            body: JSON.stringify(body),
-            headers: { 'Content-Type': 'application/json' },
+            url: `realty/${id}`, method: 'PATCH', body: body,
           };
-        },
-        invalidatesTags: ['Realty'],
+        }, invalidatesTags: ['Realty', 'Me'],
       }),
       removeRealty: builder.mutation<void, {id: number}>({
         query(id) {
           return {method: 'DELETE', url: `realty/${id}`}
         }, invalidatesTags: ['Realty']
-      }),
-      getRealty: builder.query<RealtyRequestType, {params:string}>({
+      }), getRealty: builder.query<RealtyRequestType, {params: string}>({
         query: (arg) => {
-          console.log('arg!!!!!!' , arg.params);
-          const requestConfig = { method: 'GET', url: `realty/${arg.params}` };
+          console.log('arg!!!!!!', arg.params);
+          const requestConfig = {method: 'GET', url: `realty/${arg.params}`};
 
           // Логируем конфигурацию запроса
           console.log("Запрос к API:", requestConfig);
           return requestConfig;
         }, providesTags: ['Realty'],
-      }),
-      getItemRealty: builder.query<RealtyType, {id:number}>({
+      }), getItemRealty: builder.query<RealtyType, {id: number}>({
         query: (args) => {
           console.log('args.id', args.id);
-          const requestConfig = { method: 'GET', url: `realty/${args.id}`,headers:{} };
+          const requestConfig = {method: 'GET', url: `realty/${args.id}`, headers: {}};
 
           // Логируем конфигурацию запроса
           console.log("Запрос к API:", requestConfig);
           return requestConfig;
           // return {method: 'GET', url: 'realty/',}
         }, providesTags: ['Realty'],
-      }),
-      getFilterList: builder.query<FilterType, void>({
+      }), getFilterList: builder.query<FilterType, void>({
         query: () => {
-          const requestConfig = { method: 'GET', url: `realty/filterList/`,headers:{} };
+          const requestConfig = {method: 'GET', url: `realty/filterList/`, headers: {}};
 
           console.log("Запрос к API:", requestConfig);
           return requestConfig;
@@ -80,12 +71,8 @@ const realtyService = baseApi.injectEndpoints({
   },
 })
 
-export const {useGetRealtyQuery,useGetItemRealtyQuery,useLazyGetFilterListQuery, useCreateRealtyMutation, useUpdateRealtyMutation,useRemoveRealtyMutation , usePatchRealtyMutation} = realtyService
+export const {useGetRealtyQuery, useGetItemRealtyQuery, useLazyGetFilterListQuery, useCreateRealtyMutation, useUpdateRealtyMutation, useRemoveRealtyMutation, usePatchRealtyMutation} = realtyService
 // export const {useCreateCategoryMutation, useGetCategoryQuery, useRemoveCategoryMutation, useUpdateCategoryMutation} = categoryService
-
-
-
-
 
 
 // export const realtyApi = createApi({

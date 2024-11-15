@@ -1,5 +1,4 @@
-
-import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, IconButtonProps, Typography } from "@mui/material";
+import { Avatar, Box, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, IconButtonProps, Typography } from "@mui/material";
 import { RealtyType, usePatchRealtyMutation } from "../../bll/realty/realty.service";
 import { styled } from '@mui/material/styles';
 import CardMedia from '@mui/material/CardMedia';
@@ -54,43 +53,43 @@ const OneAd = ({item,}: PropsType) => {
   const [sneckOpen, setSneckOpen] = useState(false)
   const [message, setMessage] = useState('')
   const [count, setCount] = useState(0)
-
+  const isFavorite=user?.additional?.favorite?.find(i=>i==item.id)
+  const favoriteStyles = {
+    color: isFavorite? "red":""
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
-  };
+  }
   const addToFavoritHandler = () => {
-    setCount(count+1)
-    if (!user){
+    setCount(count + 1)
+    if( !user ) {
       setMessage("нехрен фармазонить, иди логинься")
       setSneckOpen(true)
-    }else if(user.id===item.author){
+    } else if( user.id === item.author ) {
       setMessage("нефиг лайкать своё")
       setSneckOpen(true)
-    }else{
+    } else {
       propertiesUpdate({id: item.id, body: {'favorite': user?.id}}).unwrap()
       .then(() => {
-        setMessage("Добавлено в избранное");
-        setSneckOpen(true);
+        setMessage("Добавлено в избранное")
+        setSneckOpen(true)
       })
       .catch((err) => {
-        setMessage("Ошибка при добавлении в избранное");
-        setSneckOpen(true);
-      });
+        setMessage("Ошибка при добавлении в избранное")
+        setSneckOpen(true)
+      })
     }
   }
   const handleClose = (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason,) => {
-   debugger
     if( reason === 'clickaway' ) {
-      return;
+      return
     }
     setSneckOpen(false)
   }
-  const action = (
-      <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose} >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-  );
+  const action = (<IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+      <CloseIcon fontSize="small"/>
+    </IconButton>);
   // {
   //   "id": 1,
   //   "title": "title",
@@ -119,58 +118,58 @@ const OneAd = ({item,}: PropsType) => {
 
   return <>
     <Card sx={{maxWidth: 345}}>
-    <CardHeader avatar={<Avatar sx={{bgcolor: red[500]}} aria-label="recipe">R</Avatar>}
-	 action={<IconButton aria-label="settings"> <MoreVertIcon/> </IconButton>}
-	 title={item.title} subheader="September 14, 2016" onClick={() => navigate(PATH.itemRealty, {state: {id: item.id}})}/>
-    <Box className={cl.clipPolygon}>
-      <Box className={cl.shadow}>
-        <Typography sx={{fontWeight: 'bold'}}>
-          {item.price} $
-        </Typography>
-        <Typography>
-          {item.number_of_rooms}/120m
-        </Typography>
+      <CardHeader avatar={<Avatar sx={{bgcolor: red[500]}} aria-label="recipe">R</Avatar>}
+	   action={<IconButton aria-label="settings"> <MoreVertIcon/> </IconButton>}
+	   title={item.title} subheader="September 14, 2016" onClick={() => navigate(PATH.itemRealty, {state: {id: item.id}})}/>
+      <Box className={cl.clipPolygon}>
+        <Box className={cl.shadow}>
+          <Typography sx={{fontWeight: 'bold'}}>
+            {item.price} $
+          </Typography>
+          <Typography>
+            {item.number_of_rooms}/120m
+          </Typography>
+        </Box>
+        <CardMedia component="img" height="194" alt="Paella dish" image={item.real_estate_image ? item.real_estate_image : defaultImg}/>
       </Box>
-      <CardMedia component="img" height="194" alt="Paella dish" image={item.real_estate_image ? item.real_estate_image : defaultImg} />
-    </Box>
-    <CardContent className={cl.flexWrapp} sx={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-      <Typography variant="body2" sx={{color: 'text.secondary'}}>
-        {item.location}
-      </Typography>
-    </CardContent>
-    <CardActions disableSpacing>
-       <IconButton aria-label="add to favorites" onClick={addToFavoritHandler}>
-        <FavoriteIcon/>
-      </IconButton>
-      <IconButton aria-label="share">
-        <ShareIcon/>
-      </IconButton>
-      <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
-        <ExpandMoreIcon/>
-      </ExpandMore>
-    </CardActions>
-
-    <Collapse in={expanded} timeout="auto" unmountOnExit>
-      <CardContent>
-        <Typography sx={{marginBottom: 2}}>Method:</Typography>
-        <Typography sx={{marginBottom: 2}}>
-          Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-          aside for 10 minutes.
-        </Typography>
-        <Typography sx={{marginBottom: 2}}>
-          {item.description}
-        </Typography>
-        <Typography>
-          Set aside off of the heat to let rest for 10 minutes, and then serve.
+      <CardContent className={cl.flexWrapp} sx={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
+        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+          {item.location}
         </Typography>
       </CardContent>
-    </Collapse>
+      <CardActions disableSpacing>
+        <IconButton aria-label="add to favorites" onClick={addToFavoritHandler}>
+          <FavoriteIcon style={favoriteStyles}/>
+        </IconButton>
+        <IconButton aria-label="share">
+          <ShareIcon/>
+        </IconButton>
+        <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
+          <ExpandMoreIcon/>
+        </ExpandMore>
+      </CardActions>
 
-  </Card>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Typography sx={{marginBottom: 2}}>Method:</Typography>
+          <Typography sx={{marginBottom: 2}}>
+            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
+            aside for 10 minutes.
+          </Typography>
+          <Typography sx={{marginBottom: 2}}>
+            {item.description}
+          </Typography>
+          <Typography>
+            Set aside off of the heat to let rest for 10 minutes, and then serve.
+          </Typography>
+        </CardContent>
+      </Collapse>
+
+    </Card>
     {/*<Button onClick={handleClick}>Open Snackbar</Button>*/}
     <Snackbar open={sneckOpen} autoHideDuration={3000} onClose={handleClose}
-              message={message} action={action} />
-    </>
+              message={message} action={action}/>
+  </>
 };
 
 export default OneAd;

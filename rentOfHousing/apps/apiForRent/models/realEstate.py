@@ -6,6 +6,7 @@ from apps.apiForRent.models import RealtyDetail
 from apps.user.models.customUser import CustomUser
 
 
+
 class RealtyLevel(models.TextChoices):
     STANDARD = 'standard', 'Стандарт'
     ECONOMY = 'economy', 'Эконом'

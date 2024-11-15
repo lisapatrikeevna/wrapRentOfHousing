@@ -1,4 +1,3 @@
-import json
 from decimal import Decimal
 
 from rest_framework import serializers
@@ -112,6 +111,11 @@ class RealtyCreateSerializer(serializers.ModelSerializer):
 
         return realty_instance
 
+
+class RealtyForUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Realty
+        fields = ('reservations', 'views', 'favorite')
 
 
 class RealtySerializer(serializers.ModelSerializer):

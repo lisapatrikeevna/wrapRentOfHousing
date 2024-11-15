@@ -34,6 +34,9 @@ export type UserType = {
   last_name?: string
   created?: string
   updated?: string
+  date_joined: string
+  rating: string
+  additional?:any
 }
 
 export interface RefreshResponse {

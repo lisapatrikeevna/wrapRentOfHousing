@@ -5,12 +5,13 @@ from rest_framework.exceptions import PermissionDenied, NotFound
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from ..models import Category, Realty
-from ..serializers.categorySerializer import CategorySerializer
-from ..serializers.realtySerializer import RealtySerializer, RealtyDetailSerializer, RealtyUpdateSerializers, RealtyCreateSerializer
+
+from ..models import Realty
+from ..serializers.realtySerializer import RealtySerializer, RealtyUpdateSerializers, RealtyCreateSerializer
+
 
 
 class RealtyPagination(PageNumberPagination):
@@ -40,7 +41,11 @@ class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
         if self.request.method == 'PUT':
             if isinstance(self.request.user, AnonymousUser):
                 raise PermissionDenied("Authentication credentials were not provided.")
-            return [IsAuthenticated()]  # Права уже учтены через middleware
+            return [IsAuthenticated()]
+        if self.request.method == 'PATCH':
+            if isinstance(self.request.user, AnonymousUser):
+                raise PermissionDenied("Authentication credentials were not provided.")
+            return [IsAuthenticated()]
         return [AllowAny()]  # Для GET-запросов токен не требуется
 
 
@@ -65,23 +70,23 @@ class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-        def patch(self, request, *args, **kwargs):
-            realty_instance = self.get_object()
+    def patch(self, request, *args, **kwargs):
+        realty_instance = self.get_object()
         user = request.user
+        print('patch/user', user)
+        print('patch/realty_instance', realty_instance)
 
-        # Получаем действие из PATCH-запроса
-        action = request.data.get('action')  # Ожидаем, что в запросе будет указано действие: 'add' или 'remove'
+        # Получаем ID пользователя из body запроса
+        favorite_user_id = request.data.get('favorite')
 
-        if action == 'add':
-            # Добавляем пользователя в избранное
-            realty_instance.favorite.add(user)
-            return Response(status=status.HTTP_200_OK)
-        elif action == 'remove':
-            # Удаляем пользователя из избранного
-            realty_instance.favorite.remove(user)
+        if favorite_user_id:
+            if realty_instance.favorite.filter(id=favorite_user_id).exists():
+                realty_instance.favorite.remove(favorite_user_id)
+            else:
+                realty_instance.favorite.add(favorite_user_id)
             return Response(status=status.HTTP_200_OK)
         else:
-            return Response({"detail": "Invalid action. Use 'add' or 'remove'."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Invalid request. 'favorite' field is required."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -104,9 +109,9 @@ class RealtyListCreate(ListCreateAPIView):
             return [IsAuthenticated()]
         return [AllowAny()]
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.prefetch_related('details')
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     return queryset.prefetch_related('details')
 
     def create(self, request, *args, **kwargs):
         print(f'------POST request.data: {request.data}')  # для проверки, что все данные приходят
