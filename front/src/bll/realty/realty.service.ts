@@ -1,5 +1,5 @@
 import { baseApi } from "../base-api";
-import { FilterType, RealtyRequestType, RealtyType } from "./realty.type";
+import { CreateRealtyType, FilterType, RealtyRequestType, RealtyType } from "./realty.type";
 
 // const token = localStorage.getItem('access_token');
 // const headers= {
@@ -10,10 +10,9 @@ import { FilterType, RealtyRequestType, RealtyType } from "./realty.type";
 const realtyService = baseApi.injectEndpoints({
   endpoints: builder => {
     return {
-      createRealty: builder.mutation<void, RealtyType>({
+      createRealty: builder.mutation<void, CreateRealtyType>({
         query: (arg) => {
-          // const token = localStorage.getItem('access_token');
-          return {
+          const res= {
             url: 'realty/',
             method: 'POST',
             // headers: {
@@ -21,20 +20,31 @@ const realtyService = baseApi.injectEndpoints({
             //   // 'Content-Type': 'application/json',
             // },
             body: arg,
-            // body: JSON.stringify(arg),
           };
+          return res
         }, invalidatesTags: ['Realty'],
       }),
-      // updateRealty: builder.mutation<void, {body: CategoryType}>({
-      //   query: body => {
-      //     return {
-      //       body:JSON.stringify(body), method: 'PUT', url: `/category/update/${body.id}`, headers: { 'Content-Type': 'application/json'}
-      //     }
-      //   }, invalidatesTags: ['Category']
-      // }),
+      updateRealty: builder.mutation<void, {body: any}>({
+        query: body => {
+          return {
+            body:JSON.stringify(body), method: 'PUT', url: `realty/${body.id}`, headers: { 'Content-Type': 'application/json'}
+          }
+        }, invalidatesTags: ['Realty']
+      }),
+      patchRealty: builder.mutation<void, { id: number; body: any }>({
+        query: ({ id, body }) => {
+          return {
+            url: `realty/${id}`, // Убедитесь, что здесь есть завершающий слэш
+            method: 'PATCH',
+            body: JSON.stringify(body),
+            headers: { 'Content-Type': 'application/json' },
+          };
+        },
+        invalidatesTags: ['Realty'],
+      }),
       removeRealty: builder.mutation<void, {id: number}>({
         query(id) {
-          return {method: 'DELETE', url: `realty/${id}/`,headers:{}}
+          return {method: 'DELETE', url: `realty/${id}`}
         }, invalidatesTags: ['Realty']
       }),
       getRealty: builder.query<RealtyRequestType, {params:string}>({
@@ -70,7 +80,7 @@ const realtyService = baseApi.injectEndpoints({
   },
 })
 
-export const {useGetRealtyQuery,useGetItemRealtyQuery,useLazyGetFilterListQuery, useCreateRealtyMutation} = realtyService
+export const {useGetRealtyQuery,useGetItemRealtyQuery,useLazyGetFilterListQuery, useCreateRealtyMutation, useUpdateRealtyMutation,useRemoveRealtyMutation , usePatchRealtyMutation} = realtyService
 // export const {useCreateCategoryMutation, useGetCategoryQuery, useRemoveCategoryMutation, useUpdateCategoryMutation} = categoryService
 
 

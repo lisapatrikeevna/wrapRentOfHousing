@@ -15,7 +15,7 @@ class RealtyFiles(models.Model):
         verbose_name = 'Файл недвижимости'
         verbose_name_plural = 'Файлы недвижимости'
         ordering = ['realty']  # Сортировка по объекту недвижимости
-#
+
 # class RealtyImg(models.Model):
 #     file_name = models.CharField(max_length=100, null=True,blank=True,unique=True)
 #     path = models.ImageField(upload_to='real_estate_images/', null=True,blank=True,unique=True)

@@ -18,17 +18,17 @@ def get_users_token(user,response):
         'access_token', access_token,
         httponly=True,
         # httponly=True,
-        secure=False, # Убедитесь, что это True на продакшене
+        secure=True, # Убедитесь, что это True на продакшене
         samesite='None',
         max_age=timedelta(minutes=25)  # Срок жизни access-токена
     )
     response.set_cookie(
         'refresh_token', refresh_token,
         httponly=True,
-        secure=False,
+        secure=True,
         samesite='None',
         # samesite='Lax',
-        max_age=timedelta(days=7)  # Срок жизни refresh-токена
+        max_age=timedelta(days=10)  # Срок жизни refresh-токена
     )
 
     print('get_users_token after add setCookies, response: ', response.data)

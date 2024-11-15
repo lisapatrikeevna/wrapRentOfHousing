@@ -1,10 +1,8 @@
-import { Avatar, Box, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, IconButtonProps, Typography } from "@mui/material";
-import { RealtyType } from "../../bll/realty/realty.service";
-// import { ExpandMore } from "@mui/icons-material";
+
+import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, IconButtonProps, Typography } from "@mui/material";
+import { RealtyType, usePatchRealtyMutation } from "../../bll/realty/realty.service";
 import { styled } from '@mui/material/styles';
 import CardMedia from '@mui/material/CardMedia';
-// import CardActions from '@mui/material/CardActions';
-// import Collapse from '@mui/material/Collapse';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
@@ -14,6 +12,12 @@ import { useState } from "react";
 import cl from './RealEstate.module.scss'
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../router";
+import defaultImg from '@/assets/baseImgR.webp'
+import { useSelector } from "react-redux";
+import { UserType } from "../../bll/auth/auth.type";
+import { RootStateType } from "../../bll/store";
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -43,12 +47,50 @@ type PropsType = {
 
 
 const OneAd = ({item,}: PropsType) => {
+  const user = useSelector<RootStateType, UserType | null>(state => state.app.user)
+  const [propertiesUpdate, {error, isLoading}] = usePatchRealtyMutation()
   const navigate = useNavigate()
   const [expanded, setExpanded] = useState(false);
+  const [sneckOpen, setSneckOpen] = useState(false)
+  const [message, setMessage] = useState('')
+  const [count, setCount] = useState(0)
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  const addToFavoritHandler = () => {
+    setCount(count+1)
+    if (!user){
+      setMessage("нехрен фармазонить, иди логинься")
+      setSneckOpen(true)
+    }else if(user.id===item.author){
+      setMessage("нефиг лайкать своё")
+      setSneckOpen(true)
+    }else{
+      propertiesUpdate({id: item.id, body: {'favorite': user?.id}}).unwrap()
+      .then(() => {
+        setMessage("Добавлено в избранное");
+        setSneckOpen(true);
+      })
+      .catch((err) => {
+        setMessage("Ошибка при добавлении в избранное");
+        setSneckOpen(true);
+      });
+    }
+  }
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason,) => {
+   debugger
+    if( reason === 'clickaway' ) {
+      return;
+    }
+    setSneckOpen(false)
+  }
+  const action = (
+      <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose} >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+  );
   // {
   //   "id": 1,
   //   "title": "title",
@@ -64,12 +106,23 @@ const OneAd = ({item,}: PropsType) => {
   //   "category": 1,
   //   "author": 1
   // },
+  // console.log('item: ',item);
+  // chrome.runtime.sendMessage({ /* some data */ }, (response) => {
+  //   if (chrome.runtime.lastError) {
+  //     console.error("Error sending message:", chrome.runtime.lastError);
+  //   } else {
+  //     console.log("Response:", response);
+  //   }
+  // });
 
-  return <Card sx={{maxWidth: 345}}>
+  // console.log('count', count);
+
+  return <>
+    <Card sx={{maxWidth: 345}}>
     <CardHeader avatar={<Avatar sx={{bgcolor: red[500]}} aria-label="recipe">R</Avatar>}
 	 action={<IconButton aria-label="settings"> <MoreVertIcon/> </IconButton>}
-	 title={item.title} subheader="September 14, 2016" onClick={()=>navigate(PATH.itemRealty,{state:{id:item.id} })}/>
-    <Box className={cl.clipPolygon} >
+	 title={item.title} subheader="September 14, 2016" onClick={() => navigate(PATH.itemRealty, {state: {id: item.id}})}/>
+    <Box className={cl.clipPolygon}>
       <Box className={cl.shadow}>
         <Typography sx={{fontWeight: 'bold'}}>
           {item.price} $
@@ -78,15 +131,15 @@ const OneAd = ({item,}: PropsType) => {
           {item.number_of_rooms}/120m
         </Typography>
       </Box>
-    <CardMedia component="img" height="194" image="https://pictures.immobilienscout24.de/listings/237653a1-49dd-4faf-ab57-3e43866e479c-1842863996.jpeg/ORIG/resize/1106x830%3E/format/webp/quality/73" alt="Paella dish"/>
+      <CardMedia component="img" height="194" alt="Paella dish" image={item.real_estate_image ? item.real_estate_image : defaultImg} />
     </Box>
-    <CardContent className={cl.flexWrapp} sx={{width:'100%',display:'flex',justifyContent:'space-between'}}>
+    <CardContent className={cl.flexWrapp} sx={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
       <Typography variant="body2" sx={{color: 'text.secondary'}}>
         {item.location}
       </Typography>
     </CardContent>
     <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites">
+       <IconButton aria-label="add to favorites" onClick={addToFavoritHandler}>
         <FavoriteIcon/>
       </IconButton>
       <IconButton aria-label="share">
@@ -96,6 +149,7 @@ const OneAd = ({item,}: PropsType) => {
         <ExpandMoreIcon/>
       </ExpandMore>
     </CardActions>
+
     <Collapse in={expanded} timeout="auto" unmountOnExit>
       <CardContent>
         <Typography sx={{marginBottom: 2}}>Method:</Typography>
@@ -111,13 +165,12 @@ const OneAd = ({item,}: PropsType) => {
         </Typography>
       </CardContent>
     </Collapse>
-  </Card>
 
-  // return <Paper className={cl.advert} grap={1}>
-  //   <Typography variant="h5">{item.title}</Typography>
-  //   <p>{item.description}</p>
-  //   <p>{item.price}</p>
-  // </Paper>
+  </Card>
+    {/*<Button onClick={handleClick}>Open Snackbar</Button>*/}
+    <Snackbar open={sneckOpen} autoHideDuration={3000} onClose={handleClose}
+              message={message} action={action} />
+    </>
 };
 
 export default OneAd;
