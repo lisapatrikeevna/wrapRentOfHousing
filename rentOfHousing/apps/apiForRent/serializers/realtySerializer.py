@@ -4,12 +4,14 @@ from decimal import Decimal
 from rest_framework import serializers
 
 from apps.apiForRent.models import *
+from apps.user.models import CustomUser
 
 
-class RealtyFilesSerializer(serializers.ModelSerializer):
+class RealtyCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RealtyFiles
-        fields = ['file_name', 'path']
+        model = Realty
+        fields = '__all__'
+        read_only_fields = ['register_date', ]
 
 
 class RealtyDetailSerializer(serializers.ModelSerializer):
@@ -18,53 +20,134 @@ class RealtyDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RealtySerializer(serializers.ModelSerializer):
-    price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'))
+    def validate_details(self, value):
+        """Валидация, чтобы проверить, что `details` является словарем."""
+        if not isinstance(value, dict):
+            raise serializers.ValidationError("Details must be a valid JSON object.")
+        return value
+
+
+class RealtyFilesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RealtyFiles
+        fields = '__all__'
+
+
+# class RealtySerializer(serializers.ModelSerializer):
+#     price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'))
+#     details = RealtyDetailSerializer(many=True, required=False)
+#     realtyFiles = RealtyFilesSerializer(many=True, required=False)
+#
+#     class Meta:
+#         model = Realty
+#         fields = '__all__'
+#         read_only_fields = ['register_date', 'rating', 'favorite', 'views']
+#
+#     def create(self, validated_data):
+#         print('!!!!!!!!!!! Inside create:', validated_data)
+#
+#     # Обработка поля `details`
+#         details_data = validated_data.pop('details', [])
+#
+#         # Если details уже является словарем, преобразуем его в список с одним элементом
+#         if isinstance(details_data, dict):
+#             details_data = [details_data]
+#
+#         print('Processed Details Data:', details_data)
+#
+#         # Извлекаем данные для realtyFiles
+#         files_data = validated_data.pop('realtyFiles', [])
+#         print('Processed Files Data:', files_data)
+#
+#         # Создаем объект Realty
+#         realty_instance = Realty.objects.create(**validated_data)
+#
+#         # Обработка details
+#         for detail in details_data:
+#             if isinstance(detail, dict):
+#                 RealtyDetail.objects.create(realty=realty_instance, **detail)
+#
+#         # Обработка realtyFiles
+#         for file_data in files_data:
+#             if isinstance(file_data, dict):
+#                 RealtyFiles.objects.create(realty=realty_instance, **file_data)
+#
+#         return realty_instance
+
+
+class RealtyUpdateSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Realty
+        fields = '__all__'
+
+
+
+class RealtyCreateSerializer(serializers.ModelSerializer):
     details = RealtyDetailSerializer(required=False)
-    realtyFiles = RealtyFilesSerializer(many=True, required=False)  # Добавляем поле для файлов
 
     class Meta:
         model = Realty
         fields = '__all__'
-        read_only_fields = ['register_date', 'rating','favorite','views']
+        read_only_fields = ['register_date', 'rating', 'views']
 
     def create(self, validated_data):
-        print('!!!!!!!!!!!!!!!!!!!/def create(self, validated_data):', validated_data)
-        # Получаем данные для details
-        details_data = validated_data.pop('details', None)
+        # Извлекаем данные для details
+        details_data = validated_data.pop('details', [])
 
-        if details_data:
-            # Предполагаем, что 'details' передается как строка JSON
-            try:
-                details_data = json.loads(details_data)
-            except json.JSONDecodeError:
-                print("Error decoding JSON for details")
-                details_data = {}
-
-        # Извлекаем файлы
-        files_data = validated_data.pop('realtyFiles', [])
+        # Извлекаем favorite_users_ids, если они есть
+        favorite_users_ids = validated_data.pop('favorite', [])
 
         # Создаем объект недвижимости
         realty_instance = Realty.objects.create(**validated_data)
 
         # Если данные о деталях были переданы, создаем их
         if details_data:
-            realty_detail = RealtyDetail.objects.create(
-                realty=realty_instance,
-                **details_data
-            )
+            # Передаем объект realty_instance в details_data
+            RealtyDetail.objects.create(realty=realty_instance, **details_data)
 
-        # Если были переданы файлы, создаем их
-        for file_data in files_data:
-            RealtyFiles.objects.create(realty=realty_instance, **file_data)
+        # Проверяем, есть ли пользователи для добавления в favorites
+        if favorite_users_ids:
+            favorite_users = CustomUser.objects.filter(id__in=favorite_users_ids)
+            realty_instance.favorite.set(favorite_users)  # Используем set()
 
         return realty_instance
 
 
 
+class RealtySerializer(serializers.ModelSerializer):
+    price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'))
+    # details = RealtyDetailSerializer(many=True, required=False)  # Используем many=True для списка
+    realtyFiles = RealtyFilesSerializer(many=True, required=False)
+    details = RealtyDetailSerializer(required=False)  # Здесь уже не many=True, так как OneToOne
 
-class RealtyCreateUpdateSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Realty
         fields = '__all__'
-        read_only_fields = ['register_date', ]
+        read_only_fields = ['register_date', 'rating']
+
+    # def create(self, validated_data):
+    #     print('!!!!!!!!!!!!!!!!!!!/def create(self, validated_data):', validated_data)
+    #
+    #     # Получаем данные для details как список
+    #     details_data = validated_data.pop('details', [])
+    #     # Извлекаем файлы
+    #     files_data = validated_data.pop('realtyFiles', [])
+    #     # Создаем объект недвижимости
+    #     realty_instance = Realty.objects.create(**validated_data)
+    #     # Если данные о деталях были переданы, создаем их
+    #     for detail in details_data:
+    #         # RealtyDetail.objects.create(details=realty_instance, **detail)
+    #         RealtyDetail.objects.create(realty=realty_instance, **detail)
+    #     # Если были переданы файлы, создаем их
+    #     # for file_data in files_data:
+    #     #     RealtyFiles.objects.create(realtyFiles=realty_instance, **file_data)
+    #     #
+    #     # return realty_instance
+
+    #
+    # def validate_details(self, value):
+    #     """Валидация, чтобы проверить, что `details` является словарем."""
+    #     if not isinstance(value, dict):
+    #         raise serializers.ValidationError("Details must be a valid JSON object.")
+    #     return value

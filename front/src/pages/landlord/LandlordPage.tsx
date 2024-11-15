@@ -30,94 +30,95 @@ const LandlordPage = () => {
     // console.log('------3---',"details", JSON.stringify(realtyDetailData));
   };
 
-  // const createNewRealty=()=>{
-  //   console.log("newRealtyData: ", newRealtyData);
-  //   console.log("realtyDetailData", realtyDetailData);
+  const createNewRealty=()=>{
+    console.log("newRealtyData: ", newRealtyData);
+    console.log("realtyDetailData", realtyDetailData);
+
+    let data={...newRealtyData, author:id}
+    if(realtyDetailData){
+      data={...data, details: [{...realtyDetailData.details}]}
+    }
+    // const data = new FormData();
+    //
+    // // Добавляем данные из newRealtyData
+    // Object.keys(newRealtyData.details).forEach(key => {
+    //   data.append(key, newRealtyData[key]);
+    // });
+
+    // Добавляем данные из realtyDetailData, если они есть
+    // if (realtyDetailData) {
+    //   // Object.keys(realtyDetailData).forEach(key => {
+    //   //   data.append(key, realtyDetailData[key]);
+    //   // });
+    //   data.append("details", JSON.stringify(realtyDetailData))
+    //   console.log('!!!!!!!!!!!!!!!parse',JSON.stringify(realtyDetailData))
+    // }
+    // if (realtyDetailData) {
+    //   Object.keys(realtyDetailData).forEach(key => {
+    //     data.append(`details[${key}]`, realtyDetailData[key]); // Важно: используем квадратные скобки здесь
+    //   });
+    // }
+
+    // Добавляем автора
+    // data.append('author', id);
+
+    console.log("data: ", data);
+    // debugger
+    createNew(data)
+    .unwrap()
+    .then((res) => console.log("res !!!!!!!!!!!!", res))
+    .catch((err) => console.log(err.errors));
+  }
+
+  // const createNewRealty = () => {
+  //   console.log("createNewRealty/newRealtyData", newRealtyData);
+  //   console.log("createNewRealty/realtyDetailData", realtyDetailData);
   //
-  //   // let data={...newRealtyData, author:id}
-  //   // if(realtyDetailData){
-  //   //   data={...data, details:realtyDetailData}
-  //   // }
   //   const data = new FormData();
+  //
+  //   // // Проверяем, что все обязательные поля присутствуют
+  //   // if (!newRealtyData.title || !newRealtyData.price || !newRealtyData.description || !newRealtyData.location || !newRealtyData.number_of_rooms || !newRealtyData.available_date || !newRealtyData.category) {
+  //   //   console.error("Missing required fields in newRealtyData");
+  //   //   return; // Выход без отправки данных
+  //   // }
   //
   //   // Добавляем данные из newRealtyData
   //   Object.keys(newRealtyData).forEach(key => {
   //     data.append(key, newRealtyData[key]);
   //   });
   //
-  //   // Добавляем данные из realtyDetailData, если они есть
+  //   // Добавляем данные о деталях, если они есть
   //   // if (realtyDetailData) {
   //   //   // Object.keys(realtyDetailData).forEach(key => {
-  //   //   //   data.append(key, realtyDetailData[key]);
+  //   //   //   data.append(`details[${key}]`, realtyDetailData[key]); // Важно: используем квадратные скобки здесь
   //   //   // });
-  //   //   data.append("details", JSON.stringify(realtyDetailData))
-  //   //   console.log('!!!!!!!!!!!!!!!parse',JSON.stringify(realtyDetailData))
-  //   // }
-  //   // if (realtyDetailData) {
-  //   //   Object.keys(realtyDetailData).forEach(key => {
-  //   //     data.append(`details[${key}]`, realtyDetailData[key]); // Важно: используем квадратные скобки здесь
+  //   //   // data.append(realtyDetailData)
+  //   //   // Перебираем ключи в объекте details
+  //   //   //@ts-ignore
+  //   //   Object.keys(realtyDetailData.details).forEach(key => {
+  //   //     data.append(`details[${key}]`, realtyDetailData.details[key]); // Используем квадратные скобки
   //   //   });
   //   // }
+  //   // Добавьте детали, если они есть
+  //   //@ts-ignore
+  //   // if (realtyDetailData && realtyDetailData.details) {
+  //   //   Object.keys(realtyDetailData.details).forEach(key => {
+  //   //     data.append(`details[${key}]`, realtyDetailData.details[key]); // Используйте квадратные скобки
+  //   //   });
+  //   // }
+  //   if (realtyDetailData && realtyDetailData.details) {
+  //     const detailsJson = JSON.stringify(realtyDetailData.details);
+  //     data.append('details', detailsJson); // Добавляем details как строку JSON
+  //   }
+  //   data.append('author', id); // Добавляем автора
   //
-  //   // Добавляем автора
-  //   data.append('author', id);
+  //   console.log("Final data to send:", [...data]); // Логируем данные для проверки
   //
-  //   console.log("data: ", data);
-  //   // debugger
   //   createNew(data)
   //   .unwrap()
-  //   .then((res) => console.log("res !!!!!!!!!!!!", res))
-  //   .catch((err) => console.log(err.errors));
-  // }
-  const createNewRealty = () => {
-    console.log("createNewRealty/newRealtyData", newRealtyData);
-    console.log("createNewRealty/realtyDetailData", realtyDetailData);
-
-    const data = new FormData();
-
-    // Проверяем, что все обязательные поля присутствуют
-    if (!newRealtyData.title || !newRealtyData.price || !newRealtyData.description || !newRealtyData.location || !newRealtyData.number_of_rooms || !newRealtyData.available_date || !newRealtyData.category) {
-      console.error("Missing required fields in newRealtyData");
-      return; // Выход без отправки данных
-    }
-
-    // Добавляем данные из newRealtyData
-    Object.keys(newRealtyData).forEach(key => {
-      data.append(key, newRealtyData[key]);
-    });
-
-    // Добавляем данные о деталях, если они есть
-    // if (realtyDetailData) {
-    //   // Object.keys(realtyDetailData).forEach(key => {
-    //   //   data.append(`details[${key}]`, realtyDetailData[key]); // Важно: используем квадратные скобки здесь
-    //   // });
-    //   // data.append(realtyDetailData)
-    //   // Перебираем ключи в объекте details
-    //   //@ts-ignore
-    //   Object.keys(realtyDetailData.details).forEach(key => {
-    //     data.append(`details[${key}]`, realtyDetailData.details[key]); // Используем квадратные скобки
-    //   });
-    // }
-    // Добавьте детали, если они есть
-    //@ts-ignore
-    // if (realtyDetailData && realtyDetailData.details) {
-    //   Object.keys(realtyDetailData.details).forEach(key => {
-    //     data.append(`details[${key}]`, realtyDetailData.details[key]); // Используйте квадратные скобки
-    //   });
-    // }
-    if (realtyDetailData && realtyDetailData.details) {
-      const detailsJson = JSON.stringify(realtyDetailData.details);
-      data.append('details', detailsJson); // Добавляем details как строку JSON
-    }
-    data.append('author', id); // Добавляем автора
-
-    console.log("Final data to send:", [...data]); // Логируем данные для проверки
-
-    createNew(data)
-    .unwrap()
-    .then((res) => console.log("Response: ", res))
-    .catch((err) => console.error("Error: ", err.errors));
-  };
+  //   .then((res) => console.log("Response: ", res))
+  //   .catch((err) => console.error("Error: ", err.errors));
+  // };
 
   return (<>
     {/*update current objects*/}

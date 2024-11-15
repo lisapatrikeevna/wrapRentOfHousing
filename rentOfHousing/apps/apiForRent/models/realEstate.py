@@ -27,15 +27,14 @@ class Realty(models.Model):
     register_date = models.DateField(auto_now_add=True)
     available_date = models.DateField('availability date')
     real_estate_image = models.ImageField('main real estate picture', upload_to='real_estate_images/', null=True, blank=True)
-    # author = models.ForeignKey('Autor', on_delete=models.CASCADE, related_name='properties', null=True, blank=True)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=2, related_name='properties')
     class_realty = models.CharField(max_length=50, choices=RealtyLevel.choices, null=False, blank=False, default='standard')
-    details = models.OneToOneField(RealtyDetail, on_delete=models.CASCADE, null=True, blank=True)
+    details = models.OneToOneField(RealtyDetail, on_delete=models.CASCADE, null=True, blank=True, related_name='details')
     square_footage = models.FloatField(blank=False, null=False, default=0)  # Площадь в квадратных метрах
     is_deleted = models.BooleanField(default=False)  # for soft deleted  # Для мягкого удаления
-    # slug = models.SlugField('url',max_length=255, unique=True,db_index=True , null=False, blank=False, default='')
-    favorite = models.ManyToManyField(CustomUser, null=True,blank=True, related_name='favorite_properties')
-    views = models.ManyToManyField(CustomUser, null=True,blank=True, related_name='views_properties')
+    favorite = models.ManyToManyField(CustomUser, blank=True, related_name='favorite_properties')
+    views = models.ManyToManyField(CustomUser, blank=True, related_name='views_properties')
+    reservations = models.ManyToManyField(CustomUser, blank=True, related_name='reserv_properties')
     objects = SoftDeleteRentManager()  # Для мягкого удаления
 
     def delete(self, *args, **kwargs):
@@ -45,12 +44,12 @@ class Realty(models.Model):
     def __str__(self):
         return self.title
 
-    # Индексы на register_date и title отлично подходят, но подумайте о добавлении индекса на поле category, если вам нужно будет часто фильтровать по этому полю.
-    # to sort real estate by registration date and title
-    # для сортировки недвижимости по дате регистрации и заголовку
     class Meta:
         ordering = ['-register_date', 'title']
-        indexes = [models.Index(fields=['register_date', 'title']),
-                   models.Index(fields=['category']),  # Индекс на категорию
-                   ]
+        indexes = [
+            models.Index(fields=['register_date', 'title']),
+            models.Index(fields=['category']),  # Индекс на категорию
+        ]
+
+
 

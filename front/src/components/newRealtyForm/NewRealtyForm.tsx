@@ -41,11 +41,16 @@ const NewRealtyForm = (props:propsType) => {
     mode: 'onSubmit',
     resolver: zodResolver(schema),
     defaultValues: {
-      title:' Neuwertige 2-Zimmer-Wohnung',
+      title:' some test',
       available: true,
       location: ' Schießhausweg 7, 74564 Crailsheim, Schwäbisch Hall ',
       description: 'en, die Sie für ein komfortables und sorgenfreies Leben benötigen.',
-      price: 1000
+      price: 10,
+      number_of_rooms: 2,
+      category: 4,
+      available_date: '19.98.1981',
+      square_footage: 23,
+
     },
   });
   useEffect(()=> { if( props.isSuccessful ) reset()},[props.isSuccessful])

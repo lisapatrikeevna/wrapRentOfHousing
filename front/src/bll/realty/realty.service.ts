@@ -34,7 +34,7 @@ const realtyService = baseApi.injectEndpoints({
       patchRealty: builder.mutation<void, { id: number; body: any }>({
         query: ({ id, body }) => {
           return {
-            url: `realty/${id}/`, // Убедитесь, что здесь есть завершающий слэш
+            url: `realty/${id}`, // Убедитесь, что здесь есть завершающий слэш
             method: 'PATCH',
             body: JSON.stringify(body),
             headers: { 'Content-Type': 'application/json' },
@@ -80,7 +80,7 @@ const realtyService = baseApi.injectEndpoints({
   },
 })
 
-export const {useGetRealtyQuery,useGetItemRealtyQuery,useLazyGetFilterListQuery, useCreateRealtyMutation, useUpdateRealtyMutation,useRemoveRealtyMutation} = realtyService
+export const {useGetRealtyQuery,useGetItemRealtyQuery,useLazyGetFilterListQuery, useCreateRealtyMutation, useUpdateRealtyMutation,useRemoveRealtyMutation , usePatchRealtyMutation} = realtyService
 // export const {useCreateCategoryMutation, useGetCategoryQuery, useRemoveCategoryMutation, useUpdateCategoryMutation} = categoryService
 
 
