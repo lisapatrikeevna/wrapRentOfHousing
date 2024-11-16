@@ -1,22 +1,25 @@
-import { Avatar, Box, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, IconButtonProps, Typography } from "@mui/material";
-import { RealtyType, usePatchRealtyMutation } from "../../bll/realty/realty.service";
+import { Avatar, Box, Card, CardActions, CardContent, CardHeader, CircularProgress, Collapse, IconButton, IconButtonProps, Typography } from "@mui/material";
+import { usePatchRealtyMutation } from "../../bll/realty/realty.service";
 import { styled } from '@mui/material/styles';
 import CardMedia from '@mui/material/CardMedia';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import cl from './RealEstate.module.scss'
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../router";
 import defaultImg from '@/assets/baseImgR.webp'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UserType } from "../../bll/auth/auth.type";
 import { RootStateType } from "../../bll/store";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import CloseIcon from '@mui/icons-material/Close';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import { useMeQuery } from "../../bll/auth/auth.servies";
+import { RealtyType } from "../../bll/realty/realty.type";
+import { appAC } from "../../bll/app.slice";
 
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -46,23 +49,34 @@ type PropsType = {
 
 
 const OneAd = ({item,}: PropsType) => {
+  const[skip,setSkip]=useState(true)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const user = useSelector<RootStateType, UserType | null>(state => state.app.user)
   const [propertiesUpdate, {error, isLoading}] = usePatchRealtyMutation()
-  const navigate = useNavigate()
+  //@ts-ignore
+  const {updatedUser, isLoading:isMeLoad} = useMeQuery(undefined,{skip:skip})
   const [expanded, setExpanded] = useState(false);
   const [sneckOpen, setSneckOpen] = useState(false)
   const [message, setMessage] = useState('')
-  const [count, setCount] = useState(0)
-  const isFavorite=user?.additional?.favorite?.find(i=>i==item.id)
+  const isReservation = user?.reserv_properties?.some((id:number) => id === item.id);
+  const isFavorite = user?.favorite_properties?.some((realtyId:number) => realtyId === item.id);
   const favoriteStyles = {
-    color: isFavorite? "red":""
+    color: isFavorite? "#f44336":""
   }
-
+  const reservStyles = {
+    color: isReservation? "#f44336":""
+  }
+  useEffect(() => {
+    if (updatedUser) {
+      dispatch(appAC.setUser(updatedUser));
+      setSkip(true); // Возвращаем `skip` обратно, чтобы не выполнять лишние запросы
+    }
+  }, [updatedUser, dispatch]);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   }
   const addToFavoritHandler = () => {
-    setCount(count + 1)
     if( !user ) {
       setMessage("нехрен фармазонить, иди логинься")
       setSneckOpen(true)
@@ -72,15 +86,39 @@ const OneAd = ({item,}: PropsType) => {
     } else {
       propertiesUpdate({id: item.id, body: {'favorite': user?.id}}).unwrap()
       .then(() => {
-        setMessage("Добавлено в избранное")
+        setSkip(false)// Отключаем skip, чтобы `useMeQuery` выполнился
         setSneckOpen(true)
+        setMessage("status favorite is changed")
+        // updatedUser && dispatch(appAC.setUser(updatedUser))
+        // setSkip(true)
+
       })
-      .catch((err) => {
-        setMessage("Ошибка при добавлении в избранное")
+      .catch(() => {
+        setMessage("error when changing favorite status")
         setSneckOpen(true)
       })
     }
   }
+  const addToReservHandler = () => {
+    if( !user ) {
+      setMessage("нехрен фармазонить, иди логинься")
+      setSneckOpen(true)
+    } else {
+      propertiesUpdate({id: item.id, body: {'reservations': user?.id}}).unwrap()
+      .then(() => {
+        setSkip(true)
+        setMessage("Добавлено в Reserv")
+        setSneckOpen(true)
+        dispatch(appAC.setUser(updatedUser))
+        setSkip(false)
+      })
+      .catch(() => {
+        setMessage("Ошибка при добавлении в Reserv")
+        setSneckOpen(true)
+      })
+    }
+  }
+  //@ts-ignore
   const handleClose = (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason,) => {
     if( reason === 'clickaway' ) {
       return
@@ -114,9 +152,14 @@ const OneAd = ({item,}: PropsType) => {
   //   }
   // });
 
-  // console.log('count', count);
+  console.log('user', user);
+
+
+
 
   return <>
+    {error && <p>"error",{ error.toString()}</p>}
+    {(isLoading || isMeLoad) && <CircularProgress />}
     <Card sx={{maxWidth: 345}}>
       <CardHeader avatar={<Avatar sx={{bgcolor: red[500]}} aria-label="recipe">R</Avatar>}
 	   action={<IconButton aria-label="settings"> <MoreVertIcon/> </IconButton>}
@@ -141,8 +184,8 @@ const OneAd = ({item,}: PropsType) => {
         <IconButton aria-label="add to favorites" onClick={addToFavoritHandler}>
           <FavoriteIcon style={favoriteStyles}/>
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon/>
+        <IconButton aria-label="share" onClick={addToReservHandler}>
+          <AddBusinessIcon style={reservStyles}/>
         </IconButton>
         <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
           <ExpandMoreIcon/>

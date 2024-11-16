@@ -4,7 +4,8 @@ import { Box, Button, CircularProgress, Paper, Typography } from "@mui/material"
 import { PATH } from "../../../router";
 import { useDispatch } from "react-redux";
 import { appAC } from "@/bll/app.slice";
-import { useLogoutMutation } from "@/bll/auth/auth.servies";
+import { useLogoutMutation } from "../../../bll/auth/auth.servies";
+// import { useLogoutMutation } from "@/bll/auth/auth.servies";
 
 
 
@@ -19,6 +20,7 @@ export const LogoutPage = () => {
     .then(res=> {
       dispatch(appAC.setLogout())
       navigate(PATH.home)
+      console.log(res);
     })
     .catch((err) => console.log(err));
   }

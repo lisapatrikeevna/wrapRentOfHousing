@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useCreateRealtyMutation, useGetRealtyQuery } from "../../bll/realty/realty.service";
 import OneAd from "../../components/realty/OneAd";
 import RealtyDetailForm from "../../components/newRealtyForm/RealtyDetailForm";
-import React, { useState } from "react";
+import { useState } from "react";
 import { CreateRealtyDetailType, CreateRealtyType } from "../../bll/realty/realty.type";
 import cl from './LandlordPage.module.scss'
 
@@ -16,13 +16,14 @@ const LandlordPage = () => {
   const id = useSelector<RootStateType, number | undefined>(state => state.app.user?.id);
   const {data: realty, isLoading: isRealtyLoading, isError: isRealtyError} = useGetRealtyQuery({params: `?author=${id}`});
   // console.log('id, realty',id, realty);
-  const [createNew, {isLoading, isError}] = useCreateRealtyMutation();
+  const [createNew, { isError}] = useCreateRealtyMutation();
   const [newRealtyData, setNewRealtyData] = useState<CreateRealtyType | null>(null);
   const [realtyDetailData, setRealtyDetailData] = useState<CreateRealtyDetailType | null>(null);
+  //@ts-ignore
   const handleNewRealtyData = (data) => {
     setNewRealtyData(data);
   };
-
+//@ts-ignore
   const handleRealtyDetailData = (data) => {
     setRealtyDetailData(data);
     // console.log('parse', Object.keys(data).forEach(key => {data.append(key, data[key]) }) )
@@ -37,6 +38,7 @@ const LandlordPage = () => {
 
     let data = {...newRealtyData, author: id}
     if( realtyDetailData ) {
+      //@ts-ignore
       data = {...data, details: [{...realtyDetailData.details}]}
     }
     // const data = new FormData();
@@ -65,6 +67,7 @@ const LandlordPage = () => {
 
     console.log("data: ", data);
     // debugger
+    //@ts-ignore
     createNew(data).unwrap()
     .then((res) => console.log("res !!!!!!!!!!!!", res))
     .catch((err) => console.log(err.errors));

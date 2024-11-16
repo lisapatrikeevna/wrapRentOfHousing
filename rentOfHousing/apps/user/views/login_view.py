@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
-    # queryset = super().get_queryset()
 
     def post(self, request, *args, **kwargs):
         try:
@@ -27,18 +26,12 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             print('CustomTokenObtainPairView/user: ',user)
             user_data = CustomUserSerializer(user).data
             print('CustomTokenObtainPairView/user-data', user_data)
-            # user_data = user_data.favorite_properties
 
             response = get_users_token(user, response)
 
             if not isinstance(response.data, dict):
                 response.data = {}
 
-            # queryset=self.queryset.prefetch_related('favorite','views','reservation')
-            # queryset=super().get_queryset().prefetch_related('favorite','views','reservation')
-            # response = get_users_token(user, response)
-            # user_data['additional'] = queryset
-            # print('CustomTokenObtainPairView/user-data/queryset', user_data)
             response.data['user'] = user_data
             return response
 

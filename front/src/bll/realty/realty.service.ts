@@ -25,6 +25,7 @@ const realtyService = baseApi.injectEndpoints({
       updateRealty: builder.mutation<void, {body: any}>({
         query: body => {
           return {
+            //@ts-ignore
             body: JSON.stringify(body), method: 'PUT', url: `realty/${body.id}`, headers: {'Content-Type': 'application/json'}
           }
         }, invalidatesTags: ['Realty']
@@ -34,7 +35,9 @@ const realtyService = baseApi.injectEndpoints({
           return {
             url: `realty/${id}`, method: 'PATCH', body: body,
           };
-        }, invalidatesTags: ['Realty', 'Me'],
+        },
+        invalidatesTags: ['Realty'],
+        // invalidatesTags: ['Me', 'Realty'],
       }),
       removeRealty: builder.mutation<void, {id: number}>({
         query(id) {

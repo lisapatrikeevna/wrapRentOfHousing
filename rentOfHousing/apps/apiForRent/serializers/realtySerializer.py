@@ -116,6 +116,7 @@ class RealtyForUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Realty
         fields = ('reservations', 'views', 'favorite')
+        # fields = ('reservations', 'views', 'favorite')
 
 
 class RealtySerializer(serializers.ModelSerializer):

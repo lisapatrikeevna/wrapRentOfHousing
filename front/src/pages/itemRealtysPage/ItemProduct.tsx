@@ -1,5 +1,5 @@
 import cl from './ItemProduct.module.scss'
-import { useGetItemRealtyQuery, useRemoveRealtyMutation, useUpdateRealtyMutation } from "../../bll/realty/realty.service";
+import { useGetItemRealtyQuery, usePatchRealtyMutation, useRemoveRealtyMutation, useUpdateRealtyMutation } from "../../bll/realty/realty.service";
 import { Box, Button, CircularProgress, Container, Rating, Stack, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import defaultImg from '@/assets/defaultitemprodkt.jpg'
@@ -9,8 +9,11 @@ import { useState } from "react";
 import NewRealtyForm from "../../components/newRealtyForm/NewRealtyForm";
 import { CreateRealtyDetailType, CreateRealtyType } from "../../bll/realty/realty.type";
 import RealtyDetailForm from "../../components/newRealtyForm/RealtyDetailForm";
+import { UserType } from "../../bll/auth/auth.type";
 
 
+
+// views_properties
 const ItemProduct = () => {
   const navigate = useNavigate()
   const location = useLocation();
@@ -34,11 +37,11 @@ const ItemProduct = () => {
     .catch((err) => {console.error('Error removing realty:', err);});
   }
 
-
+//@ts-ignore
   const handleRealtyData = (data) => {
     setNewRealtyData(data);
   };
-
+//@ts-ignore
   const handleRealtyDetailData = (data) => {
     setRealtyDetailData(data);
   };
@@ -72,7 +75,9 @@ const ItemProduct = () => {
     const data = new FormData();
 
     // Добавляем данные из newRealtyData
+    //@ts-ignore
     Object.keys(newRealtyData).forEach(key => {
+      //@ts-ignore
       data.append(key, newRealtyData[key]);
     });
 
@@ -86,10 +91,20 @@ const ItemProduct = () => {
 
     console.log("data: ", data);
     debugger
+    //@ts-ignore
     updateRealty(data)
     .unwrap()
     .then((res) => console.log("res !!!!!!!!!!!!", res))
     .catch((err) => console.log(err));
+  }
+  //@ts-ignore
+  const [propertiesUpdate, { isLoading}] = usePatchRealtyMutation()
+  const user = useSelector<RootStateType, UserType | null>(state => state.app.user)
+  //@ts-ignore
+  const isVisitet = user?.reserv_properties?.some((id:number) => id === item.id);
+  //@ts-ignore
+  const visitStyles = {
+    color: isVisitet? "#f44336":""
   }
 
   // const [avatarImg, setAvatarImg] = useState<string | null>();

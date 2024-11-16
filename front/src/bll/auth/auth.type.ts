@@ -35,8 +35,11 @@ export type UserType = {
   created?: string
   updated?: string
   date_joined: string
-  rating: string
-  additional?:any
+  rating: string,
+  favorite_properties?:Array<number>
+  reserv_properties?:Array<number>
+  views_properties?:Array<number>
+  additional?:{reservations?:Array<number>,views?:Array<number>,favorite?:Array<number>}
 }
 
 export interface RefreshResponse {

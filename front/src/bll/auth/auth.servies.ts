@@ -11,7 +11,6 @@ import { LoginArgs, responseRegisterType, SignUpArgs } from "./auth.type";
 
 const authService=baseApi.injectEndpoints({
  endpoints: builder => ({
-
    me: builder.query<any, void>({
      query: () => {
        // const token = localStorage.getItem('access_token');
@@ -41,7 +40,7 @@ const authService=baseApi.injectEndpoints({
        console.log('logout/res', res);
        return res
      },
-     invalidatesTags: ['Me'],
+     // invalidatesTags: ['Me'],
    }),
 
    // signUp: builder.mutation<void, SignUpArgs>({

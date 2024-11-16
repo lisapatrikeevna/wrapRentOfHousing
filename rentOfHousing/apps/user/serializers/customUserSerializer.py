@@ -20,12 +20,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'phone', 'avatar', 'is_active', 'date_joined', 'rating', 'additional')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'phone', 'avatar', 'is_active', 'date_joined', 'rating', 'additional','favorite_properties','reserv_properties','views_properties')
         extra_kwargs = {'password': {'write_only': True}}
 
     def get_additional(self, obj):
         # Возвращаем все объекты недвижимости, которые в избранном у данного пользователя
         return RealtyForUserSerializer(obj.favorite_properties.all(), many=True).data
+        # return RealtyForUserSerializer(obj.favorite_properties.all().first()).data
 
     def validate_phone(self, value):
         if not value:
@@ -64,17 +65,6 @@ logger.addHandler(logging.StreamHandler())
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
-    # @classmethod
-    # def get_token(cls, user):
-    #     print('get_token user ', user)
-    #     token = super().get_token(user)
-    #     # Добавляем дополнительные данные к токену
-    #     token['email'] = user.email
-    #     token['username'] = user.username
-    #     # token['phone'] = user.phone if user.phone else None
-    #     # token['avatar'] = user.avatar.url if user.avatar else None
-    #     return token
-
     def validate(self, attrs):
         print('CustomTokenObtainPairSerializer > attrs: ',attrs)
         username_or_email = attrs.get('username') or attrs.get('email')
@@ -109,6 +99,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 
+class LogoutSerializer(serializers.Serializer):
+    pass
 
 
 

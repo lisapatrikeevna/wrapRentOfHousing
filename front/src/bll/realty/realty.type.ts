@@ -30,6 +30,9 @@ export type RealtyType = {
   class_realty: string
   details?: RealtyDetailsType
   square_footage: number
+  favorite?:Array<number>
+  views?:Array<number>
+  reservations?:Array<number>
 }
 
 export interface CreateRealtyType {
