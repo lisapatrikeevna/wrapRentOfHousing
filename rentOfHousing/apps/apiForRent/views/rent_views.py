@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import Realty
-from ..serializers.realtySerializer import RealtySerializer, RealtyUpdateSerializers, RealtyCreateSerializer
+from ..serializers.realtyListCreateSerializer import RealtyListCreateSerializer, RealtyUpdateSerializers, RealtyCreateSerializer
 
 
 
@@ -83,9 +83,11 @@ class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
         views_user_id = request.data.get('views')
 
         if favorite_user_id:
+            print('exist/if realty_instance.favorite.filter(id=favorite_user_id).exists()',realty_instance.favorite.filter(id=favorite_user_id).exists())
             if realty_instance.favorite.filter(id=favorite_user_id).exists():
                 realty_instance.favorite.remove(favorite_user_id)
             else:
+                print('else')
                 realty_instance.favorite.add(favorite_user_id)
             return Response(status=status.HTTP_200_OK)
         elif reservations_user_id :
@@ -96,9 +98,12 @@ class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
             return Response(status=status.HTTP_200_OK)
         elif views_user_id is not None:
             if realty_instance.views.filter(id=views_user_id).exists():
-                realty_instance.views.remove(views_user_id)
+                pass
+                # realty_instance.views.remove(views_user_id)
             else:
+                # realty_instance.views.add(views_user_id)
                 realty_instance.views.add(views_user_id)
+
             return Response(status=status.HTTP_200_OK)
         else:
             serializer = self.get_serializer(realty_instance, data=request.data, partial=True)
@@ -112,7 +117,7 @@ class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
 
 class RealtyListCreate(ListCreateAPIView):
     queryset = Realty.objects.all()
-    serializer_class = RealtySerializer
+    serializer_class = RealtyListCreateSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['category', 'location', 'number_of_rooms', 'available', 'available_date', 'class_realty', 'square_footage', 'author']
     search_fields = ['description', 'title', 'location']
@@ -155,6 +160,7 @@ class RealtyListCreate(ListCreateAPIView):
             'current_page': res['current_page'],
             'count': res['count']
         })
+
 
 # Открытый доступ для всех пользователей
 class FilterOptionsView(APIView):

@@ -45,10 +45,10 @@ const NewRealtyForm = (props:propsType) => {
       available: true,
       location: ' Schießhausweg 7, 74564 Crailsheim, Schwäbisch Hall ',
       description: 'en, die Sie für ein komfortables und sorgenfreies Leben benötigen.',
-      price: 10,
-      number_of_rooms: 2,
+      price: 810,
+      number_of_rooms: 3,
       category: 4,
-      available_date: '19.98.1981',
+      available_date: '19-09-1981',
       square_footage: 23,
 
     },

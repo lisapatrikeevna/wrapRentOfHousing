@@ -33,9 +33,9 @@ class Realty(models.Model):
     details = models.OneToOneField(RealtyDetail, on_delete=models.CASCADE, null=True, blank=True, related_name='details')
     square_footage = models.FloatField(blank=False, null=False, default=0)  # Площадь в квадратных метрах
     is_deleted = models.BooleanField(default=False)  # for soft deleted  # Для мягкого удаления
-    favorite = models.ManyToManyField(CustomUser, blank=True, related_name='favorite_properties')
-    views = models.ManyToManyField(CustomUser, blank=True, related_name='views_properties')
-    reservations = models.ManyToManyField(CustomUser, blank=True, related_name='reserv_properties')
+    favorite = models.ManyToManyField(CustomUser, blank=True,null=True, related_name='favorite_properties')
+    views = models.ManyToManyField(CustomUser, blank=True,null=True, related_name='views_properties')
+    reservations = models.ManyToManyField(CustomUser, blank=True,null=True, related_name='reserv_properties')
     objects = SoftDeleteRentManager()  # Для мягкого удаления
 
     def delete(self, *args, **kwargs):

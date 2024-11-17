@@ -32,6 +32,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             if not isinstance(response.data, dict):
                 response.data = {}
 
+            print('!!!!!!!!!!!!!getMe/response',response)
+            print('!!!!!!!!!!!!!getMe/user_data',user_data)
             response.data['user'] = user_data
             return response
 

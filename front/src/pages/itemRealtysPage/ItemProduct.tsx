@@ -5,11 +5,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import defaultImg from '@/assets/defaultitemprodkt.jpg'
 import { useSelector } from "react-redux";
 import { RootStateType } from "../../bll/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NewRealtyForm from "../../components/newRealtyForm/NewRealtyForm";
 import { CreateRealtyDetailType, CreateRealtyType } from "../../bll/realty/realty.type";
 import RealtyDetailForm from "../../components/newRealtyForm/RealtyDetailForm";
-import { UserType } from "../../bll/auth/auth.type";
+// import { UserType } from "../../bll/auth/auth.type";
 
 
 
@@ -22,12 +22,13 @@ const ItemProduct = () => {
   const [isEdit, setIsEdit] = useState(false)
   const {data: realty, isLoading: isRealtyLoading, isError: isRealtyError} = useGetItemRealtyQuery({id})
   const [ removeRealty ] = useRemoveRealtyMutation();
-  console.log('!!!!!realty', realty);
-  // console.log("userId==id", userId == realty.author);
-  // console.log('!!!!!id', id);
   const [newRealtyData, setNewRealtyData] = useState<CreateRealtyType|null>(null);
   const [realtyDetailData, setRealtyDetailData] = useState<CreateRealtyDetailType|null>(null);
   const [updateRealty,{isError:updateIsError, isLoading:updateIsLoading}]=useUpdateRealtyMutation()
+  const [propertiesUpdate,{error}] = usePatchRealtyMutation()
+  useEffect(()=>{
+    userId && propertiesUpdate({id:id,body:{'views':userId}})
+  },[])
   const removeHandler=()=>{
     removeRealty(id).unwrap()
     .then((res) => {
@@ -36,7 +37,7 @@ const ItemProduct = () => {
     })
     .catch((err) => {console.error('Error removing realty:', err);});
   }
-
+  console.log('!!!!!realty', realty);
 //@ts-ignore
   const handleRealtyData = (data) => {
     setNewRealtyData(data);
@@ -97,15 +98,7 @@ const ItemProduct = () => {
     .then((res) => console.log("res !!!!!!!!!!!!", res))
     .catch((err) => console.log(err));
   }
-  //@ts-ignore
-  const [propertiesUpdate, { isLoading}] = usePatchRealtyMutation()
-  const user = useSelector<RootStateType, UserType | null>(state => state.app.user)
-  //@ts-ignore
-  const isVisitet = user?.reserv_properties?.some((id:number) => id === item.id);
-  //@ts-ignore
-  const visitStyles = {
-    color: isVisitet? "#f44336":""
-  }
+
 
   // const [avatarImg, setAvatarImg] = useState<string | null>();
 
@@ -146,7 +139,8 @@ const ItemProduct = () => {
     {(isRealtyLoading || updateIsLoading) && <CircularProgress color="success"/>}
     {(realty && !isEdit) && <Container>
       <Box className={cl.imgWrap}>
-        {realty.real_estate_image ? <img src={realty.real_estate_image} alt="img"/> : <img src={defaultImg} alt="defaultImg"/>}
+        {realty.real_estate_image ? <img src={realty.real_estate_image} alt="img"/> :
+          <img src={defaultImg} alt="defaultImg"/>}
       </Box>
 
       <p> author id : {realty.author}</p>

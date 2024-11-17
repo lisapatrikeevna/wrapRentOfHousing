@@ -32,42 +32,30 @@ const realtyService = baseApi.injectEndpoints({
       }),
       patchRealty: builder.mutation<void, {id: number; body: any}>({
         query: ({id, body}) => {
-          return {
-            url: `realty/${id}`, method: 'PATCH', body: body,
-          };
+          return {url: `realty/${id}`, method: 'PATCH', body: body,};
         },
-        invalidatesTags: ['Realty'],
-        // invalidatesTags: ['Me', 'Realty'],
+        // invalidatesTags: ['Realty'],
+        invalidatesTags: ['Me', 'Realty'],
       }),
       removeRealty: builder.mutation<void, {id: number}>({
         query(id) {
           return {method: 'DELETE', url: `realty/${id}`}
         }, invalidatesTags: ['Realty']
-      }), getRealty: builder.query<RealtyRequestType, {params: string}>({
+      }),
+      getRealty: builder.query<RealtyRequestType, {params: string}>({
         query: (arg) => {
           console.log('arg!!!!!!', arg.params);
-          const requestConfig = {method: 'GET', url: `realty/${arg.params}`};
-
-          // Логируем конфигурацию запроса
-          console.log("Запрос к API:", requestConfig);
-          return requestConfig;
+          return  {method: 'GET', url: `realty/${arg.params}`};
         }, providesTags: ['Realty'],
       }), getItemRealty: builder.query<RealtyType, {id: number}>({
         query: (args) => {
           console.log('args.id', args.id);
-          const requestConfig = {method: 'GET', url: `realty/${args.id}`, headers: {}};
-
-          // Логируем конфигурацию запроса
-          console.log("Запрос к API:", requestConfig);
-          return requestConfig;
-          // return {method: 'GET', url: 'realty/',}
+          return  {method: 'GET', url: `realty/${args.id}`, headers: {}};
         }, providesTags: ['Realty'],
-      }), getFilterList: builder.query<FilterType, void>({
+      }),
+      getFilterList: builder.query<FilterType, void>({
         query: () => {
-          const requestConfig = {method: 'GET', url: `realty/filterList/`, headers: {}};
-
-          console.log("Запрос к API:", requestConfig);
-          return requestConfig;
+          return  {method: 'GET', url: `realty/filterList/`, headers: {}};
         }, providesTags: ['Realty'],
       }),
     }

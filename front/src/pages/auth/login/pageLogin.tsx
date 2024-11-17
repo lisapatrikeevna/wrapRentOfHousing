@@ -37,7 +37,6 @@ export const PageLogin = () => {
     console.log('handleSignIn data:', data);
     signIn(data).unwrap().then((response) => {
       console.log('Login successful:', response);
-      debugger
       dispatch(appAC.setUser(response.user));
       // window.close()
     }).catch((error) => {

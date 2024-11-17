@@ -27,8 +27,8 @@ const slice = createSlice({
       state.isLoadingCategory = action.payload
     }, setIsErrorCategory: (state, action: PayloadAction<string>) => {
       state.isErrorCategory = action.payload
-    }, setUser: (state, action: PayloadAction<UserType>) => {
-      state.user = action.payload
+    }, setUser: (state, action: PayloadAction<{user:UserType}>) => {
+      state.user = action.payload.user
     },
       // setRefreshToken: (state, action: PayloadAction<string>) => {
       // state.refresh_token = action.payload },

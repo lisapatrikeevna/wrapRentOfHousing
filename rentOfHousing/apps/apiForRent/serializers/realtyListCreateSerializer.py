@@ -19,11 +19,11 @@ class RealtyDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-    def validate_details(self, value):
-        """Валидация, чтобы проверить, что `details` является словарем."""
-        if not isinstance(value, dict):
-            raise serializers.ValidationError("Details must be a valid JSON object.")
-        return value
+    # def validate_details(self, value):
+    #     """Валидация, чтобы проверить, что `details` является словарем."""
+    #     if not isinstance(value, dict):
+    #         raise serializers.ValidationError("Details must be a valid JSON object.")
+    #     return value
 
 
 class RealtyFilesSerializer(serializers.ModelSerializer):
@@ -78,6 +78,10 @@ class RealtyUpdateSerializers(serializers.ModelSerializer):
     class Meta:
         model = Realty
         fields = '__all__'
+        # Проверяем, есть ли пользователи для добавления в favorites
+        # if favorite_users_ids:
+        #     favorite_users = CustomUser.objects.filter(id__in=favorite_users_ids)
+        #     realty_instance.favorite.set(favorite_users)  # Используем set()
 
 
 
@@ -87,27 +91,27 @@ class RealtyCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Realty
         fields = '__all__'
-        read_only_fields = ['register_date', 'rating', 'views']
+        read_only_fields = ['register_date', 'rating', 'views','favorite','reservations']
 
     def create(self, validated_data):
         # Извлекаем данные для details
-        details_data = validated_data.pop('details', [])
+        details_data = validated_data.pop('details', None)
+        # details_data = validated_data.pop('details', [])
 
         # Извлекаем favorite_users_ids, если они есть
-        favorite_users_ids = validated_data.pop('favorite', [])
+        # favorite_users_ids = validated_data.pop('favorite', [])
+        # views_users_ids = validated_data.pop('favorite', [])
+        # favorite_users_ids = validated_data.pop('favorite', [])
 
         # Создаем объект недвижимости
         realty_instance = Realty.objects.create(**validated_data)
 
         # Если данные о деталях были переданы, создаем их
         if details_data:
-            # Передаем объект realty_instance в details_data
-            RealtyDetail.objects.create(realty=realty_instance, **details_data)
-
-        # Проверяем, есть ли пользователи для добавления в favorites
-        if favorite_users_ids:
-            favorite_users = CustomUser.objects.filter(id__in=favorite_users_ids)
-            realty_instance.favorite.set(favorite_users)  # Используем set()
+            details_instance = RealtyDetail.objects.create(**details_data)
+            # Привязываем объект RealtyDetail к Realty
+            realty_instance.details = details_instance
+            realty_instance.save()
 
         return realty_instance
 
@@ -116,10 +120,9 @@ class RealtyForUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Realty
         fields = ('reservations', 'views', 'favorite')
-        # fields = ('reservations', 'views', 'favorite')
 
 
-class RealtySerializer(serializers.ModelSerializer):
+class RealtyListCreateSerializer(serializers.ModelSerializer):
     price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'))
     # details = RealtyDetailSerializer(many=True, required=False)  # Используем many=True для списка
     realtyFiles = RealtyFilesSerializer(many=True, required=False)

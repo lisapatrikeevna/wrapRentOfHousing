@@ -6,6 +6,7 @@ import { appAC } from "./bll/app.slice";
 import { useGetCategoryQuery } from "./bll/category/category.service";
 import { Outlet } from "react-router-dom";
 import ErrorBoundary from "./ErrorBoundary";
+import { useMeQuery } from "./bll/auth/auth.servies.ts";
 
 
 function App() {
@@ -17,6 +18,12 @@ function App() {
     dispatch(appAC.setIsLoadingCategory(isLoadingCategory));
     categories && dispatch(appAC.setCategories(categories));
   },[categories,isLoadingCategory,isErrorCategory,dispatch])
+  const {data:updatedUser, isLoading:isMeLoad} = useMeQuery()
+  useEffect(() => {
+    if (updatedUser) {
+      dispatch(appAC.setUser(updatedUser));
+    }
+  }, [updatedUser]);
 
 
   return (

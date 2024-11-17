@@ -105,9 +105,10 @@ const RealtyDetailForm = (props:propsType) => {
     // console.log( [...formData]);
 
     const formDataObject = Object.fromEntries(formData.entries());
-    // props.onFormDataChange(formDataObject);
+    props.onFormDataChange(formDataObject);
+    // props.onFormDataChange(formData);
     // props.onFormDataChange({"details":{...formDataObject}});
-    props.onFormDataChange({"details":formDataObject})
+    // props.onFormDataChange({"details":formDataObject})
   };
 
 
