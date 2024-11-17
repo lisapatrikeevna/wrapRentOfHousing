@@ -38,7 +38,13 @@ const LandlordPage = () => {
     if (realtyDetailData) {
       //@ts-ignore
       Object.keys(realtyDetailData).forEach(key => {
-        data.append(`details[${key}]`, realtyDetailData[key]); // Используем квадратные скобки
+        const value = realtyDetailData[key];
+        // Проверяем, если это файл
+        if (key === 'realtyFiles' && value instanceof File) {
+          data.append(`details.${key}`, value);
+        }
+        data.append(`details.${key}`, value); // Используем квадратные скобки
+        // data.append(`details[${key}]`, realtyDetailData[key]); // Используем квадратные скобки
       });
     }
     data.append('author', id);
@@ -100,40 +106,34 @@ export default LandlordPage;
 
 
 
-// ------POST request.FILES: <MultiValueDict: {'real_estate_image': [<InMemoryUploadedFile: d09208183125ab47493d5de2f8710b6faa27d7cc-3000x2000.jpg (image/jpeg)>]}>
-//   def create/ if serializer.is_valid():  RealtyCreateSerializer(data=<QueryDict: {'csrfmiddlewaretoken': ['6mwwAnWLyZdtpLv3wte946COY1rjTYoTveMVJ1yLiEXC9yyNFtVrDfD3tVqxlt3N'], 'price': ['239'], 'details.internet': ['yes'], 'details.garage_or_parking': ['50 e/m'], 'details.balcony': ['hren wam'], 'details.heating_type': [''], 'details.air_conditioning': ['true'], 'details.floor_number': ['2'], 'details.total_floors': ['12'], 'details.pet_friendly': ['true'], 'details.description': ['drtfyguhji tfyghuj'], 'title': ['hren tebe'], 'description': ['rftghj fgtyhuj wsdxc'], 'location': ['china'], 'number_of_rooms': ['2'], 'available': ['true'], 'available_date': ['2024-11-07'], 'class_realty': ['standard'], 'square_footage': [''], 'category': ['2'], 'author': ['1'], 'real_estate_image': [<InMemoryUploadedFile: d09208183125ab47493d5de2f8710b6faa27d7cc-3000x2000.jpg (image/jpeg)>]}>):
-//   id = IntegerField(label='ID', read_only=True)
-//   details = RealtyDetailSerializer(required=False):
-//   id = IntegerField(label='ID', read_only=True)
-//   internet = CharField(allow_blank=True, max_length=50, required=False)
-//   garage_or_parking = CharField(allow_blank=True, allow_null=True, max_length=50, required=False)
-//   balcony = CharField(allow_blank=True, allow_null=True, max_length=50, required=False)
-//   heating_type = CharField(allow_blank=True, allow_null=True, max_length=50, required=False)
-//   air_conditioning = BooleanField(required=False)
-//   floor_number = IntegerField(max_value=4294967295, min_value=0)
-//   total_floors = IntegerField(max_value=4294967295, min_value=0)
-//   pet_friendly = BooleanField(required=False)
-//   furnished = BooleanField(required=False)
-//   description = CharField(allow_blank=True, allow_null=True, required=False, style={'base_template': 'textarea.html'})
-//   created_at = DateTimeField(read_only=True)
-//   updated_at = DateTimeField(read_only=True)
-//   title = CharField(max_length=150, validators=[<UniqueValidator(queryset=Realty.objects.all())>])
-//   description = CharField(label='Property description', style={'base_template': 'textarea.html'})
-//   location = CharField(max_length=200)
-//   price = DecimalField(decimal_places=2, max_digits=10, min_value=0)
-//   number_of_rooms = IntegerField(max_value=65535, min_value=1)
-//   available = BooleanField(required=False)
-//   rating = FloatField(allow_null=True, help_text='min: 1, max: 5', label='Rating (1-5)', read_only=True)
-//   register_date = DateField(read_only=True)
-//   available_date = DateField(label='Availability date')
-//   real_estate_image = ImageField(allow_null=True, label='Main real estate picture', max_length=100, required=False)
-//   class_realty = ChoiceField(choices=[('standard', 'Стандарт'), ('economy', 'Эконом'), ('comfort', 'Комфорт'), ('premium', 'Премиум'), ('luxury', 'Люкс'), ('super_luxury', 'Супер-люкс')], required=False)
-//   square_footage = FloatField(required=False)
-//   is_deleted = BooleanField(required=False)
-//   category = PrimaryKeyRelatedField(queryset=Category.objects.all())
-//   author = PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), required=False)
-//   favorite = PrimaryKeyRelatedField(allow_null=True, many=True, read_only=True)
-//   views = PrimaryKeyRelatedField(allow_null=True, many=True, read_only=True)
-//   reservations = PrimaryKeyRelatedField(allow_null=True, many=True, read_only=True)
-//   [17/Nov/2024 15:08:49] "POST /api/realty/ HTTP/1.1" 201 18436
+
+// ------POST request.data: <QueryDict: {
+// 'title': [' some test990'],
+// 'description': ['en, die Sie für ein komfortables und sorgenfreies Leben benötigen.'],
+// 'location': [' Schießhausweg 7, 74564 Crailsheim, Schwäbisch Hall '],
+// 'price': ['810'],
+// 'number_of_rooms': ['3'],
+// 'category': ['4'],
+// 'available': ['true'],
+// 'available_date': ['2024-11-15'],
+// 'class_realty': ['comfort'],
+// 'square_footage': ['23'],
+// 'details[internet]': ['Telecom, 0mb/10s'],
+// 'details[garage_or_parking]': ['Garage/Stellplatz: 30 €'],
+// 'details[floor_number]': ['9'],
+// 'details[total_floors]': ['21'],
+// 'author': ['6'],
+// 'real_estate_image': [<InMemoryUploadedFile: 0e4355a6-4788-4a66-97c3-24e6fe1e8343-1857281401.webp (image/webp)>],
+// 'details[realtyFiles]': [<InMemoryUploadedFile: a960e1a5-6724-4f80-902d-fa0cb38c046e-1857281375.webp (image/webp)>, <InMemoryUploadedFile: a960e1a5-6724-4f80-902d-fa0cb38c046e-1857281375.webp (image/webp)>]}>
+
+
+
+
+
+
+
+
+
+
+
 

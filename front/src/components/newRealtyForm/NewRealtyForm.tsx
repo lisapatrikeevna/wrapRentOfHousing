@@ -65,9 +65,10 @@ const NewRealtyForm = (props:propsType) => {
       // Проверка перед добавлением значений
       if (value === undefined || value === null || value === '') return;
 
-      if (key === 'price' || key === 'number_of_rooms' || key === 'square_footage') {
-        formData.append(key, String(Number(value))); // Преобразуем числа в строки
-      } else if (key === 'available_date') {
+      // if (key === 'price' || key === 'number_of_rooms' || key === 'square_footage') {
+      //   formData.append(key, String(Number(value))); // Преобразуем числа в строки
+      // } else
+        if (key === 'available_date') {
         const formattedDate = new Date(value).toISOString().split('T')[0]; // Преобразуем дату в формат YYYY-MM-DD
         formData.append(key, formattedDate);
       } else if (key === 'real_estate_image' && value instanceof File) {

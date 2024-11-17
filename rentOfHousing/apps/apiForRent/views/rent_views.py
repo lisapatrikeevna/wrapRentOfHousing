@@ -143,7 +143,7 @@ class RealtyListCreate(ListCreateAPIView):
         serializer = RealtyCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            print('def create/ if serializer.is_valid(): ', serializer)
+            print('-------def create/ if serializer.is_valid(): ', serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             print(f'Serializer errors: {serializer.errors}')  # Логирование ошибок сериализатора

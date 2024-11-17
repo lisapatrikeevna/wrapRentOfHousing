@@ -1,9 +1,10 @@
+from rest_framework import serializers
 from decimal import Decimal
-
+from apps.apiForRent.models import *
 from rest_framework import serializers
 
 from apps.apiForRent.models import *
-from apps.user.models import CustomUser
+
 
 
 class RealtyCreateUpdateSerializer(serializers.ModelSerializer):
@@ -19,59 +20,10 @@ class RealtyDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-    # def validate_details(self, value):
-    #     """Валидация, чтобы проверить, что `details` является словарем."""
-    #     if not isinstance(value, dict):
-    #         raise serializers.ValidationError("Details must be a valid JSON object.")
-    #     return value
-
-
 class RealtyFilesSerializer(serializers.ModelSerializer):
     class Meta:
         model = RealtyFiles
         fields = '__all__'
-
-
-# class RealtySerializer(serializers.ModelSerializer):
-#     price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'))
-#     details = RealtyDetailSerializer(many=True, required=False)
-#     realtyFiles = RealtyFilesSerializer(many=True, required=False)
-#
-#     class Meta:
-#         model = Realty
-#         fields = '__all__'
-#         read_only_fields = ['register_date', 'rating', 'favorite', 'views']
-#
-#     def create(self, validated_data):
-#         print('!!!!!!!!!!! Inside create:', validated_data)
-#
-#     # Обработка поля `details`
-#         details_data = validated_data.pop('details', [])
-#
-#         # Если details уже является словарем, преобразуем его в список с одним элементом
-#         if isinstance(details_data, dict):
-#             details_data = [details_data]
-#
-#         print('Processed Details Data:', details_data)
-#
-#         # Извлекаем данные для realtyFiles
-#         files_data = validated_data.pop('realtyFiles', [])
-#         print('Processed Files Data:', files_data)
-#
-#         # Создаем объект Realty
-#         realty_instance = Realty.objects.create(**validated_data)
-#
-#         # Обработка details
-#         for detail in details_data:
-#             if isinstance(detail, dict):
-#                 RealtyDetail.objects.create(realty=realty_instance, **detail)
-#
-#         # Обработка realtyFiles
-#         for file_data in files_data:
-#             if isinstance(file_data, dict):
-#                 RealtyFiles.objects.create(realty=realty_instance, **file_data)
-#
-#         return realty_instance
 
 
 class RealtyUpdateSerializers(serializers.ModelSerializer):
@@ -84,8 +36,8 @@ class RealtyUpdateSerializers(serializers.ModelSerializer):
         #     realty_instance.favorite.set(favorite_users)  # Используем set()
 
 
-
 class RealtyCreateSerializer(serializers.ModelSerializer):
+    price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'))
     details = RealtyDetailSerializer(required=False)
 
     class Meta:
@@ -94,22 +46,14 @@ class RealtyCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ['register_date', 'rating', 'views','favorite','reservations']
 
     def create(self, validated_data):
-        # Извлекаем данные для details
         details_data = validated_data.pop('details', None)
-        # details_data = validated_data.pop('details', [])
-
-        # Извлекаем favorite_users_ids, если они есть
-        # favorite_users_ids = validated_data.pop('favorite', [])
-        # views_users_ids = validated_data.pop('favorite', [])
-        # favorite_users_ids = validated_data.pop('favorite', [])
-
-        # Создаем объект недвижимости
         realty_instance = Realty.objects.create(**validated_data)
 
-        # Если данные о деталях были переданы, создаем их
         if details_data:
-            details_instance = RealtyDetail.objects.create(**details_data)
-            # Привязываем объект RealtyDetail к Realty
+            details_serializer = RealtyDetailSerializer(data=details_data)
+            details_serializer.is_valid(raise_exception=True)
+            details_instance = details_serializer.save()
+
             realty_instance.details = details_instance
             realty_instance.save()
 
@@ -159,3 +103,40 @@ class RealtyListCreateSerializer(serializers.ModelSerializer):
     #     if not isinstance(value, dict):
     #         raise serializers.ValidationError("Details must be a valid JSON object.")
     #     return value
+
+
+
+# ------POST request.data: <QueryDict: {
+# 'csrfmiddlewaretoken': ['FsdjEsD0mpIBoYOvvkMJfzVbXhvyiH3AZcwpsG4jBuYdAG9TXiUu5XtYicRnzUHw'],
+# 'details.internet': ['no'],
+# 'details.garage_or_parking': ['50 e/m'],
+# 'details.balcony': [''],
+# 'details.heating_type': [''],
+# 'details.floor_number': ['23'],
+# 'details.total_floors': ['12'],
+# 'details.pet_friendly': ['true'],
+# 'details.description': ['Das in der Katharinenvorstadt, direkt beim Würthmuseum gelegene 2 stöckige Haus wird ausschließlich von Ihnen zum Wohnen genutzt.\r\nEs befindet sich lediglich im Erdgeschoss eine separate gewerbliche Einheit.'],
+# 'title': ['title review'],
+# 'description': ['Für ein paar Stunden, Tage, ein Jahr oder länger?\r\nBei ShareYourSpace findest du eine große Auswahl an Büros, Schreibtischen und Meetingräumen, die du flexibel buchen kannst.'],
+# 'location': ['Schwäbisch Hall'],
+# 'price': ['2300.00'],
+# 'number_of_rooms': ['34'],
+# 'available': ['true'],
+# 'available_date': ['2024-12-05'],
+# 'class_realty': ['standard'], 'square_footage': ['234.0'], 'category': ['2'], 'author': ['6'], 'real_estate_image': [<InMemoryUploadedFile: images.jpeg (image/jpeg)>]}>
+
+
+# !!!!!!!!!!!!!!!!!!!details_data {
+# 'internet': 'no',
+# 'garage_or_parking': '50 e/m',
+# 'balcony': '',
+# 'heating_type': '',
+# 'air_conditioning': False,
+# 'floor_number': 23,
+# 'total_floors': 12,
+# 'pet_friendly': True,
+# 'furnished': False,
+# 'description': 'Das in der Katharinenvorstadt, direkt beim Würthmuseum gelegene 2 stöckige Haus wird ausschließlich von Ihnen zum Wohnen genutzt.\r\nEs befindet sich lediglich im Erdgeschoss eine separate gewerbliche Einheit.'}
+
+
+
