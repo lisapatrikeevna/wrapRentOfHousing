@@ -23,11 +23,12 @@ const ItemProduct = () => {
   const [removeRealty] = useRemoveRealtyMutation();
   const [newRealtyData, setNewRealtyData] = useState<CreateRealtyType | null>(null);
   const [realtyDetailData, setRealtyDetailData] = useState<CreateRealtyDetailType | null>(null);
-  const [updateRealty, {isError: updateIsError, isLoading: updateIsLoading}] = useUpdateRealtyMutation()
+  const [updateRealty, {error: updateIsError, isLoading: updateIsLoading}] = useUpdateRealtyMutation()
   const [propertiesUpdate, {error}] = usePatchRealtyMutation()
   useEffect(() => {
-    // for putch!
+    // for putch if viseted!
     userId && propertiesUpdate({id: id, body: {'views': userId}})
+    console.log(error)
   }, [])
   const removeHandler = () => {
     removeRealty(id).unwrap()
@@ -46,11 +47,9 @@ const ItemProduct = () => {
   const handleRealtyDetailData = (data) => {
     setRealtyDetailData(data);
   };
-  console.log("newRealtyData: ", newRealtyData);
-  console.log("realtyDetailData", realtyDetailData);
+  // console.log("newRealtyData: ", newRealtyData);
+  // console.log("realtyDetailData", realtyDetailData);
   const updateCurrentRealty = () => {
-    console.log("newRealtyData: ", newRealtyData);
-    console.log("realtyDetailData", realtyDetailData);
     const data = new FormData();
     //
     // // Добавляем данные из newRealtyData
@@ -91,10 +90,7 @@ const ItemProduct = () => {
 
     console.log("Final data to send:", ...data); // Логируем данные для проверки
 
-    // console.log("data: ", data);
-    debugger
-    //@ts-ignore
-    updateRealty(data).unwrap()
+    updateRealty({id: id, body: data,}).unwrap()
     .then((res) => console.log("res !!!!!!!!!!!!", res))
     .catch((err) => console.log(err));
   }

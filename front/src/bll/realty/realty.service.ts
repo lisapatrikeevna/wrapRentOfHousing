@@ -13,19 +13,20 @@ const realtyService = baseApi.injectEndpoints({
       createRealty: builder.mutation<void, CreateRealtyType>({
         query: (arg) => {
           const res = {
-            url: 'realty/', method: 'POST', // headers: {
+            url: 'realty/', method: 'POST', body: arg,
+            // headers: {
             //   'Authorization': `Bearer ${token}`,
             //   // 'Content-Type': 'application/json',
             // },
-            body: arg,
+
           };
           return res
         }, invalidatesTags: ['Realty'],
       }),
-      updateRealty: builder.mutation<void, RealtyType>({
-        query: body => {
+      updateRealty: builder.mutation<void, {id: number,body:RealtyType}>({
+        query: (args) => {
           return {
-            body: body, method: 'PUT', url: `realty/${body.id}`,
+            url: `realty/${args.id}`, method: 'PUT',  body: args.body,
             // headers: {'Content-Type': 'application/json'}
           }
         }, invalidatesTags: ['Realty']
