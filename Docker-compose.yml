@@ -1,29 +1,3 @@
-#version: '3'
-#
-#services:
-#  web:
-#    build:
-#      context: .rentOfHousing
-#      dockerfile: Dockerfile
-#    command: python manage.py runserver 0.0.0.0:8088
-#    volumes:
-#      - .:/app
-#    ports:
-#      - 8088:8088
-#
-#
-#  frontend:
-#    build:
-#      context: .front
-#      dockerfile: Dockerfile
-#    command: npm start
-#    volumes:
-#      - ./frontend:/app
-#    ports:
-#      - 3000:3000
-#    depends_on:
-#      - web
-
 version: '3.8'
 # Поднимаем два сервиса, django И node
 services:
@@ -31,15 +5,17 @@ services:
     #говорим что build будет из dockerfile который располагается ./rentOfHousing/rentOfHousing/
     build: ./rentOfHousing
     # имя контейнера
-    container_name: djangoapp
+    container_name: rentOfHousing-container
     # перезапускать контейнер при завершении выполнения работы или при аварийном завершении
     restart: always
     # проброс портов внутрь контейнера, 8000 порт на хост машине будет проброшен внутрь контейнера на такой же 8000 порт
     ports:
       - 12345:12345
+
     # команда при старте контейнера
-    command: >
-      sh -c "python manage.py runserver 0.0.0.0:12345"
+#    command: >
+#      sh -c "python manage.py runserver 0.0.0.0:12345"
+
     # Для статики мы подключаем два volume (чтобы при перезапуске наши данные не пропадали)), создадим их ниже.
     volumes:
       - ./rentOfHousing:/usr/src/app
@@ -53,7 +29,7 @@ services:
     # Аналогично, build из ./reactapp/dockerfile
     build: ./front
     # имя контейнера
-    container_name: reactapp
+    container_name: react-app
     # рестарт
     restart: always
     # порты

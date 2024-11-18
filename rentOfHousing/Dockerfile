@@ -32,8 +32,8 @@ RUN pip install -r requirements.txt
 # копируем всё что осталось.
 COPY . .
 
-EXPOSE 8088
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8088"]
+EXPOSE 12345
+CMD ["python", "manage.py", "runserver", "0.0.0.0:12345"]
 
 
 

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'apps.apiForRent.apps.ApiforrentConfig',
     'apps.user.apps.UserConfig',
+    'drf_spectacular',
 
     # base
     'django.contrib.admin',
@@ -137,7 +138,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 # AUTH_USER_MODEL = 'apps.user.models.CustomUser'
 AUTH_USER_MODEL = 'user.CustomUser'
@@ -160,6 +161,17 @@ SIMPLE_JWT = {
 SESSION_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SAMESITE = 'None'
 
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'realty API',
+    'DESCRIPTION': 'Documentation API ',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,  # отключает автоинклуд схемы
+    # 'TAGS': [
+    #     {'name': 'Users', 'description': 'Управление пользователями'},
+    #     {'name': 'Products', 'description': 'Операции с продуктами'},
+    # ],
+}
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
