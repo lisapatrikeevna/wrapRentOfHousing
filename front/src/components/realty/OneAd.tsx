@@ -163,12 +163,13 @@ const OneAd = ({item,}: PropsType) => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography sx={{marginBottom: 2}}>Description:</Typography>
-          <Typography sx={{marginBottom: 2}}>
-            {item.description}
-          </Typography>
+          <Typography sx={{marginBottom: 2}}>{item.description}</Typography>
           {item.details && <>
-            <Typography sx={{marginBottom: 2}}>{item.details?.pet_friendly}</Typography>
-            <Typography>Set aside off of the heat to let rest for 10 minutes, and then serve.</Typography>
+            <hr/>
+            <Typography sx={{marginBottom: 2}}>Details:</Typography>
+            <Typography sx={{marginBottom: 2}}>pet_friendly: {item.details?.pet_friendly? 'yes' : 'no'}</Typography>
+            <Typography>total_floors:{item.details?.total_floors}</Typography>
+            <Typography>internet:{item.details?.internet}</Typography>
           </>}
         </CardContent>
       </Collapse>

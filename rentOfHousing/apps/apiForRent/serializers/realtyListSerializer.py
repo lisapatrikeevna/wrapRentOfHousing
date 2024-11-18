@@ -4,6 +4,7 @@ from apps.apiForRent.models import *
 from rest_framework import serializers
 
 from apps.apiForRent.models import *
+from apps.apiForRent.serializers.realtyDetail_serializer import RealtyDetailSerializer
 
 
 
@@ -14,10 +15,10 @@ class RealtyCreateUpdateSerializer(serializers.ModelSerializer):
         read_only_fields = ['register_date', ]
 
 
-class RealtyDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RealtyDetail
-        fields = '__all__'
+# class RealtyDetailSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = RealtyDetail
+#         fields = '__all__'
 
 
 class RealtyFilesSerializer(serializers.ModelSerializer):
@@ -66,7 +67,7 @@ class RealtyForUserSerializer(serializers.ModelSerializer):
         fields = ('reservations', 'views', 'favorite')
 
 
-class RealtyListCreateSerializer(serializers.ModelSerializer):
+class RealtyListSerializer(serializers.ModelSerializer):
     price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'))
     # details = RealtyDetailSerializer(many=True, required=False)  # Используем many=True для списка
     realtyFiles = RealtyFilesSerializer(many=True, required=False)

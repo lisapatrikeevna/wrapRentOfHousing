@@ -14,16 +14,38 @@ import PrivacyPolicy from "./pages/privacyPolicy/PrivacyPolicy";
 import LogoutPage from "./pages/auth/logoutPage/LogoutPage";
 import { RootStateType } from "./bll/store";
 import { UserType } from "./bll/auth/auth.type";
+import UserHistory from "./pages/usesrHistory/UserHistory";
+import UserFavorites from "./pages/usesrFavorites/UserHistory.tsx";
+import React from "react";
+import UsersBooking from "./pages/usersBooking/UsersBooking.tsx";
 
 
 export const PATH = {
-  login: '/login', loginOut: '/logOut', register: '/register', home: '/', renter: '/renter', about: '/about', privacyPolicy: '/privacyPolicy', itemRealty: '/realEstate', toLandlords: '/toLandlords',
+  login: '/login', loginOut: '/logOut',
+  register: '/register', home: '/', renter: '/renter',
+  about: '/about', privacyPolicy: '/privacyPolicy',
+  itemRealty: '/realEstate', toLandlords: '/toLandlords',
+  history: '/history',favorite: '/favorite',
+  myBooking: '/myBooking',
 }
 
-const publicRoutes: RouteObject[] = [{element: <RegisterForm/>, path: PATH.register,}, {element: <PageLogin/>, path: PATH.login,}, {element: <HomePage/>, path: PATH.home,}, {element: <About/>, path: PATH.about,}, {element: <PrivacyPolicy/>, path: PATH.privacyPolicy,}, // {element: <ItemProduct/>, path: PATH.itemRealty,},
+const publicRoutes: RouteObject[] = [
+  {element: <RegisterForm/>, path: PATH.register,},
+  {element: <PageLogin/>, path: PATH.login,},
+  {element: <HomePage/>, path: PATH.home,},
+  {element: <About/>, path: PATH.about,},
+  {element: <PrivacyPolicy/>, path: PATH.privacyPolicy,},
+  // {element: <ItemProduct/>, path: PATH.itemRealty,},
 ]
 
-const privateRoutes: RouteObject[] = [{element: <LandlordPage/>, path: PATH.toLandlords}, {element: <ItemProduct/>, path: PATH.itemRealty}, {element: <LogoutPage/>, path: PATH.loginOut,}, // {element: <div>log out</div>, path: PATH.loginOut,},
+const privateRoutes: RouteObject[] = [
+  {element: <LandlordPage/>, path: PATH.toLandlords},
+  {element: <ItemProduct/>, path: PATH.itemRealty},
+  {element: <LogoutPage/>, path: PATH.loginOut,},
+  {element: <UserHistory/>, path: PATH.history},
+  {element: <UserFavorites/>, path: PATH.favorite},
+  {element: <UsersBooking/>, path: PATH.myBooking},
+  // {element: <div>log out</div>, path: PATH.loginOut,},
 ]
 
 

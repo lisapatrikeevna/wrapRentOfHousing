@@ -62,7 +62,6 @@ const NewRealtyForm = (props:propsType) => {
     Object.keys(data).forEach(key => {
       const value = (data as any)[key];
 
-      // Проверка перед добавлением значений
       if (value === undefined || value === null || value === '') return;
 
       // if (key === 'price' || key === 'number_of_rooms' || key === 'square_footage') {

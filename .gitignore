@@ -28,6 +28,10 @@ front/*.local
 *.sw?
 *.pyc
 __pycache__/
+*.pycache
+*__pycache__*
+*.egg-info
+*.pytest_cache
 
 
 

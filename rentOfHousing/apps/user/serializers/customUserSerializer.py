@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apps.apiForRent.serializers.realtyListCreateSerializer import RealtyForUserSerializer
+from apps.apiForRent.serializers.realtyListSerializer import RealtyForUserSerializer
 from apps.user.models import CustomUser
 
 

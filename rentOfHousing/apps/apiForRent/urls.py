@@ -3,7 +3,12 @@ from django.conf.urls.static import static
 from django.urls import path, re_path
 
 from .views.category_view import CategoryListView
-from .views.rent_views import  RealtyListCreate, RealtyRetrieveUpdateDelete, FilterOptionsView
+from .views.filterOptionsView import FilterOptionsView
+from .views.realtyRetrieveUpdateDelete_view import RealtyRetrieveUpdateDelete
+from .views.rent_views import  RealtyListCreate
+from .views.userRealtylists import UserRealtyslists
+
+
 
 urlpatterns = ([
     path('category/', CategoryListView.as_view(), name='category'),
@@ -11,6 +16,8 @@ urlpatterns = ([
     re_path(r'^realty/filterList/$', FilterOptionsView.as_view()),
     # Здесь (?P<pk>\d+) указывает, что мы ожидаем, что часть URL будет числом и что она будет передана как аргумент pk.
     re_path(r'^realty/(?P<pk>\d+)$', RealtyRetrieveUpdateDelete.as_view(), name='realty-detail'),
+    path('realty/additional/', UserRealtyslists.as_view()),
+
 ])
                # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
 

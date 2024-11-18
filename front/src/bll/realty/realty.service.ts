@@ -47,7 +47,14 @@ const realtyService = baseApi.injectEndpoints({
           console.log('arg!!!!!!', arg.params);
           return  {method: 'GET', url: `realty/${arg.params}`};
         }, providesTags: ['Realty'],
-      }), getItemRealty: builder.query<RealtyType, {id: number}>({
+      }),
+      getUsersRealty: builder.query<RealtyRequestType, {params: string}>({
+        query: (arg) => {
+          console.log('arg!!!!!!', arg.params);
+          return  {method: 'GET', url: `realty/additional/${arg.params}/`};
+        }, providesTags: ['Realty'],
+      }),
+      getItemRealty: builder.query<RealtyType, {id: number}>({
         query: (args) => {
           console.log('args.id', args.id);
           return  {method: 'GET', url: `realty/${args.id}`, headers: {}};
@@ -62,7 +69,7 @@ const realtyService = baseApi.injectEndpoints({
   },
 })
 
-export const {useGetRealtyQuery, useGetItemRealtyQuery, useLazyGetFilterListQuery, useCreateRealtyMutation, useUpdateRealtyMutation, useRemoveRealtyMutation, usePatchRealtyMutation} = realtyService
+export const {useGetRealtyQuery, useGetItemRealtyQuery, useLazyGetFilterListQuery, useCreateRealtyMutation, useUpdateRealtyMutation, useRemoveRealtyMutation, usePatchRealtyMutation, useGetUsersRealtyQuery} = realtyService
 // export const {useCreateCategoryMutation, useGetCategoryQuery, useRemoveCategoryMutation, useUpdateCategoryMutation} = categoryService
 
 

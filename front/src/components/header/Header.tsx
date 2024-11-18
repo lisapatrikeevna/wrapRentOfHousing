@@ -34,7 +34,8 @@ const Header = () => {
     setOpen(!open)
   }
   const avatarHandler=()=>{
-    console.log('user', user);
+    console.log('user', user||'usol v les');
+    console.log('user.id', user?.id);
     !!user? modalHandler() : navigate(PATH.login)
   }
 
@@ -77,14 +78,14 @@ const Header = () => {
   <Modal open={open} onClose={modalHandler} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
     <Box sx={style}>
       <Typography id="modal-modal-title" variant="h6" component="h2">
-        hi, {user?.username }!
+        hi, {user?.username || "Guest"}!
       </Typography>
       {/*<Typography id="modal-modal-description" sx={{ mt: 2 }}>*/}
       {/*  Duis mollis, est non commodo luctus, nisi erat porttitor ligula.*/}
       {/*</Typography>*/}
-      <NavLink to={PATH.loginOut} >logout</NavLink>
-      <p>history</p>
-      <p>favorit</p>
+     <p> <NavLink to={PATH.loginOut} >logout</NavLink></p>
+     <p> <NavLink to={PATH.history}>history</NavLink></p>
+     <p> <NavLink to={PATH.favorite}>favorit</NavLink></p>
       <p>reservation</p>
     </Box>
   </Modal>

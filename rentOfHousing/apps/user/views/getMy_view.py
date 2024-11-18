@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from apps.apiForRent.models import Realty
 from apps.user.serializers.customUserSerializer import CustomUserSerializer
 from apps.user.utils import get_users_token
-from apps.apiForRent.serializers.realtyListCreateSerializer import RealtyListCreateSerializer
+from apps.apiForRent.serializers.realtyListSerializer import RealtyListSerializer
 
 
 class GetMy(views.APIView):
