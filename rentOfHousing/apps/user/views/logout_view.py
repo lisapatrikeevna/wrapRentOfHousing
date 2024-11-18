@@ -21,12 +21,28 @@ from apps.user.serializers.customUserSerializer import LogoutSerializer
 
 
 
+# class LogoutUserView(generics.GenericAPIView):
+#     permission_classes = [IsAuthenticated]
+#     # serializer_class = LogoutSerializer
+#
+#     def post(self, request):
+#         response = Response(status=status.HTTP_205_RESET_CONTENT)
+#         response.delete_cookie('access_token')
+#         response.delete_cookie('refresh_token')
+#         return response
+
+
 class LogoutUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
-    # serializer_class = LogoutSerializer
+    serializer_class = LogoutSerializer
 
     def post(self, request):
         response = Response(status=status.HTTP_205_RESET_CONTENT)
-        response.delete_cookie('access_token')
-        response.delete_cookie('refresh_token')
+        cookie_options = {
+            # 'path': '/',
+            'domain': '127.0.0.1',
+        }
+
+        response.delete_cookie('access_token', **cookie_options)
+        response.delete_cookie('refresh_token', **cookie_options)
         return response

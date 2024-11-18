@@ -6,12 +6,12 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from apps.apiForRent.models import Realty
-from apps.apiForRent.serializers.realtyListSerializer import RealtyUpdateSerializers
+from apps.apiForRent.serializers.realtyListSerializer import RealtyUpdateSerializers, RealtyListSerializer
 
 
 
 class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
-  queryset = Realty.objects.all()
+  # queryset = Realty.objects.all()
   serializer_class = RealtyUpdateSerializers
   permission_classes = [IsAuthenticatedOrReadOnly]
   lookup_field = "pk" # выбираем по какому полю сделаем запрос
@@ -43,7 +43,13 @@ class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
       realty = Realty.objects.get(pk=pk, is_deleted=False)
     except Realty.DoesNotExist:
       raise NotFound(detail=f"this Realty with id = '{pk}' dont exist")
+
+    print('-----------------------realty', type(realty.price))
     return realty
+  def retrieve(self, request, *args, **kwargs):
+    instance = self.get_object()
+    serializer = RealtyListSerializer(instance)
+    return Response(serializer.data)
 
   def delete(self, request, *args, **kwargs):
     realty_instance = self.get_object()

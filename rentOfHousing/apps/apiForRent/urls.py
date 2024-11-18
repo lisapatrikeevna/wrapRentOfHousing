@@ -5,7 +5,7 @@ from django.urls import path, re_path
 from .views.category_view import CategoryListView
 from .views.filterOptionsView import FilterOptionsView
 from .views.realtyRetrieveUpdateDelete_view import RealtyRetrieveUpdateDelete
-from .views.rent_views import  RealtyListCreate
+from .views.rent_views import RealtyListCreate
 from .views.userRealtylists import UserRealtyslists
 
 

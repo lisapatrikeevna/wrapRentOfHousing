@@ -24,14 +24,5 @@ const UserFavorites = () => {
 export default UserFavorites;
 
 
-// 20
-// 38
-// 39
-// 47
-// 48
-// 65
-// 66
-// 70
-
 
 

@@ -12,11 +12,12 @@ import cl from './LandlordPage.module.scss'
 
 
 
+
 const LandlordPage = () => {
   const id = useSelector<RootStateType, number | undefined>(state => state.app.user?.id);
   const {data: realty, isLoading: isRealtyLoading, isError: isRealtyError} = useGetRealtyQuery({params: `?author=${id}`});
-  // console.log('id, realty',id, realty);
-  const [createNew, { isError}] = useCreateRealtyMutation();
+  console.log('id, realty',id, realty);
+  const [createNew, {isError}] = useCreateRealtyMutation();
   const [newRealtyData, setNewRealtyData] = useState<CreateRealtyType | null>(null);
   const [realtyDetailData, setRealtyDetailData] = useState<CreateRealtyDetailType | null>(null);
   //@ts-ignore
@@ -31,16 +32,17 @@ const LandlordPage = () => {
 
   const createNewRealty = () => {
     const data = new FormData();
-    Object.keys(newRealtyData).forEach(key => {
+    newRealtyData && Object.keys(newRealtyData).forEach(key => {
+      // @ts-ignore
       data.append(key, newRealtyData[key]);
     });
 
-    if (realtyDetailData) {
-      //@ts-ignore
+    if( realtyDetailData ) {
       Object.keys(realtyDetailData).forEach(key => {
+        // @ts-ignore
         const value = realtyDetailData[key];
         // Проверяем, если это файл
-        if (key === 'realtyFiles' && value instanceof File) {
+        if( key === 'realtyFiles' && value instanceof File ) {
           data.append(`details.${key}`, value);
         }
         data.append(`details.${key}`, value); // Используем квадратные скобки
@@ -49,12 +51,18 @@ const LandlordPage = () => {
     }
     data.append('author', id);
 
-    console.log("Final data to send:", [...data]); // Логируем данные для проверки
+    console.log("Final data to send:", ...data); // Логируем данные для проверки
 
     createNew(data).unwrap()
     .then((res) => console.log("Response: ", res))
     .catch((err) => console.error("Error: ", err.errors));
   };
+
+
+
+
+
+
 
   return (<Box className={cl.root}>
     {/*update current objects*/}
@@ -97,16 +105,6 @@ const LandlordPage = () => {
 export default LandlordPage;
 
 
-
-
-
-
-
-
-
-
-
-
 // ------POST request.data: <QueryDict: {
 // 'title': [' some test990'],
 // 'description': ['en, die Sie für ein komfortables und sorgenfreies Leben benötigen.'],
@@ -127,7 +125,22 @@ export default LandlordPage;
 // 'details[realtyFiles]': [<InMemoryUploadedFile: a960e1a5-6724-4f80-902d-fa0cb38c046e-1857281375.webp (image/webp)>, <InMemoryUploadedFile: a960e1a5-6724-4f80-902d-fa0cb38c046e-1857281375.webp (image/webp)>]}>
 
 
-
+// Final data to send:
+// (2) ['title', 'Mietkauf statt Miete!!!']
+// (2) ['description', 'Erfüllen Sie sich den Traum vom Eigenheim ohne Eig…ft im eigenen Heim.\n- Endlich raus aus der Miete!']
+// (2) ['location', 'poland']
+// (2) ['price', '530']
+// (2) ['number_of_rooms', '5']
+// (2) ['category', '5']
+// (2) ['available_date', '2024-10-08']
+// (2) ['real_estate_image', File]
+// (2) ['class_realty', 'premium']
+// (2) ['square_footage', '140']
+// (2) ['details.internet', ' 7 mb/s']
+// (2) ['details.garage_or_parking', ' 7,14 €/м²']
+// (2) ['details.floor_number', '1']
+// (2) ['details.total_floors', '1']
+// (2) ['author', '6']
 
 
 

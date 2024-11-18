@@ -5,6 +5,7 @@ import { PATH } from "../../../router";
 import { useDispatch } from "react-redux";
 import { appAC } from "@/bll/app.slice";
 import { useLogoutMutation } from "../../../bll/auth/auth.servies";
+import {read_cookie, delete_cookie } from 'sfcookies';
 // import { useLogoutMutation } from "@/bll/auth/auth.servies";
 
 
@@ -18,6 +19,14 @@ export const LogoutPage = () => {
   const handleLogout=()=>{
     logOut().unwrap()
     .then(res=> {
+      console.log(read_cookie('access_token'));
+      delete_cookie('access_token')
+      delete_cookie('access_token')
+      delete_cookie('refresh_token')
+      delete_cookie('refresh_token')
+      // delete_cookie(cookie_key);
+      // document.cookie = 'access_token=; Max-Age=0; path=/;';
+      // document.cookie = 'refresh_token=; Max-Age=0; path=/;';
       dispatch(appAC.setLogout())
       navigate(PATH.home)
       console.log(res);

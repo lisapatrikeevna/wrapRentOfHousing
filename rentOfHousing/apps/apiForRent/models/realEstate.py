@@ -20,7 +20,7 @@ class Realty(models.Model):
     title = models.CharField(max_length=150, null=False, blank=False, unique=True)
     description = models.TextField('property description', null=False, blank=False)
     location = models.CharField('location', max_length=200)
-    price = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(0)])
+    price = models.FloatField('price', validators=[MinValueValidator(1)])
     number_of_rooms = models.PositiveSmallIntegerField('number of rooms', validators=[MinValueValidator(1)])
     category = models.ForeignKey('Category', on_delete=models.DO_NOTHING)
     available = models.BooleanField(default=True)

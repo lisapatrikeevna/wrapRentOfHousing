@@ -20,7 +20,7 @@ const schema = z.object({
   internet: z.string().optional(),
   garage_or_parking: z.string().optional(),
   balcony: z.string().optional(),
-  heating_type: z.string().optional(),
+  heating_type: z.string().max(50).optional(),
   air_conditioning: z.boolean().optional(),
   floor_number: z.number().positive().optional(),
   total_floors: z.number().positive().optional(),
@@ -43,23 +43,19 @@ type propsType={
 
 
 const RealtyDetailForm = (props:propsType) => {
-  // console.log('detail', props.detail);
   // let categories = useSelector<RootStateType, Array<CategoryType>>(state => state.app.categories);
-  // const [createNew, { isLoading, isError }] = useCreateRealtyMutation();
-  const { control, handleSubmit,reset, formState: { errors } } = useForm<FormType>({
+  const { control, handleSubmit, reset, formState: { errors } } = useForm<FormType>({
     mode: 'onSubmit',
     resolver: zodResolver(schema),
-    defaultValues: {
-      internet: 'Telecom, 0mb/10s',
-      total_floors: 2,
-      garage_or_parking: 'Garage/Stellplatz: 30 €',
-      // description: 'Diese gemütliche 2-Zimmer Wohnung mit einer Wohnfläche von ca. 49 m²...',
-      // realtyFiles: [],
-    },
+    // defaultValues: {
+    //   internet: 'Telecom, 0mb/10s',
+    //   total_floors: 2,
+    //   garage_or_parking: 'Garage/Stellplatz: 30 €',
+    //   // description: 'Diese gemütliche 2-Zimmer Wohnung mit einer Wohnfläche von ca. 49 m²...',
+    //   // realtyFiles: [],
+    // },
   });
-  useEffect(()=>{
-    props.detail && reset(props.detail)
-  },[props.detail])
+  useEffect(()=>{props.detail && reset(props.detail)},[props.detail])
 
   const onSubmit = (data: FormType) => {
     // debugger
@@ -111,7 +107,7 @@ const RealtyDetailForm = (props:propsType) => {
     // props.onFormDataChange({"details":formDataObject})
   };
 
-
+  console.log('detail', props.detail);
 
 
 

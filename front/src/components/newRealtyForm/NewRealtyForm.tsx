@@ -40,21 +40,22 @@ const NewRealtyForm = (props:propsType) => {
   const { control, register, handleSubmit, formState: { errors },reset } = useForm<FormType>({
     mode: 'onSubmit',
     resolver: zodResolver(schema),
-    defaultValues: {
-      title:' some test',
-      available: true,
-      location: ' Schießhausweg 7, 74564 Crailsheim, Schwäbisch Hall ',
-      description: 'en, die Sie für ein komfortables und sorgenfreies Leben benötigen.',
-      price: 810,
-      number_of_rooms: 3,
-      category: 4,
-      available_date: '19-09-1981',
-      square_footage: 23,
-
-    },
+    // defaultValues: {
+    //   title:' some test',
+    //   available: true,
+    //   location: ' Schießhausweg 7, 74564 Crailsheim, Schwäbisch Hall ',
+    //   description: 'en, die Sie für ein komfortables und sorgenfreies Leben benötigen.',
+    //   price: 810,
+    //   number_of_rooms: 3,
+    //   category: 4,
+    //   available_date: '19-09-1981',
+    //   square_footage: 23,
+    //
+    // },
   });
   useEffect(()=> { if( props.isSuccessful ) reset()},[props.isSuccessful])
   useEffect(()=> { if( props.realty ) reset(props.realty)},[props.realty])
+  // useEffect(()=>{student?.administrative_details && reset(student.administrative_details) },[student])
 
   const onSubmit = (data: FormType) => {
     const formData = new FormData();
@@ -81,6 +82,9 @@ const NewRealtyForm = (props:propsType) => {
     const formDataObject = Object.fromEntries(formData.entries());
     props.onFormDataChange(formDataObject);
   };
+
+  console.log("realty.price ", props.realty);
+
 
   return (
     <>

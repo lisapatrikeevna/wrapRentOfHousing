@@ -53,6 +53,9 @@ importers:
       sass:
         specifier: ^1.79.6
         version: 1.79.6
+      sfcookies:
+        specifier: ^1.0.2
+        version: 1.0.2
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -1431,6 +1434,9 @@ packages:
     resolution: {integrity: sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==}
     engines: {node: '>=10'}
     hasBin: true
+
+  sfcookies@1.0.2:
+    resolution: {integrity: sha512-RnSv7iL0li3eIIW7NlE616E23mKupGzzNU75snc+4+ZdTETJI209JUjQDZ35b12AQoLcqXd/5Ak/xUrzjaTzVw==}
 
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
@@ -2831,6 +2837,8 @@ snapshots:
       loose-envify: 1.4.0
 
   semver@7.6.3: {}
+
+  sfcookies@1.0.2: {}
 
   shebang-command@2.0.0:
     dependencies:
