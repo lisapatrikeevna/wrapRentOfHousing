@@ -49,10 +49,12 @@ const LandlordPage = () => {
         // data.append(`details[${key}]`, realtyDetailData[key]); // Используем квадратные скобки
       });
     }
+    // @ts-ignore
     data.append('author', id);
 
     console.log("Final data to send:", ...data); // Логируем данные для проверки
 
+    // @ts-ignore
     createNew(data).unwrap()
     .then((res) => console.log("Response: ", res))
     .catch((err) => console.error("Error: ", err.errors));

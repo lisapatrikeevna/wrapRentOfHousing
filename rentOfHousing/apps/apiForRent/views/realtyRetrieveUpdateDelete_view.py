@@ -16,6 +16,7 @@ class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
   permission_classes = [IsAuthenticatedOrReadOnly]
   lookup_field = "pk" # выбираем по какому полю сделаем запрос
   # serializer_class = RealtyCreateUpdateSerializer
+
   def get_queryset(self):
     queryset = super().get_queryset()
     return queryset.select_related('favorite')
