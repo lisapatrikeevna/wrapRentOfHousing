@@ -28,7 +28,7 @@ class UserRealtyslists(ListAPIView):
       return Realty.objects.filter(views__in=[user_id])
     elif activity_type == 'favorite/':
       return Realty.objects.filter(favorite__in=[user_id])
-    elif activity_type == 'reservations':
+    elif activity_type == 'reservations/':
       return Realty.objects.filter(reservations__in=[user_id])
 
     # Если тип активности не указан, возвращаем пустой QuerySet

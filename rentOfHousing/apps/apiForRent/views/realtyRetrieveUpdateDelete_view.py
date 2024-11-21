@@ -47,6 +47,7 @@ class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
 
     print('-----------------------realty', type(realty.price))
     return realty
+
   def retrieve(self, request, *args, **kwargs):
     instance = self.get_object()
     serializer = RealtyListSerializer(instance)
@@ -66,7 +67,6 @@ class RealtyRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
   def patch(self, request, *args, **kwargs):
-    """Обработка PATCH-запроса."""
     realty_instance = self.get_object()
     # user = request.user
     # print('patch/user', user)

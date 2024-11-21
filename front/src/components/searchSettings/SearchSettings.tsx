@@ -11,6 +11,7 @@ export type SearchParamsType={
   available_date?: string
   class_realty?: string
   square_footage?: string
+  search?:string
 }
 type PropsType = {
   searchHandler: (searchParams: SearchParamsType) => void

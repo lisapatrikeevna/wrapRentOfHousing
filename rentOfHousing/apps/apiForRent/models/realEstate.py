@@ -1,12 +1,8 @@
 from datetime import date, timedelta
-
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from rest_framework.exceptions import ValidationError
-
 from apps.apiForRent.management.managers import SoftDeleteRentManager
 from apps.apiForRent.models import RealtyDetail
-# from apps.apiForRent.models.booking import Booking
 from apps.user.models.customUser import CustomUser
 
 

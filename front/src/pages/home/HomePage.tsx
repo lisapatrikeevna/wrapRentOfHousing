@@ -7,7 +7,7 @@ import ParalaxBlock from "../../components/paralaxBlock/ParalaxBlock";
 import ServicesBlock from "../../components/servisesBlock/ServicesBlock";
 import { useGetRealtyQuery } from "../../bll/realty/realty.service";
 // import { useGetCategoryQuery } from "../../bll/category/category.service";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootStateType } from "../../bll/store";
 import { CategoryType } from "../../bll/category/category.service";
@@ -64,7 +64,8 @@ const HomePage = () => {
       'available',
       'available_date',
       'class_realty',
-      'square_footage'
+      'square_footage',
+      'search'
     ];
 
     // paramsToInclude.forEach((param) => {
@@ -92,7 +93,6 @@ const HomePage = () => {
         }
       }
     });
-debugger
     setParams(params);  // Обновляем параметры и запускаем запрос с обновлённым состоянием
   }
 
@@ -111,7 +111,7 @@ debugger
   const sortHandler = (value: string) => {
     setParams(value)
   }
-  console.log("realty.data", realty?.data);
+  // console.log("realty.data", realty?.data);
 
   return (<>
       <Box className={cl.homeBg}>

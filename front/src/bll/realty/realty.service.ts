@@ -1,5 +1,5 @@
 import { baseApi } from "../base-api";
-import { CreateRealtyType, FilterType, RealtyRequestType, RealtyType } from "./realty.type";
+import { bookingType, CreateRealtyType, FilterType, RealtyRequestType, RealtyType } from "./realty.type";
 
 // const token = localStorage.getItem('access_token');
 // const headers= {
@@ -66,11 +66,21 @@ const realtyService = baseApi.injectEndpoints({
           return  {method: 'GET', url: `realty/filterList/`, headers: {}};
         }, providesTags: ['Realty'],
       }),
+      setBooking: builder.mutation<void, bookingType>({
+        query: (args) => {
+          const res=  {method: 'POST', url: `bookings/`,body:args};
+          // return  {method: 'POST', url: `booking/${args.realty}`,body:args};
+          console.log('setBooking',res);
+          return res
+        }, invalidatesTags: ['Realty'],
+      }),
     }
   },
 })
 
-export const {useGetRealtyQuery, useGetItemRealtyQuery, useLazyGetFilterListQuery, useCreateRealtyMutation, useUpdateRealtyMutation, useRemoveRealtyMutation, usePatchRealtyMutation, useGetUsersRealtyQuery} = realtyService
+export const {useGetRealtyQuery, useGetItemRealtyQuery, useLazyGetFilterListQuery,
+  useCreateRealtyMutation, useUpdateRealtyMutation, useRemoveRealtyMutation,
+  usePatchRealtyMutation, useGetUsersRealtyQuery,useSetBookingMutation} = realtyService
 // export const {useCreateCategoryMutation, useGetCategoryQuery, useRemoveCategoryMutation, useUpdateCategoryMutation} = categoryService
 
 

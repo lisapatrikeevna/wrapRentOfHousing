@@ -92,7 +92,14 @@ export type FilterType = {
   square_footage: itemFilterType[]
   available: itemFilterType[]
 }
-
+export type bookingType = {
+  realty: number
+  start_date: string
+  // start_date: Date
+  // end_date: Date
+  end_date: string
+  user: number
+}
 
 
 

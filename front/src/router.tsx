@@ -15,10 +15,8 @@ import LogoutPage from "./pages/auth/logoutPage/LogoutPage";
 import { RootStateType } from "./bll/store";
 import { UserType } from "./bll/auth/auth.type";
 import UserHistory from "./pages/usesrHistory/UserHistory";
-import UserFavorites from "./pages/usesrFavorites/UserHistory.tsx";
-import React from "react";
-import UsersBooking from "./pages/usersBooking/UsersBooking.tsx";
-
+import UserFavorites from "./pages/usesrFavorites/UserFavorite";
+import UsersBooking from "./pages/usersBooking/UsersBooking";
 
 export const PATH = {
   login: '/login', loginOut: '/logOut',

@@ -6,7 +6,6 @@ import { SearchParamsType } from "../components/searchSettings/SearchSettings";
 
 type initialStateType = {
   additionalFilters: SearchParamsType | null
-  // refresh_token: string | null
   user: UserType | null
   categories: Array<CategoryType>
   filteringOptions: string
@@ -15,8 +14,7 @@ type initialStateType = {
 }
 const initialState: initialStateType = {
   user: null, additionalFilters: null,
-  // refresh_token: null,
-  categories: [], filteringOptions: '?page=1', isLoadingCategory: false, isErrorCategory: false, // user:{}as User,
+  categories: [], filteringOptions: '?page=1', isLoadingCategory: false, isErrorCategory: false, // user:{}as UserType,
 }
 
 const slice = createSlice({
@@ -27,22 +25,28 @@ const slice = createSlice({
       state.isLoadingCategory = action.payload
     }, setIsErrorCategory: (state, action: PayloadAction<string>) => {
       state.isErrorCategory = action.payload
-    }, setUser: (state, action: PayloadAction<{user:UserType}>) => {
-      state.user = action.payload.user
     },
-      // setRefreshToken: (state, action: PayloadAction<string>) => {
-      // state.refresh_token = action.payload },
-  setLogout(state) {
+    setUser: (state, action: PayloadAction<{user: UserType}>) => {
+      state.user = action.payload.user
+    }, // setSearch: (state, action: PayloadAction<string>) => {
+    // state.searchValue = action.payload },
+    setLogout(state) {
       // Очистка стейта пользователя при выходе
       state.user = null
-      state.additionalFilters=null
-      state.filteringOptions=''
+      state.additionalFilters = null
+      state.filteringOptions = ''
       // Очистка токенов из localStorage
       // localStorage.removeItem('access_token');
       // localStorage.removeItem('refresh_token');
-    }, setAdditionalFilters: (state, action: PayloadAction<SearchParamsType|null>) => {
+    },
+    setAdditionalFilters: (state, action: PayloadAction<SearchParamsType | null>) => {
       console.log('appSlise/setAdditionalFilters/payload: ', action.payload);
-      state.additionalFilters = action.payload
+      if(action.payload?.search) {
+        // state.additionalFilters = null
+        state.additionalFilters = action.payload
+      } else {
+        state.additionalFilters = action.payload
+      }
     },
   }
 })
