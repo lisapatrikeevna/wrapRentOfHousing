@@ -25,11 +25,15 @@ const ItemProduct = () => {
   const [realtyDetailData, setRealtyDetailData] = useState<CreateRealtyDetailType | null>(null);
   const [updateRealty, {error: updateIsError, isLoading: updateIsLoading}] = useUpdateRealtyMutation()
   const [propertiesUpdate, {error}] = usePatchRealtyMutation()
+  const [rating, setRating] = useState( 0);
   useEffect(() => {
     // for putch if viseted!
     userId && propertiesUpdate({id: id, body: {'views': userId}})
     console.log(error)
   }, [])
+  useEffect(() => {
+    setRating(realty?.rating );
+  }, [realty]);
   const removeHandler = () => {
     removeRealty(id).unwrap()
     .then((res) => {
@@ -84,7 +88,7 @@ const ItemProduct = () => {
         // data.append(`details[${key}]`, realtyDetailData[key]); // Используем квадратные скобки
       });
     }
-    console.log("author, id: ", userId ,id);
+    console.log("author, id: ", userId, id);
     data.append('id', id);
     userId && data.append('author', userId);
 
@@ -94,7 +98,15 @@ const ItemProduct = () => {
     .then((res) => console.log("res !!!!!!!!!!!!", res))
     .catch((err) => console.log(err));
   }
-
+  const ratingHandler = (e) => {
+    setRating(e.currentTarget.value)
+    propertiesUpdate({id: id, body: {'rating': +e.currentTarget.value}}).unwrap()
+    .then(res => {
+      console.log(res)
+      // setRating(e.currentTarget.value)
+    })
+  .catch(err => console.log(err))
+  }
 
   // const [avatarImg, setAvatarImg] = useState<string | null>();
 
@@ -135,8 +147,7 @@ const ItemProduct = () => {
     {(isRealtyLoading || updateIsLoading) && <CircularProgress color="success"/>}
     {(realty && !isEdit) && <Container>
       <Box className={cl.imgWrap}>
-        {realty.real_estate_image ? <img src={`http://127.0.0.1:12345/${realty.real_estate_image}`} alt="img"/>
-          : <img src={defaultImg} alt="defaultImg"/>}
+        {realty.real_estate_image ? <img src={`http://127.0.0.1:12345/${realty.real_estate_image}`} alt="img"/> : <img src={defaultImg} alt="defaultImg"/>}
       </Box>
 
       <Typography> author id : {realty.author}</Typography>
@@ -151,7 +162,8 @@ const ItemProduct = () => {
         <Typography>number_of_rooms:{realty.number_of_rooms}</Typography>
         <Typography variant="body2" sx={{color: 'text.secondary'}}>description :{realty.description}</Typography>
         <Typography>price: {realty.price}</Typography>
-        <Rating name="read-only" value={realty.rating} readOnly/>
+        {realty?.reservations.includes(userId) ? <> <Rating name="read-only" value={rating} onChange={ratingHandler}/>
+          <Typography>change rating</Typography> </> : <Rating name="read-only" value={rating} readOnly/>}
       </Stack>
       <Typography> available_date : {realty.available_date}</Typography>
       <Typography>category :{realty.category}</Typography>

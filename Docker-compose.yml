@@ -1,56 +1,5 @@
-#version: '3.8'
-## Поднимаем два сервиса, django И node
-#services:
-#  django:
-#    #говорим что build будет из dockerfile который располагается ./rentOfHousing/rentOfHousing/
-#    build: ./rentOfHousing
-#    # имя контейнера
-#    container_name: rentOfHousing-container
-#    # перезапускать контейнер при завершении выполнения работы или при аварийном завершении
-#    restart: always
-#    # проброс портов внутрь контейнера, 8000 порт на хост машине будет проброшен внутрь контейнера на такой же 8000 порт
-#    ports:
-#      - 12345:12345
-#
-#    # команда при старте контейнера
-##    command: >
-##      sh -c "python manage.py runserver 0.0.0.0:12345"
-#
-#    # Для статики мы подключаем два volume (чтобы при перезапуске наши данные не пропадали)), создадим их ниже.
-#    volumes:
-#      - ./rentOfHousing:/usr/src/app
-#      - django_static_volume:/usr/src/app/static
-#      - django_media_volume:/usr/src/app/media
-#    # подключаем к сети myNetwork (в целом не обязательно, но до кучи чтоб было)
-#    networks:
-#      - myNetwork
-#
-#  node:
-#    # Аналогично, build из ./reactapp/dockerfile
-#    build: ./front
-#    # имя контейнера
-#    container_name: react-app
-#    # рестарт
-#    restart: always
-#    # порты
-#    ports:
-#      - 5173:5173
-#    # команда при запуске
-#    command: pnpm run dev
-#    # Зависимость. нет смысла ноде, если некому отдать ей данные. поэтому сначала стартуем сервис django, а за ней node
-#    depends_on:
-#      - django
-#    # Сеть та же, все контейнеры должны крутиться в однйо сети чтобы видеть друг друга.
-#    networks:
-#      - myNetwork
-## создаём два volume для статики
-#volumes:
-#  django_static_volume:
-#  django_media_volume:
-#
-#networks:
-#  myNetwork:
-#
+version: '3.8'
+# Поднимаем два сервиса, django И node
 services:
   mysql:
     image: mysql:8.0
@@ -60,11 +9,67 @@ services:
       MYSQL_DATABASE: '${DB_NAME}'
       MYSQL_USER: '${DB_USER}'
       MYSQL_PASSWORD: '${DB_PASSWORD}'
-    ports:volumes:
+    volumes:
       - mysql_data:/var/lib/mysql
     ports:
-      - "3307:3306"
-  api:
+      - "3307:3308"
+
+  django:
+    #говорим что build будет из dockerfile который располагается ./rentOfHousing/rentOfHousing/
+    build: ./rentOfHousing
+    # имя контейнера
+    container_name: rentOfHousing-container
+    # перезапускать контейнер при завершении выполнения работы или при аварийном завершении
+    restart: always
+    # проброс портов внутрь контейнера, 8000 порт на хост машине будет проброшен внутрь контейнера на такой же 8000 порт
+    ports:
+      - 12345:12345
+
+    # команда при старте контейнера
+#    command: >
+#      sh -c "python manage.py runserver 0.0.0.0:12345"
+
+    # Для статики мы подключаем два volume (чтобы при перезапуске наши данные не пропадали)), создадим их ниже.
+    volumes:
+      - ./rentOfHousing:/usr/src/app
+      - django_static_volume:/usr/src/app/static
+      - django_media_volume:/usr/src/app/media
+    # подключаем к сети myNetwork (в целом не обязательно, но до кучи чтоб было)
+    networks:
+      - myNetwork
+
+  node:
+    # Аналогично, build из ./reactapp/dockerfile
+    build: ./front
+    # имя контейнера
+    container_name: react-app
+    # рестарт
+    restart: always
+    # порты
+    ports:
+      - 5173:5173
+    # команда при запуске
+    command: pnpm run dev
+    # Зависимость. нет смысла ноде, если некому отдать ей данные. поэтому сначала стартуем сервис django, а за ней node
+    depends_on:
+      - django
+    # Сеть та же, все контейнеры должны крутиться в однйо сети чтобы видеть друг друга.
+    networks:
+      - myNetwork
+# создаём два volume для статики
+volumes:
+  django_static_volume:
+  django_media_volume:
+
+networks:
+  myNetwork:
+
+
+
+
+
+
+
 
 
 

@@ -6,7 +6,6 @@ import BlendBlock from "../../components/blendBlock/BlendBlock";
 import ParalaxBlock from "../../components/paralaxBlock/ParalaxBlock";
 import ServicesBlock from "../../components/servisesBlock/ServicesBlock";
 import { useGetRealtyQuery } from "../../bll/realty/realty.service";
-// import { useGetCategoryQuery } from "../../bll/category/category.service";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootStateType } from "../../bll/store";
@@ -26,31 +25,9 @@ const HomePage = () => {
   const additionalFilters = useSelector<RootStateType, SearchParamsType | null>(state => state.app.additionalFilters)
   const [newParams, setParams] = useState('?page=1');
   const {data: realty, isLoading: isRealtyLoading, isError: isRealtyError} = useGetRealtyQuery({params: newParams});
-  // Сохраняем предыдущее значение additionalFilters для отслеживания изменений
-  // const prevFiltersRef = useRef<SearchParamsType | null>(additionalFilters);
-  // const { data: categories, isLoading: isLoadingCategory, isError: isErrorCategory } = useGetCategoryQuery();
-  // console.log("!!!!categories", categories);
-  console.log("homePage/filters: ", filters);
-  console.log("homePage/additionalFilters: ", additionalFilters);
 
 
   useEffect(() => {
-    // // Функция проверки изменения значений additionalFilters
-    // const hasFiltersChanged = (prevFilters: SearchParamsType | null, currentFilters: SearchParamsType | null) => {
-    //   if (!prevFilters || !currentFilters) return prevFilters !== currentFilters;
-    //
-    //   return Object.keys(currentFilters).some(
-    //     key => prevFilters[key] !== currentFilters[key]
-    //   );
-    // };
-    //
-    // // Проверяем, изменилось ли значение additionalFilters
-    // if (hasFiltersChanged(prevFiltersRef.current, additionalFilters)) {
-    //   searchHandler(additionalFilters || {});  // Вызов searchHandler при изменении фильтров
-    // }
-    //
-    // // Обновляем предыдущее значение после проверки
-    // prevFiltersRef.current = additionalFilters;
     additionalFilters && searchHandler(additionalFilters)
   }, [additionalFilters]);
 
@@ -68,23 +45,13 @@ const HomePage = () => {
       'search'
     ];
 
-    // paramsToInclude.forEach((param) => {
-    //   if (searchParams[param] !== undefined) {
-    //     const paramValue = searchParams[param];
-    //     params = params.includes(param)
-    //       ? params.replace(new RegExp(`${param}=[^&]*`), `${param}=${paramValue}`)
-    //       : `${params}&${param}=${paramValue}`;
-    //   }
-    // });
     paramsToInclude.forEach((param) => {
       const paramValue = searchParams[param];
 
       if (paramValue !== undefined) {
         if (paramValue === 0) {
-          // Удаляем параметр из строки, если его значение равно 0
           params = params.replace(new RegExp(`([&?])${param}=[^&]*(&|$)`), (match, p1, p2) => {
-            // Если это первый параметр, просто удаляем его
-            return p2 === '&' ? p1 : ''; // Удаляем параметр, убирая лишний символ
+            return p2 === '&' ? p1 : '';
           });
         } else {
           params = params.includes(param)
@@ -93,7 +60,7 @@ const HomePage = () => {
         }
       }
     });
-    setParams(params);  // Обновляем параметры и запускаем запрос с обновлённым состоянием
+    setParams(params);
   }
 
   const pageHandler = (current_page: number) => {
@@ -111,14 +78,16 @@ const HomePage = () => {
   const sortHandler = (value: string) => {
     setParams(value)
   }
-  // console.log("realty.data", realty?.data);
+
+
+
 
   return (<>
       <Box className={cl.homeBg}>
         <h3 className={cl.title}>HomePage title</h3>
         {isErrorCategory && <Typography color="error"> {isErrorCategory}</Typography>}
         {isLoadingCategory && <CircularProgress/>}
-        {(!isLoadingCategory && !isErrorCategory && categories.length) && <SearchSettings searchHandler={searchHandler} categories={categories} city={additionalFilters?.location? additionalFilters.location:null} selectedCat={additionalFilters?.category? categories[additionalFilters.category]:null}/>}
+        {(!isLoadingCategory && !isErrorCategory && categories.length) && <SearchSettings searchHandler={searchHandler} categories={categories} city={additionalFilters?.location? additionalFilters.location:0} selectedCat={additionalFilters?.category? categories[additionalFilters.category]:null}/>}
       </Box>
 
       {isRealtyError && <Typography color="error">Error loading realty data</Typography>}
@@ -126,8 +95,6 @@ const HomePage = () => {
       {realty?.data && realty.data.length>0 ? <RealEstateList realty={realty} pageHandler={pageHandler} sortHandler={sortHandler} filters={filters}/>
         :<Container>
           <Typography variant='h4'>Чувак ты дохрена хочешь </Typography>
-          {/*<Typography variant='h4'>There are no properties with the selected parameters</Typography>*/}
-          {/*<Typography>select other options</Typography>*/}
           <Typography>будь скромнее . Поменяй параметры поиска</Typography>
       </Container>}
 

@@ -2,10 +2,12 @@ import { Button, MenuItem, Paper, Select, SelectChangeEvent, TextField } from "@
 import cl from './SearchSettings.module.scss'
 import { useEffect, useState } from "react";
 import { CategoryType } from "../../bll/category/category.service";
+import { useDispatch } from "react-redux";
+import { appAC } from "../../bll/app.slice";
 
 export type SearchParamsType={
   category?:number
-  location?:string
+  location?:string|number
   number_of_rooms?: string
   available?: boolean
   available_date?: string
@@ -14,35 +16,35 @@ export type SearchParamsType={
   search?:string
 }
 type PropsType = {
-  searchHandler: (searchParams: SearchParamsType) => void
+  searchHandler: (searchParams: {location: number | string; category: number}) => void
   categories: Array<CategoryType>
   city:string|null
   selectedCat:CategoryType|null
 }
 let all={id:0,name:'All'}
+
+
+
 const SearchSettings = ({categories, ...props}: PropsType) => {
+  const dicpatch=useDispatch()
   const [category, setCategory] = useState( all.id);
-  // const [category, setCategory] = useState<number|string>( );
   const [city, setCity] = useState<string>('');
   useEffect(()=> {
     props.city && setCity(props.city)
       props.selectedCat? setCategory(props.selectedCat.id):categories[1]
     },[props.city, props.selectedCat])
   const searchHandler = () => {
-    console.log("category, location: ", category, city)
     let res={location:city =='' ? 0:city, category: category}
-    // if(category){
-    //   res={...res,category:category};
-    // }
-    // if(city){
-    //   res={...res,location:city ==''?0:city}
-    // }
     props.searchHandler(res);
+
+    dicpatch(appAC.setAdditionalFilters(res))
   }
   const handleChange = (e: SelectChangeEvent) => {
     setCategory(+e.target.value);
   }
-  // console.log("categories", categories);
+
+
+
 
 
   return (<Paper className={cl.searchSettings}>

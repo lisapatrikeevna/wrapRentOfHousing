@@ -32,18 +32,7 @@ const FiltersModal = () => {
   const [selectedAvailableDate, setSelectedAvailableDate] = useState('');
   const [available, setAvailable] = useState(true);
 
-  // useEffect(() => {
-  //   if (data) {
-  //     console.log('data', data);
-  //     // Установите состояния как пустые строки по умолчанию
-  //     // setSelectedCategory('');
-  //     setSelectedAvailableDate('');
-  //     setSelectedClassRealty('');
-  //     setSelectedLocation('');
-  //     setSelectedNumberOfRooms('');
-  //     setSelectedSquareFootage('');
-  //   }
-  // }, [data]);
+
 
   const resetHandlers=()=>{
     // setSelectedCategory('');
@@ -53,11 +42,8 @@ const FiltersModal = () => {
     setSelectedNumberOfRooms('');
     setSelectedSquareFootage('');
     // setAvailable(false)
-    // handleSend();
-    // let filters:SearchParamsType = {}
 
-    debugger
-    dispatch(appAC.setAdditionalFilters(null));
+    dispatch(appAC.setClearAdditionalFilters());
   }
 
   const handleSend = () => {

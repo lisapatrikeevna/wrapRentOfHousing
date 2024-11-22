@@ -1,7 +1,6 @@
 import cl from './Header.module.scss'
 import logoImg from './../../assets/logo.png'
-import { AppBar, Avatar, Box, Container, FilledInput, FormControl, Input, InputAdornment, InputLabel, Modal, Toolbar, Typography } from '@mui/material'
-// import MenuIcon from '@mui/icons-material/Menu'
+import { AppBar, Avatar, Box, Container, FormControl, Input, InputAdornment, InputLabel, Modal, Toolbar, Typography } from '@mui/material'
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { PATH } from "../../router";
@@ -34,6 +33,7 @@ const Header = () => {
     !!user ? modalHandler() : navigate(PATH.login)
   }
   const searchHandler = () => {
+    dispatch(appAC.setClearAdditionalFilters())
     dispatch(appAC.setAdditionalFilters({search:serchValue}))
     setSerchValue('')
   }
@@ -47,24 +47,14 @@ const Header = () => {
           <>
             <FormControl fullWidth sx={{m: 1}} variant="filled">
               <InputLabel htmlFor="filled-adornment-amount">search</InputLabel>
-              {/*<FilledInput id="filled-adornment-password" sx={{height:'40px'}}*/}
               <Input id="filled-adornment-password" sx={{height:'40px'}} value={serchValue} onChange={e => setSerchValue(e.currentTarget.value)}
 	            endAdornment={<InputAdornment position="end">
-	              {/*<IconButton aria-label={showPassword ? 'hide the password' : 'display the password'}*/}
-	              {/*  onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} onMouseUp={handleMouseUpPassword} edge="end">*/}
-	              {/*  {showPassword ? <VisibilityOff /> : <Visibility />}*/}
-	              {/*</IconButton>*/}
 	              <SearchIcon onClick={searchHandler}/>
 	            </InputAdornment>}
               />
             </FormControl>
-            {/*<TextField value={serchValue} onChange={e => setSerchValue(e.currentTarget.value)}/>*/}
-            {/*<SearchIcon onClick={() => {}}/>*/}
           </>
           <FiltersModal/>
-          {/*<IconButton edge="start" color="inherit" aria-label="menu" sx={{mr: 2}}>*/}
-          {/*  <MenuIcon/>*/}
-          {/*</IconButton>*/}
           <Avatar sx={{width: 26, height: 26}} onClick={avatarHandler}>
             <PermIdentityIcon color={user ? 'inherit' : 'error'}/>
           </Avatar>
@@ -73,7 +63,6 @@ const Header = () => {
       </Box>
 
       <nav className={cl.navbar}>
-        {/*<Container component="ul" className={cl.role}>*/}
         <Container component="ul" sx={{width: '212px'}} className={cl.role}>
           <li><NavLink className={({isActive}) => (isActive ? cl.active : '')} to={PATH.toLandlords}>to landlords</NavLink></li>
           <li><NavLink className={({isActive}) => (isActive ? cl.active : '')} to={PATH.home}>rent</NavLink></li>
@@ -82,7 +71,6 @@ const Header = () => {
           <li><Link to={PATH.home}>Home</Link></li>
           <li><Link to={PATH.about}>About</Link></li>
           <li><Link to={PATH.privacyPolicy}>PrivacyPolicy</Link></li>
-          {/*<li><Link to={PATH.itemRealty}>itemRealty</Link></li>*/}
         </Container>
 
       </nav>
@@ -94,9 +82,6 @@ const Header = () => {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           hi, {user?.username || "Guest"}!
         </Typography>
-        {/*<Typography id="modal-modal-description" sx={{ mt: 2 }}>*/}
-        {/*  Duis mollis, est non commodo luctus, nisi erat porttitor ligula.*/}
-        {/*</Typography>*/}
         <p><NavLink to={PATH.loginOut}>logout</NavLink></p>
         <p><NavLink to={PATH.history}>history</NavLink></p>
         <p><NavLink to={PATH.favorite}>favorit</NavLink></p>

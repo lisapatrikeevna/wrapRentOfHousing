@@ -40,35 +40,14 @@ const slice = createSlice({
       // localStorage.removeItem('refresh_token');
     },
     setAdditionalFilters: (state, action: PayloadAction<SearchParamsType | null>) => {
-      console.log('appSlise/setAdditionalFilters/payload: ', action.payload);
-      if(action.payload?.search) {
-        // state.additionalFilters = null
         state.additionalFilters = action.payload
-      } else {
-        state.additionalFilters = action.payload
-      }
     },
+    setClearAdditionalFilters: (state) => {
+         state.additionalFilters = null
+    }
   }
 })
 export const appAC = slice.actions
 export const appReducer = slice.reducer
 
-// TC
 
-// export const getCategoriesTC = () => async (dispatch: AppDispatchType, getState: () => RootStateType) => {
-//   dispatch(appAC.setIsLoadingCategory(true));
-//   try {
-//     const result = await dispatch(api.endpoints.getCategory.initiate());
-//
-//     if (result.error) {
-//       throw result.error; // обрабатываем ошибку
-//     }
-//
-//     const categories = result.data;
-//     dispatch(appAC.setCategories(categories));
-//   } catch (error) {
-//     dispatch(appAC.setIsErrorCategory(true));  // корректно отмечаем ошибку
-//   } finally {
-//     dispatch(appAC.setIsLoadingCategory(false));
-//   }
-// };
